@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
+import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
+import 'package:splito_flutter/features/dashboard/presentation/providers/dashboard_providers.dart';
 import 'package:splito_flutter/features/settlements/data/repositories/settlement_repository_impl.dart';
 import 'package:splito_flutter/features/settlements/domain/entities/settlement.dart';
 import 'package:splito_flutter/features/settlements/domain/usecases/create_settlement_usecase.dart';
@@ -86,11 +88,13 @@ class CreateSettlementNotifier extends AsyncNotifier<Settlement?> {
       );
 
       // On successful creation, invalidate group balances, simplified balances,
-      // group settlements logs, and overall net user balances.
+      // group settlements logs, group activity, dashboard analytics, and overall net user balances.
       ref.invalidate(groupBalancesProvider(groupId));
       ref.invalidate(simplifiedBalancesProvider(groupId));
       ref.invalidate(groupSettlementsProvider(groupId));
+      ref.invalidate(groupActivityProvider(groupId));
       ref.invalidate(myOverallBalancesProvider);
+      ref.invalidate(dashboardStatsProvider);
 
       state = AsyncData<Settlement?>(settlement);
       return settlement;

@@ -13,6 +13,7 @@ import 'package:splito_flutter/features/groups/domain/usecases/get_members_useca
 import 'package:splito_flutter/features/groups/domain/usecases/get_my_groups_usecase.dart';
 import 'package:splito_flutter/features/groups/domain/usecases/remove_member_usecase.dart';
 import 'package:splito_flutter/features/groups/domain/usecases/update_group_usecase.dart';
+import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
 
 /// Provider exposing [GetMyGroupsUseCase].
 final getMyGroupsUseCaseProvider = Provider<GetMyGroupsUseCase>((ref) {
@@ -234,6 +235,8 @@ class AddMemberNotifier extends AsyncNotifier<void> {
       await useCase(groupId: groupId, email: email);
       ref.invalidate(groupDetailProvider(groupId));
       ref.invalidate(groupMembersProvider(groupId));
+      ref.invalidate(groupActivityProvider(groupId));
+      ref.invalidate(myGroupsProvider);
       state = const AsyncData<void>(null);
     } on Failure catch (failure, stackTrace) {
       state = AsyncError<void>(failure, stackTrace);

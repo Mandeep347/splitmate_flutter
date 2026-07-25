@@ -10,6 +10,11 @@ import 'package:splito_flutter/features/expenses/domain/usecases/get_expense_by_
 import 'package:splito_flutter/features/expenses/domain/usecases/get_group_expenses_usecase.dart';
 import 'package:splito_flutter/features/expenses/domain/usecases/reverse_expense_usecase.dart';
 import 'package:splito_flutter/features/expenses/domain/usecases/update_expense_usecase.dart';
+import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
+import 'package:splito_flutter/features/analytics/presentation/providers/analytics_providers.dart';
+import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
+import 'package:splito_flutter/features/dashboard/presentation/providers/dashboard_providers.dart';
+import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
 
 // ============================================================================
 // SECTION A — UseCase Providers
@@ -161,6 +166,13 @@ class CreateExpenseNotifier extends AsyncNotifier<Expense?> {
       );
 
       ref.invalidate(groupExpensesProvider(groupId));
+      ref.invalidate(groupBalancesProvider(groupId));
+      ref.invalidate(simplifiedBalancesProvider(groupId));
+      ref.invalidate(groupActivityProvider(groupId));
+      ref.invalidate(myOverallBalancesProvider);
+      ref.invalidate(dashboardStatsProvider);
+      ref.invalidate(groupTotalSpentProvider(groupId));
+      ref.invalidate(groupDetailProvider(groupId));
       state = AsyncData<Expense?>(expense);
       return expense;
     } on Failure catch (failure, stackTrace) {
@@ -205,6 +217,7 @@ class UpdateExpenseNotifier extends AsyncNotifier<void> {
 
       ref.invalidate(expenseDetailProvider(expenseId));
       ref.invalidate(groupExpensesProvider(groupId));
+      ref.invalidate(groupActivityProvider(groupId));
       state = const AsyncData<void>(null);
     } on Failure catch (failure, stackTrace) {
       state = AsyncError<void>(failure, stackTrace);
@@ -242,6 +255,13 @@ class ReverseExpenseNotifier extends AsyncNotifier<void> {
 
       ref.invalidate(expenseDetailProvider(expenseId));
       ref.invalidate(groupExpensesProvider(groupId));
+      ref.invalidate(groupBalancesProvider(groupId));
+      ref.invalidate(simplifiedBalancesProvider(groupId));
+      ref.invalidate(groupActivityProvider(groupId));
+      ref.invalidate(myOverallBalancesProvider);
+      ref.invalidate(dashboardStatsProvider);
+      ref.invalidate(groupTotalSpentProvider(groupId));
+      ref.invalidate(groupDetailProvider(groupId));
       state = const AsyncData<void>(null);
     } on Failure catch (failure, stackTrace) {
       state = AsyncError<void>(failure, stackTrace);
