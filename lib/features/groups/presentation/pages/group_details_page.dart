@@ -563,24 +563,179 @@ class GroupDetailsPage extends ConsumerWidget {
       );
     }
 
+    void showMembersBottomSheet(Group g) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: theme.colorScheme.surface,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (modalContext) {
+          return DraggableScrollableSheet(
+            initialChildSize: 0.6,
+            minChildSize: 0.4,
+            maxChildSize: 0.85,
+            expand: false,
+            builder: (sheetContext, scrollController) {
+              return Padding(
+                padding: EdgeInsets.all(ext.spaceMD),
+                child: Column(
+                  children: [
+                    // Grab Handle
+                    Container(
+                      width: 36,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    // Header Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Group Members (${g.members.length})',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () async {
+                            Navigator.pop(modalContext);
+                            await AddMemberSheet.show(context, g.id);
+                          },
+                          icon: const Icon(Icons.person_add_rounded, size: 16),
+                          label: const Text('Add Member'),
+                          style: ElevatedButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Divider(height: 24),
+                    // Members List
+                    Expanded(
+                      child: ListView.builder(
+                        controller: scrollController,
+                        itemCount: g.members.length,
+                        itemBuilder: (context, index) {
+                          final m = g.members[index];
+                          final isCreator = m.userId == g.createdBy;
+
+                          return Card(
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                              ),
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              leading: MemberAvatar(name: m.name, radius: 22),
+                              title: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      m.name,
+                                      style: theme.textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  if (m.isAdmin || isCreator) ...[
+                                    const SizedBox(width: 6),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: theme.colorScheme.primaryContainer,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        isCreator ? 'Owner' : 'Admin',
+                                        style: theme.textTheme.labelSmall?.copyWith(
+                                          color: theme.colorScheme.onPrimaryContainer,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              subtitle: Text(
+                                m.email.isNotEmpty ? m.email : 'No email address',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+    }
+
     void showEditOptions(Group g) async {
       final value = await showMenu<String>(
         context: context,
         position: const RelativeRect.fromLTRB(100, 80, 0, 0),
         items: [
           const PopupMenuItem(
+            value: 'add_member',
+            child: Row(
+              children: [
+                Icon(Icons.person_add_outlined, size: 20),
+                SizedBox(width: 10),
+                Text('Add Member'),
+              ],
+            ),
+          ),
+          const PopupMenuItem(
             value: 'edit',
-            child: Text('Edit Name'),
+            child: Row(
+              children: [
+                Icon(Icons.edit_outlined, size: 20),
+                SizedBox(width: 10),
+                Text('Edit Group Name'),
+              ],
+            ),
           ),
           if (isAdmin)
             const PopupMenuItem(
               value: 'delete',
-              child: Text('Delete Group'),
+              child: Row(
+                children: [
+                  Icon(Icons.delete_outline_rounded, size: 20, color: Colors.red),
+                  SizedBox(width: 10),
+                  Text('Delete Group', style: TextStyle(color: Colors.red)),
+                ],
+              ),
             ),
         ],
       );
 
-      if (value == 'edit') {
+      if (value == 'add_member') {
+        if (context.mounted) await AddMemberSheet.show(context, g.id);
+      } else if (value == 'edit') {
         if (context.mounted) await EditGroupNameSheet.show(context, g);
       } else if (value == 'delete') {
         if (context.mounted) {
@@ -597,10 +752,144 @@ class GroupDetailsPage extends ConsumerWidget {
       }
     }
 
+    double userWillGet = 0.0;
+    double userNeedToPay = 0.0;
+
+    if (balancesAsync.hasValue && currentUser != null) {
+      final balances = balancesAsync.value!.balances;
+      for (final b in balances) {
+        if (b.toUserId == currentUser.id || b.toUserName == currentUser.name) {
+          userWillGet += b.amount;
+        } else if (b.fromUserId == currentUser.id || b.fromUserName == currentUser.name) {
+          userNeedToPay += b.amount;
+        }
+      }
+    }
+
+    Widget buildBalanceSummaryBadge(String currency) {
+      if (userWillGet == 0.0 && userNeedToPay == 0.0) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.18),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check_circle_outline_rounded, color: Colors.tealAccent, size: 14),
+              SizedBox(width: 4),
+              Text(
+                'Settled in this group',
+                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        );
+      }
+
+      return Wrap(
+        spacing: 8,
+        runSpacing: 4,
+        children: [
+          if (userWillGet > 0)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF10B981).withValues(alpha: 0.25),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.6)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'You will get ',
+                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                  Flexible(
+                    child: AmountDisplay(
+                      amount: userWillGet,
+                      currency: currency,
+                      style: const TextStyle(color: Color(0xFF6EE7B7), fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          if (userNeedToPay > 0)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEF4444).withValues(alpha: 0.25),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFEF4444).withValues(alpha: 0.6)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'You need to pay ',
+                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                  Flexible(
+                    child: AmountDisplay(
+                      amount: userNeedToPay,
+                      currency: currency,
+                      style: const TextStyle(color: Color(0xFFFCA5A5), fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      );
+    }
+
     if (isDesktop && group != null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(group.name),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(group.name),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () => showMembersBottomSheet(group),
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.people_alt_rounded, size: 12, color: theme.colorScheme.onPrimaryContainer),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${group.membersCount} members',
+                            style: TextStyle(
+                              color: theme.colorScheme.onPrimaryContainer,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  buildBalanceSummaryBadge(group.defaultCurrency),
+                ],
+              ),
+            ],
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.more_vert_rounded),
@@ -618,11 +907,11 @@ class GroupDetailsPage extends ConsumerWidget {
                 flex: 3,
                 child: Column(
                   children: [
-                    membersCard(group),
-                    const SizedBox(height: 16),
                     balancesCard(group),
                     const SizedBox(height: 16),
                     metaInfoCard(group),
+                    const SizedBox(height: 16),
+                    membersCard(group),
                   ],
                 ),
               ),
@@ -667,24 +956,109 @@ class GroupDetailsPage extends ConsumerWidget {
             slivers: [
               SliverAppBar(
                 pinned: true,
-                expandedHeight: 120,
+                expandedHeight: 175,
                 flexibleSpace: FlexibleSpaceBar(
-                  title: Text(
-                    group.name,
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      color: theme.colorScheme.onPrimaryContainer,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  titlePadding: const EdgeInsets.only(left: 16, bottom: 12, right: 16),
+                  title: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        group.name,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 6),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        children: [
+                          // Members Count Clickable Chip
+                          InkWell(
+                            onTap: () => showMembersBottomSheet(group),
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.18),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.people_alt_rounded, color: Colors.white, size: 14),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${group.membersCount} members',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // Balance Badge
+                          buildBalanceSummaryBadge(group.defaultCurrency),
+                        ],
+                      ),
+                    ],
                   ),
-                  background: Container(
-                    decoration: BoxDecoration(
-                      gradient: ext.primaryGradient,
-                    ),
+                  background: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // Modern Deep Gradient Background
+                      Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFF0F172A), // Deep Slate 900
+                              Color(0xFF312E81), // Indigo 900
+                              Color(0xFF1E1B4B), // Deep Purple
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Decorative Glowing Mesh Accents
+                      Positioned(
+                        top: -30,
+                        right: -30,
+                        child: Container(
+                          width: 140,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xFF6366F1).withValues(alpha: 0.25),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: -40,
+                        left: 20,
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xFF10B981).withValues(alpha: 0.2),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.more_vert_rounded),
+                    icon: const Icon(Icons.more_vert_rounded, color: Colors.white),
                     onPressed: () => showEditOptions(group),
                   ),
                 ],
@@ -693,8 +1067,6 @@ class GroupDetailsPage extends ConsumerWidget {
                 padding: EdgeInsets.all(ext.spaceLG),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
-                    membersCard(group),
-                    const SizedBox(height: 12),
                     balancesCard(group),
                     const SizedBox(height: 12),
                     recentActivityCard(group),
@@ -709,6 +1081,8 @@ class GroupDetailsPage extends ConsumerWidget {
                     analyticsTeaserCard(group),
                     const SizedBox(height: 12),
                     metaInfoCard(group),
+                    const SizedBox(height: 12),
+                    membersCard(group),
                     const SizedBox(height: 80),
                   ]),
                 ),

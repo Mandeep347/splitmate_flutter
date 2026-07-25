@@ -27,6 +27,7 @@ import 'package:splito_flutter/features/analytics/presentation/pages/group_analy
 import 'package:splito_flutter/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:splito_flutter/features/expenses/presentation/pages/global_expenses_page.dart';
 import 'package:splito_flutter/features/activity/presentation/pages/global_activity_page.dart';
+import 'package:splito_flutter/features/activity/presentation/pages/activity_feed_page.dart';
 import 'package:splito_flutter/features/analytics/presentation/pages/global_statistics_page.dart';
 import 'package:splito_flutter/features/navigation/presentation/widgets/responsive_navigation_shell.dart';
 
@@ -328,6 +329,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                             groupId: groupId,
                             groupName: groupName,
                             currency: currency,
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        name: AppRoutes.activityFeedName,
+                        path: AppRoutes.activityFeedPath,
+                        builder: (context, state) {
+                          final groupId = state.pathParameters['groupId']!;
+                          final extra = state.extra as Map<String, dynamic>? ?? {};
+                          final groupName = extra['groupName'] as String? ?? 'Group';
+                          return ActivityFeedPage(
+                            groupId: groupId,
+                            groupName: groupName,
                           );
                         },
                       ),

@@ -235,7 +235,7 @@ class DashboardPage extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    DashboardCategoryPieChart(shares: categories, height: 160),
+                    DashboardCategoryPieChart(shares: categories, height: 190),
                   ],
                 ),
               ),
@@ -391,7 +391,7 @@ class _BalanceCard extends StatelessWidget {
     final ext = theme.extension<AppThemeExtension>()!;
 
     final isOwed = netBalance >= 0;
-    final balanceText = isOwed ? 'You are owed' : 'You owe';
+    final balanceText = isOwed ? 'You will get' : 'You need to pay';
     const balanceColor = Colors.white;
 
     return Card(
@@ -511,18 +511,18 @@ class _OverviewGrid extends StatelessWidget {
         subtitle: 'Across all groups',
       ),
       _OverviewItem(
-        title: 'You Owe',
+        title: 'You Need to Pay',
         amount: analytics.totalOwedToOthers,
         icon: Icons.account_balance_outlined,
         color: const Color(0xFFEF4444), // Red
-        subtitle: 'Owed to others',
+        subtitle: 'Need to pay others',
       ),
       _OverviewItem(
-        title: 'Others Owe You',
+        title: 'You Will Get',
         amount: analytics.totalOthersOweUser,
         icon: Icons.account_balance_wallet_outlined,
         color: const Color(0xFF6366F1), // Indigo
-        subtitle: 'Owed to you',
+        subtitle: 'You will get',
       ),
       _OverviewItem(
         title: 'Net Balance',

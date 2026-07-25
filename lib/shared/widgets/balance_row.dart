@@ -38,8 +38,34 @@ class BalanceRow extends ConsumerWidget {
     final theme = Theme.of(context);
     final currentUser = ref.watch(currentUserProvider);
 
-    final fromLabel = _displayName(balance.fromUserId, balance.fromUserName, currentUser);
-    final toLabel = _displayName(balance.toUserId, balance.toUserName, currentUser);
+    final isOtherPayingMe = currentUser != null &&
+        (balance.toUserId == currentUser.id || balance.toUserName == currentUser.name);
+    final isMePayingOther = currentUser != null &&
+        (balance.fromUserId == currentUser.id || balance.fromUserName == currentUser.name);
+
+    final String avatarName;
+    final String nameLabel;
+    final String statusText;
+    final Color amountColor;
+
+    if (isOtherPayingMe) {
+      avatarName = balance.fromUserName;
+      nameLabel = balance.fromUserName;
+      statusText = 'Will pay you';
+      amountColor = theme.colorScheme.owedColor;
+    } else if (isMePayingOther) {
+      avatarName = balance.toUserName;
+      nameLabel = balance.toUserName;
+      statusText = 'You will pay';
+      amountColor = theme.colorScheme.oweColor;
+    } else {
+      avatarName = balance.fromUserName;
+      final fromLabel = _displayName(balance.fromUserId, balance.fromUserName, currentUser);
+      final toLabel = _displayName(balance.toUserId, balance.toUserName, currentUser);
+      nameLabel = '$fromLabel → $toLabel';
+      statusText = 'Owes';
+      amountColor = theme.colorScheme.onSurfaceVariant;
+    }
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
@@ -55,8 +81,8 @@ class BalanceRow extends ConsumerWidget {
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            // Left Member Avatar
-            MemberAvatar(name: balance.fromUserName, radius: 18),
+            // Left Member Avatar (Other user)
+            MemberAvatar(name: avatarName, radius: 18),
             const SizedBox(width: 12),
 
             // Center details column
@@ -64,38 +90,35 @@ class BalanceRow extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RichText(
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(
-                            style: theme.textTheme.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text: fromLabel,
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              const TextSpan(text: ' → '),
-                              TextSpan(
-                                text: toLabel,
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  AmountDisplay(
-                    amount: balance.amount,
-                    currency: balance.currency,
+                  Text(
+                    nameLabel,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
-                    color: theme.colorScheme.oweColor,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Row(
+                    children: [
+                      Text(
+                        '$statusText ',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: amountColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Flexible(
+                        child: AmountDisplay(
+                          amount: balance.amount,
+                          currency: balance.currency,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          color: amountColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -172,7 +172,7 @@ class _GroupCardState extends ConsumerState<GroupCard> {
                                   );
                                 }
 
-                                final owedText = userNetBalance > 0 ? 'You are owed' : 'You owe';
+                                final owedText = userNetBalance > 0 ? 'You will get' : 'You need to pay';
                                 final balanceColor = userNetBalance > 0
                                     ? theme.colorScheme.owedColor
                                     : theme.colorScheme.oweColor;
@@ -185,12 +185,14 @@ class _GroupCardState extends ConsumerState<GroupCard> {
                                         color: theme.colorScheme.onSurfaceVariant,
                                       ),
                                     ),
-                                    AmountDisplay(
-                                      amount: userNetBalance.abs(),
-                                      currency: widget.group.defaultCurrency,
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        color: balanceColor,
-                                        fontWeight: FontWeight.bold,
+                                    Flexible(
+                                      child: AmountDisplay(
+                                        amount: userNetBalance.abs(),
+                                        currency: widget.group.defaultCurrency,
+                                        style: theme.textTheme.bodySmall?.copyWith(
+                                          color: balanceColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ],

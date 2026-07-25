@@ -81,13 +81,13 @@ class OverallBalanceCard extends ConsumerWidget {
         child: IntrinsicHeight(
           child: Row(
             children: [
-              // Left Column: You owe
+              // Left Column: You need to pay
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'You owe',
+                      'You need to pay',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -112,13 +112,13 @@ class OverallBalanceCard extends ConsumerWidget {
                 color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
               ),
 
-              // Right Column: Owed to you
+              // Right Column: You will get
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Owed to you',
+                      'You will get',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),

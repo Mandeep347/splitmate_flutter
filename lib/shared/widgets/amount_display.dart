@@ -18,6 +18,12 @@ class AmountDisplay extends StatelessWidget {
   /// Option to prepend positive values with a '+' sign.
   final bool showSign;
 
+  /// Maximum lines to render before truncating.
+  final int? maxLines;
+
+  /// Text overflow handling algorithm.
+  final TextOverflow? overflow;
+
   /// Creates a const [AmountDisplay] instance.
   const AmountDisplay({
     super.key,
@@ -26,6 +32,8 @@ class AmountDisplay extends StatelessWidget {
     this.style,
     this.color,
     this.showSign = false,
+    this.maxLines = 1,
+    this.overflow = TextOverflow.ellipsis,
   });
 
   String _currencySymbol(String currencyCode) {
@@ -57,6 +65,8 @@ class AmountDisplay extends StatelessWidget {
 
     return Text(
       formatted,
+      maxLines: maxLines,
+      overflow: overflow,
       style: baseStyle?.copyWith(
         color: color ?? baseStyle.color,
       ),
