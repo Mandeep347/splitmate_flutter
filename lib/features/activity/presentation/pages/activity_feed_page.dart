@@ -5,6 +5,8 @@ import 'package:splito_flutter/features/activity/presentation/providers/activity
 import 'package:splito_flutter/features/activity/presentation/widgets/activity_list_tile.dart';
 import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
+import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
+import 'package:splito_flutter/features/settlements/presentation/providers/settlement_providers.dart';
 
 /// Screen displaying the paginated feed of activities in a group.
 class ActivityFeedPage extends ConsumerStatefulWidget {
@@ -71,7 +73,7 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
         value: activityState,
         data: (feed) {
           if (feed.items.isEmpty) {
-            return const EmptyStateWidget(
+            return EmptyStateWidget(
               icon: Icons.history_outlined,
               title: 'No activity yet',
               subtitle:
@@ -81,7 +83,9 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
 
           return RefreshIndicator(
             onRefresh: () async {
-              ref.read(groupActivityProvider(widget.groupId).notifier).refresh();
+              ref.invalidate(groupExpensesProvider(widget.groupId));
+              ref.invalidate(groupSettlementsProvider(widget.groupId));
+              ref.invalidate(groupActivityProvider(widget.groupId));
             },
             child: ListView.builder(
               controller: _scrollController,

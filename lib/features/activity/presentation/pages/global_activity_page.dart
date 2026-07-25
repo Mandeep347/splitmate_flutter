@@ -6,8 +6,19 @@ import 'package:splito_flutter/features/activity/presentation/widgets/activity_l
 import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
 
+import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
+
 class GlobalActivityPage extends ConsumerWidget {
   const GlobalActivityPage({super.key});
+
+  Future<void> _handleRefresh(WidgetRef ref) async {
+    ref.invalidate(myGroupsProvider);
+    final groups = ref.read(myGroupsProvider).valueOrNull ?? [];
+    for (final g in groups) {
+      ref.invalidate(groupActivityProvider(g.id));
+    }
+    ref.invalidate(globalActivityProvider);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,9 +31,7 @@ class GlobalActivityPage extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_outlined),
-            onPressed: () {
-              ref.invalidate(globalActivityProvider);
-            },
+            onPressed: () => _handleRefresh(ref),
           ),
         ],
       ),
@@ -38,9 +47,7 @@ class GlobalActivityPage extends ConsumerWidget {
           }
 
           return RefreshIndicator(
-            onRefresh: () async {
-              ref.invalidate(globalActivityProvider);
-            },
+            onRefresh: () => _handleRefresh(ref),
             child: ListView.separated(
               padding: const EdgeInsets.all(16.0),
               itemCount: activities.length,

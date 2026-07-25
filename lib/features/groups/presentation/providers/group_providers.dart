@@ -65,14 +65,30 @@ final removeMemberUseCaseProvider = Provider<RemoveMemberUseCase>((ref) {
 
 /// Notifier that manages retrieving and listing the user's joined groups.
 class MyGroupsNotifier extends AsyncNotifier<List<Group>> {
+  Timer? _pollingTimer;
+
   @override
   FutureOr<List<Group>> build() async {
-    // Watch auth state so this provider automatically rebuilds when the user
-    // logs in or out.  Without this, StatefulShellRoute.indexedStack pre-builds
-    // the groups branch before authentication, the API returns 403, and the
-    // error state persists until an explicit invalidation (e.g. creating a group).
     final isAuthenticated = ref.watch(authStateProvider);
-    if (!isAuthenticated) return [];
+    if (!isAuthenticated) {
+      _pollingTimer?.cancel();
+      return [];
+    }
+
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 20), (_) {
+      if (ref.read(authStateProvider)) {
+        ref.invalidateSelf();
+        final groups = state.valueOrNull ?? [];
+        for (final g in groups) {
+          ref.invalidate(groupActivityProvider(g.id));
+        }
+      }
+    });
+
+    ref.onDispose(() {
+      _pollingTimer?.cancel();
+    });
 
     final useCase = ref.watch(getMyGroupsUseCaseProvider);
     return useCase();
