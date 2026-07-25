@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/theme/financial_colors.dart';
+import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
+import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/balances/domain/entities/pairwise_balance.dart';
 import 'amount_display.dart';
 import 'member_avatar.dart';
 
 /// Card item widget representing a single debt balance relationship.
-class BalanceRow extends StatelessWidget {
+class BalanceRow extends ConsumerWidget {
   /// The pairwise debt balance representation.
   final PairwiseBalance balance;
 
@@ -23,9 +26,20 @@ class BalanceRow extends StatelessWidget {
     this.onSettle,
   });
 
+  String _displayName(String? userId, String name, LoggedInUser? me) {
+    if (me == null) return name;
+    if (userId != null && userId == me.id) return 'You';
+    if (userId == null && name == me.name) return 'You';
+    return name;
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final currentUser = ref.watch(currentUserProvider);
+
+    final fromLabel = _displayName(balance.fromUserId, balance.fromUserName, currentUser);
+    final toLabel = _displayName(balance.toUserId, balance.toUserName, currentUser);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
@@ -60,12 +74,12 @@ class BalanceRow extends StatelessWidget {
                             style: theme.textTheme.bodyMedium,
                             children: [
                               TextSpan(
-                                text: balance.fromUserName,
+                                text: fromLabel,
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                               const TextSpan(text: ' → '),
                               TextSpan(
-                                text: balance.toUserName,
+                                text: toLabel,
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ],

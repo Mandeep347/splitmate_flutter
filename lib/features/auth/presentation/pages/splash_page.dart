@@ -17,10 +17,14 @@ class SplashPage extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.grain_rounded,
-              size: 64,
-              color: theme.colorScheme.primary,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                'assets/icon/app_logo.png',
+                width: 72,
+                height: 72,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(height: 16),
             Text(

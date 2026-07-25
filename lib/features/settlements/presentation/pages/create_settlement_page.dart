@@ -5,6 +5,7 @@ import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/groups/domain/entities/group_member.dart';
+import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
 import 'package:splito_flutter/features/settlements/domain/entities/settlement.dart';
 import 'package:splito_flutter/features/settlements/presentation/providers/settlement_providers.dart';
 import 'package:splito_flutter/features/settings/presentation/providers/settings_providers.dart';
@@ -148,11 +149,11 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
     });
   }
 
-  Widget _buildSelector(BuildContext context, {required bool isFrom, required LoggedInUser? currentUser}) {
+  Widget _buildSelector(BuildContext context, {required bool isFrom, required LoggedInUser? currentUser, required List<GroupMember> membersList}) {
     final theme = Theme.of(context);
     final key = isFrom ? _fromKey : _toKey;
     final selectedId = isFrom ? _selectedFromUserId : _selectedToUserId;
-    final selectedMember = widget.members.firstWhere(
+    final selectedMember = membersList.firstWhere(
       (m) => m.userId == selectedId,
       orElse: () => GroupMember(
         userId: '',
@@ -170,7 +171,7 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
 
     return InkWell(
       key: key,
-      onTap: () => _showMemberPicker(context, isFrom: isFrom, currentUser: currentUser),
+      onTap: () => _showMemberPicker(context, isFrom: isFrom, currentUser: currentUser, membersList: membersList),
       borderRadius: BorderRadius.circular(12),
       child: InputDecorator(
         decoration: InputDecoration(
@@ -196,7 +197,7 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
     );
   }
 
-  void _showMemberPicker(BuildContext context, {required bool isFrom, required LoggedInUser? currentUser}) async {
+  void _showMemberPicker(BuildContext context, {required bool isFrom, required LoggedInUser? currentUser, required List<GroupMember> membersList}) async {
     final theme = Theme.of(context);
     final isDesktop = ResponsiveLayout.isDesktop(context) || ResponsiveLayout.isTablet(context);
     
@@ -230,9 +231,9 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
                 Flexible(
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: widget.members.length,
+                    itemCount: membersList.length,
                     itemBuilder: (context, index) {
-                      final member = widget.members[index];
+                      final member = membersList[index];
                       final isDisabled = member.userId == disabledUserId;
                       final memberDisplayName = _displayName(member.userId, member.name, currentUser);
                       
@@ -282,7 +283,7 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
       final GroupMember? result = await showMenu<GroupMember>(
         context: context,
         position: position,
-        items: widget.members.map((member) {
+        items: membersList.map((member) {
           final isDisabled = member.userId == disabledUserId;
           final memberDisplayName = _displayName(member.userId, member.name, currentUser);
           return PopupMenuItem<GroupMember>(
@@ -326,6 +327,11 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
     final currencySymbol = _getCurrencySymbol(_selectedCurrency!);
     final createSettlementState = ref.watch(createSettlementProvider);
 
+    final fetchedMembers = ref.watch(groupMembersProvider(widget.groupId)).valueOrNull ??
+        ref.watch(groupDetailProvider(widget.groupId)).valueOrNull?.members ??
+        const [];
+    final membersList = widget.members.isNotEmpty ? widget.members : fetchedMembers;
+
     ref.listen<AsyncValue<Settlement?>>(createSettlementProvider, (previous, next) {
       if (next is AsyncData<Settlement?> && previous is AsyncLoading<Settlement?>) {
         final settlement = next.value;
@@ -367,12 +373,12 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
                   final isWide = constraints.maxWidth >= 500;
 
                   final fromWidget = isWide
-                      ? Expanded(child: _buildSelector(context, isFrom: true, currentUser: currentUser))
-                      : _buildSelector(context, isFrom: true, currentUser: currentUser);
+                      ? Expanded(child: _buildSelector(context, isFrom: true, currentUser: currentUser, membersList: membersList))
+                      : _buildSelector(context, isFrom: true, currentUser: currentUser, membersList: membersList);
 
                   final toWidget = isWide
-                      ? Expanded(child: _buildSelector(context, isFrom: false, currentUser: currentUser))
-                      : _buildSelector(context, isFrom: false, currentUser: currentUser);
+                      ? Expanded(child: _buildSelector(context, isFrom: false, currentUser: currentUser, membersList: membersList))
+                      : _buildSelector(context, isFrom: false, currentUser: currentUser, membersList: membersList);
 
                   final swapButton = Material(
                     color: Colors.transparent,

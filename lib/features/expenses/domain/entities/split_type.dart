@@ -49,7 +49,7 @@ enum SplitType {
       case SplitType.equal:
         return 'Equal';
       case SplitType.exact:
-        return 'Exact Amount';
+        return 'Exact';
       case SplitType.percentage:
         return 'Percentage';
       case SplitType.share:

@@ -60,16 +60,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.14.4
-
-flutter_launcher_icons:
-  android: true
-  image_path: assets/icon/app_logo.png
-
-  # Code Generation & Linting
   flutter_lints: ^4.0.0
   build_runner: ^2.4.10
   riverpod_generator: ^2.4.0
-  # Moved riverpod_annotation here because it is not used as a runtime dependency
   riverpod_annotation: ^2.3.5
   freezed: ^2.5.2
   json_serializable: ^6.8.0
@@ -90,6 +83,7 @@ flutter:
 
   assets:
     - config/env/.env
+    - assets/icon/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

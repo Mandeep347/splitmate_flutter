@@ -60,21 +60,13 @@ class AuthFormWrapper extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      Color(0xFF6366F1),
-                                      Color(0xFF14B8A6),
-                                    ],
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: const Icon(
-                                  Icons.grain_rounded,
-                                  color: Colors.white,
-                                  size: 28,
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.asset(
+                                  'assets/icon/app_logo.png',
+                                  width: 52,
+                                  height: 52,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                               const SizedBox(width: 16),
@@ -199,15 +191,24 @@ class AuthFormWrapper extends StatelessWidget {
                 // Top Logo
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      gradient: ext.primaryGradient,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.25),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
-                    child: const Icon(
-                      Icons.grain_rounded,
-                      color: Colors.white,
-                      size: 28,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.asset(
+                        'assets/icon/app_logo.png',
+                        width: 64,
+                        height: 64,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

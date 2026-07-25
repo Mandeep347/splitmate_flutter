@@ -12,6 +12,7 @@ import 'package:splito_flutter/features/expenses/presentation/widgets/paid_by_se
 import 'package:splito_flutter/features/expenses/presentation/widgets/participant_input_section.dart';
 import 'package:splito_flutter/features/expenses/presentation/widgets/split_type_selector.dart';
 import 'package:splito_flutter/features/groups/domain/entities/group_member.dart';
+import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
 import 'package:splito_flutter/features/settings/presentation/providers/settings_providers.dart';
 import 'package:splito_flutter/shared/widgets/app_text_field.dart';
 import 'package:splito_flutter/shared/widgets/currency_chip_selector.dart';
@@ -199,7 +200,21 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
     final currencySymbol = _getCurrencySymbol(_selectedCurrency!);
     final expenseState = ref.watch(createExpenseProvider);
 
-    final mappedMembers = widget.members.map((m) => _mapMember(m, currentUser)).toList();
+    // Fallback to fetching group members via provider if widget.members was empty
+    final fetchedMembers = ref.watch(groupMembersProvider(widget.groupId)).valueOrNull ??
+        ref.watch(groupDetailProvider(widget.groupId)).valueOrNull?.members ??
+        const [];
+    final effectiveMembers = widget.members.isNotEmpty ? widget.members : fetchedMembers;
+
+    final mappedMembers = effectiveMembers.map((m) => _mapMember(m, currentUser)).toList();
+
+    // Auto-select default paidBy userId if not yet selected or invalid
+    if (mappedMembers.isNotEmpty &&
+        (_selectedPaidByUserId == null || !mappedMembers.any((m) => m.userId == _selectedPaidByUserId))) {
+      _selectedPaidByUserId = (currentUser != null && mappedMembers.any((m) => m.userId == currentUser.id))
+          ? currentUser.id
+          : mappedMembers.first.userId;
+    }
 
     ref.listen<AsyncValue<Expense?>>(createExpenseProvider, (previous, next) {
       if (next is AsyncData<Expense?> && previous is AsyncLoading<Expense?>) {
