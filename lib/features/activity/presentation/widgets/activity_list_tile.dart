@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import '../../domain/entities/activity_item.dart';
 import 'activity_icon.dart';
 
 /// List tile widget presenting a single activity item description and timestamp.
-class ActivityListTile extends StatelessWidget {
+///
+/// Substitutes the current user's name with "You" in the [activity.description]
+/// so actions performed by the signed-in user read naturally (e.g.
+/// "You added an expense" instead of "Mandeep Chauhan added an expense").
+class ActivityListTile extends ConsumerWidget {
   /// The activity item entity.
   final ActivityItem activity;
 
@@ -15,8 +21,29 @@ class ActivityListTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    // Bug 3 fix: read current user to substitute their name with "You".
+    final currentUser = ref.watch(currentUserProvider);
+
+    // Replace the actor's name with "You" when the activity belongs to the
+    // current user.  The backend description already contains the actor name,
+    // so we do a targeted string replacement.
+    String displayDescription = activity.description;
+    if (currentUser != null && activity.actorName.isNotEmpty) {
+      // Match by actorUserId when available, fall back to name comparison.
+      final isCurrentUser = activity.actorUserId.isNotEmpty
+          ? activity.actorUserId == currentUser.id
+          : activity.actorName == currentUser.name;
+
+      if (isCurrentUser) {
+        // Replace the leading name token with "You".
+        displayDescription = displayDescription.replaceFirst(
+          activity.actorName,
+          'You',
+        );
+      }
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -37,7 +64,7 @@ class ActivityListTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  activity.description,
+                  displayDescription,
                   style: theme.textTheme.bodyMedium,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

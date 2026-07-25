@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/groups/domain/entities/group_member.dart';
 import 'package:splito_flutter/features/settlements/domain/entities/settlement.dart';
@@ -71,6 +72,18 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
     super.dispose();
   }
 
+  String _displayName(String? userId, String name, LoggedInUser? me) {
+    if (me == null) return name;
+    if (userId != null && userId == me.id) return 'You';
+    if (userId == null && name == me.name) return 'You';
+    return name;
+  }
+
+  String _paidToLabel(String toUserId, String toName, LoggedInUser? me) {
+    if (me != null && toUserId == me.id) return 'you';
+    return toName;
+  }
+
   String _getCurrencySymbol(String currencyCode) {
     switch (currencyCode.toUpperCase()) {
       case 'INR':
@@ -135,7 +148,7 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
     });
   }
 
-  Widget _buildSelector(BuildContext context, {required bool isFrom}) {
+  Widget _buildSelector(BuildContext context, {required bool isFrom, required LoggedInUser? currentUser}) {
     final theme = Theme.of(context);
     final key = isFrom ? _fromKey : _toKey;
     final selectedId = isFrom ? _selectedFromUserId : _selectedToUserId;
@@ -151,10 +164,13 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
       ),
     );
     final hasSelection = selectedId != null && selectedMember.userId.isNotEmpty;
+    final nameLabel = hasSelection
+        ? _displayName(selectedMember.userId, selectedMember.name, currentUser)
+        : 'Select member';
 
     return InkWell(
       key: key,
-      onTap: () => _showMemberPicker(context, isFrom: isFrom),
+      onTap: () => _showMemberPicker(context, isFrom: isFrom, currentUser: currentUser),
       borderRadius: BorderRadius.circular(12),
       child: InputDecorator(
         decoration: InputDecoration(
@@ -169,7 +185,7 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         ),
         child: Text(
-          hasSelection ? selectedMember.name : 'Select member',
+          nameLabel,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: hasSelection ? null : theme.colorScheme.onSurfaceVariant,
           ),
@@ -180,7 +196,7 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
     );
   }
 
-  void _showMemberPicker(BuildContext context, {required bool isFrom}) async {
+  void _showMemberPicker(BuildContext context, {required bool isFrom, required LoggedInUser? currentUser}) async {
     final theme = Theme.of(context);
     final isDesktop = ResponsiveLayout.isDesktop(context) || ResponsiveLayout.isTablet(context);
     
@@ -218,11 +234,12 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
                     itemBuilder: (context, index) {
                       final member = widget.members[index];
                       final isDisabled = member.userId == disabledUserId;
+                      final memberDisplayName = _displayName(member.userId, member.name, currentUser);
                       
                       return ListTile(
                         leading: MemberAvatar(name: member.name, radius: 14),
                         title: Text(
-                          member.name,
+                          memberDisplayName,
                           style: TextStyle(
                             color: isDisabled ? theme.colorScheme.onSurface.withValues(alpha: 0.38) : null,
                             fontWeight: isDisabled ? FontWeight.normal : FontWeight.bold,
@@ -267,6 +284,7 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
         position: position,
         items: widget.members.map((member) {
           final isDisabled = member.userId == disabledUserId;
+          final memberDisplayName = _displayName(member.userId, member.name, currentUser);
           return PopupMenuItem<GroupMember>(
             value: member,
             enabled: !isDisabled,
@@ -275,7 +293,7 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
                 MemberAvatar(name: member.name, radius: 12),
                 const SizedBox(width: 8),
                 Text(
-                  member.name,
+                  memberDisplayName,
                   style: TextStyle(
                     color: isDisabled ? theme.colorScheme.onSurface.withValues(alpha: 0.38) : null,
                   ),
@@ -300,6 +318,7 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(currentUserProvider);
     final defaultCurrency = ref.watch(defaultCurrencyProvider);
     _selectedCurrency ??= defaultCurrency;
 
@@ -307,14 +326,15 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
     final currencySymbol = _getCurrencySymbol(_selectedCurrency!);
     final createSettlementState = ref.watch(createSettlementProvider);
 
-    // Listen to provider states to handle popping on success or displaying failure overlays
     ref.listen<AsyncValue<Settlement?>>(createSettlementProvider, (previous, next) {
       if (next is AsyncData<Settlement?> && previous is AsyncLoading<Settlement?>) {
         final settlement = next.value;
         if (settlement != null) {
+          final fromText = _displayName(settlement.fromUserId, settlement.fromUserName, currentUser);
+          final toText = _paidToLabel(settlement.toUserId, settlement.toUserName, currentUser);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${settlement.fromUserName} paid ${settlement.toUserName}'),
+              content: Text('$fromText paid $toText'),
             ),
           );
           context.pop();
@@ -347,12 +367,12 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
                   final isWide = constraints.maxWidth >= 500;
 
                   final fromWidget = isWide
-                      ? Expanded(child: _buildSelector(context, isFrom: true))
-                      : _buildSelector(context, isFrom: true);
+                      ? Expanded(child: _buildSelector(context, isFrom: true, currentUser: currentUser))
+                      : _buildSelector(context, isFrom: true, currentUser: currentUser);
 
                   final toWidget = isWide
-                      ? Expanded(child: _buildSelector(context, isFrom: false))
-                      : _buildSelector(context, isFrom: false);
+                      ? Expanded(child: _buildSelector(context, isFrom: false, currentUser: currentUser))
+                      : _buildSelector(context, isFrom: false, currentUser: currentUser);
 
                   final swapButton = Material(
                     color: Colors.transparent,

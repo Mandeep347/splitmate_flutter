@@ -264,17 +264,20 @@ class SettingsPage extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    // Bug 5 fix: guard against null dialog result; router
+                    // redirect handles navigation automatically after logout.
                     onTap: () async {
-                      final confirm = await ConfirmationDialog.show(
+                      final confirmed = await ConfirmationDialog.show(
                         context,
                         title: 'Sign Out',
                         message: 'You will need to sign in again to access your groups.',
                         confirmLabel: 'Sign Out',
                         isDestructive: true,
                       );
-                      if (confirm == true) {
+                      if (confirmed != true) return;
+                      try {
                         await ref.read(authNotifierProvider.notifier).logout();
-                      }
+                      } catch (_) {}
                     },
                   ),
                 ],

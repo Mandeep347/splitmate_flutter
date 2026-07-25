@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:splito_flutter/core/router/route_names.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/settings/presentation/providers/settings_providers.dart';
 import 'package:splito_flutter/shared/widgets/confirmation_dialog.dart';
 import 'package:splito_flutter/shared/widgets/info_row.dart';
 import 'package:splito_flutter/shared/widgets/notification_bell.dart';
-import 'package:go_router/go_router.dart';
-import 'package:splito_flutter/core/router/route_names.dart';
 import '../widgets/edit_profile_sheet.dart';
 
 /// Screen displaying user profile dashboard, local app preferences, and session controls.
@@ -30,9 +30,11 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final ext = theme.extension<AppThemeExtension>()!;
+    // Bug 4 fix: use ref.watch so profile rebuilds when auth completes.
     final user = ref.watch(currentUserProvider);
     final settingsState = ref.watch(settingsProvider);
 
+    // Bug 4 fix: show spinner while user is loading — never return empty body.
     if (user == null) {
       return const Scaffold(
         body: Center(
@@ -48,7 +50,8 @@ class ProfilePage extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.settings_outlined),
             tooltip: 'Settings',
-            onPressed: () => context.goNamed(AppRoutes.settingsName),
+            // Bug 6 fix: push settings so back navigation works.
+            onPressed: () => context.pushNamed(AppRoutes.settingsName),
           ),
           const NotificationBell(),
         ],
@@ -130,6 +133,8 @@ class ProfilePage extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // Section 3: App Settings Card
+          // Bug 4 fix: render section header and user info regardless of settings
+          // load state; only gate the settings-specific widgets.
           Text(
             'Preferences',
             style: theme.textTheme.titleMedium?.copyWith(
@@ -163,34 +168,45 @@ class ProfilePage extends ConsumerWidget {
                 error: (_, __) => const SizedBox.shrink(),
                 data: (settings) => Column(
                   children: [
-                    // Theme Row
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Theme'),
-                      trailing: SegmentedButton<String>(
-                        showSelectedIcon: false,
-                        segments: const [
-                          ButtonSegment(
-                            value: 'system',
-                            label: Text('System'),
-                            icon: Icon(Icons.brightness_auto_outlined, size: 16),
+                    // Theme Selector
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Theme',
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
-                          ButtonSegment(
-                            value: 'light',
-                            label: Text('Light'),
-                            icon: Icon(Icons.light_mode_outlined, size: 16),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          width: double.infinity,
+                          child: SegmentedButton<String>(
+                            showSelectedIcon: false,
+                            segments: const [
+                              ButtonSegment(
+                                value: 'system',
+                                label: Text('System'),
+                                icon: Icon(Icons.brightness_auto_outlined, size: 16),
+                              ),
+                              ButtonSegment(
+                                value: 'light',
+                                label: Text('Light'),
+                                icon: Icon(Icons.light_mode_outlined, size: 16),
+                              ),
+                              ButtonSegment(
+                                value: 'dark',
+                                label: Text('Dark'),
+                                icon: Icon(Icons.dark_mode_outlined, size: 16),
+                              ),
+                            ],
+                            selected: {settings.themeMode},
+                            onSelectionChanged: (selected) {
+                              ref.read(settingsProvider.notifier).updateThemeMode(selected.first);
+                            },
                           ),
-                          ButtonSegment(
-                            value: 'dark',
-                            label: Text('Dark'),
-                            icon: Icon(Icons.dark_mode_outlined, size: 16),
-                          ),
-                        ],
-                        selected: {settings.themeMode},
-                        onSelectionChanged: (selected) {
-                          ref.read(settingsProvider.notifier).updateThemeMode(selected.first);
-                        },
-                      ),
+                        ),
+                      ],
                     ),
                     Divider(height: ext.spaceLG),
                     // Notifications
@@ -307,17 +323,20 @@ class ProfilePage extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  // Bug 5 fix: guard against null dialog result; use try/catch
+                  // so the router redirect handles navigation automatically.
                   onTap: () async {
-                    final confirm = await ConfirmationDialog.show(
+                    final confirmed = await ConfirmationDialog.show(
                       context,
                       title: 'Sign Out',
                       message: 'You will need to sign in again to access your groups.',
                       confirmLabel: 'Sign Out',
                       isDestructive: true,
                     );
-                    if (confirm == true) {
+                    if (confirmed != true) return;
+                    try {
                       await ref.read(authNotifierProvider.notifier).logout();
-                    }
+                    } catch (_) {}
                   },
                 ),
               ],

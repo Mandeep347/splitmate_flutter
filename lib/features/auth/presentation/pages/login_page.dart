@@ -149,7 +149,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    context.goNamed(AppRoutes.forgotPasswordName);
+                    context.pushNamed(AppRoutes.forgotPasswordName);
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
@@ -173,7 +173,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () => context.goNamed(AppRoutes.registerName),
+                onPressed: () => context.pushNamed(AppRoutes.registerName),
                 child: const Text("Don't have an account? Sign Up"),
               ),
             ],

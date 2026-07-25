@@ -2,15 +2,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:splito_flutter/core/constants/storage_keys.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
+import 'package:splito_flutter/core/storage/hive_storage_service.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/auth/presentation/widgets/auth_form_wrapper.dart';
 import 'package:splito_flutter/shared/widgets/loading_overlay.dart';
 import 'package:splito_flutter/shared/widgets/primary_button.dart';
 
 /// Screen notifying the user that verification email was sent,
-/// offering verification email resend with a 60s cooldown.
+/// offering verification email resend with a 24-hour cooldown.
 class EmailVerificationPendingPage extends ConsumerStatefulWidget {
   /// The attempted registration email address.
   final String email;
@@ -26,13 +28,15 @@ class EmailVerificationPendingPage extends ConsumerStatefulWidget {
 }
 
 class _EmailVerificationPendingPageState extends ConsumerState<EmailVerificationPendingPage> {
-  int _cooldownSeconds = 0;
+  static const int _twentyFourHoursMs = 24 * 60 * 60 * 1000;
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _startCooldown();
+    _timer = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -41,33 +45,59 @@ class _EmailVerificationPendingPageState extends ConsumerState<EmailVerification
     super.dispose();
   }
 
-  void _startCooldown() {
-    setState(() => _cooldownSeconds = 60);
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_cooldownSeconds > 0) {
-        setState(() => _cooldownSeconds--);
-      } else {
-        _timer?.cancel();
-      }
-    });
+  int? _getRemainingCooldownMs() {
+    final hive = ref.read(hiveStorageServiceProvider);
+    final int? lastTs = hive.read<int>(StorageKeys.settingsBox, 'last_resend_ts');
+    if (lastTs == null) return null;
+
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final elapsed = now - lastTs;
+    if (elapsed >= _twentyFourHoursMs) {
+      return null;
+    }
+    return _twentyFourHoursMs - elapsed;
+  }
+
+  String? _getCountdownText() {
+    final remainingMs = _getRemainingCooldownMs();
+    if (remainingMs == null) return null;
+
+    final duration = Duration(milliseconds: remainingMs);
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes.remainder(60);
+    return 'Resend available in ${hours}h ${minutes}m';
   }
 
   Future<void> _resend() async {
-    if (_cooldownSeconds > 0) return;
+    if (_getRemainingCooldownMs() != null) return;
     try {
       await ref.read(authNotifierProvider.notifier).resendVerification(email: widget.email);
+      final hive = ref.read(hiveStorageServiceProvider);
+      await hive.write<int>(
+        StorageKeys.settingsBox,
+        'last_resend_ts',
+        DateTime.now().millisecondsSinceEpoch,
+      );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Verification email resent successfully.'),
+          SnackBar(
+            content: Text('Verification email sent to ${widget.email}'),
             behavior: SnackBarBehavior.floating,
           ),
         );
-        _startCooldown();
+        setState(() {});
       }
-    } catch (_) {
-      // Error is listened to reactive-style in build
+    } catch (e) {
+      if (mounted) {
+        final message = e is Failure ? e.message : 'Failed to resend verification email.';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
@@ -76,25 +106,8 @@ class _EmailVerificationPendingPageState extends ConsumerState<EmailVerification
     final theme = Theme.of(context);
     final authAsync = ref.watch(authNotifierProvider);
     final isLoading = authAsync is AsyncLoading;
-
-    ref.listen<AsyncValue<AuthState>>(
-      authNotifierProvider,
-      (previous, next) {
-        if (next is AsyncError) {
-          final error = next.error;
-          final message = error is Failure
-              ? error.message
-              : 'Failed to resend verification email. Please try again.';
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(message),
-              backgroundColor: theme.colorScheme.error,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        }
-      },
-    );
+    final countdownText = _getCountdownText();
+    final isCooldownActive = countdownText != null;
 
     return LoadingOverlay(
       isLoading: isLoading,
@@ -137,10 +150,8 @@ class _EmailVerificationPendingPageState extends ConsumerState<EmailVerification
             ),
             const SizedBox(height: 32),
             PrimaryButton(
-              label: _cooldownSeconds > 0
-                  ? 'Resend Email (${_cooldownSeconds}s)'
-                  : 'Resend Email',
-              onPressed: _cooldownSeconds > 0 ? null : _resend,
+              label: isCooldownActive ? countdownText : 'Resend Email',
+              onPressed: isCooldownActive ? null : _resend,
               isLoading: isLoading,
             ),
             const SizedBox(height: 16),

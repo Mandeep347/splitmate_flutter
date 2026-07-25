@@ -91,26 +91,16 @@ final resetPasswordUseCaseProvider = Provider<ResetPasswordUseCase>((ref) {
 class AuthNotifier extends AsyncNotifier<AuthState> {
   @override
   Future<AuthState> build() async {
-    // Changed: Moved all ref.watch calls to before the first await to prevent undefined behavior in Riverpod.
     final repository = ref.watch(authRepositoryProvider);
     final getMe = ref.watch(getMeUseCaseProvider);
 
-    // Register the session-expired callback so the network layer
-    // can trigger logout without importing auth_provider directly.
-    // Uses a post-frame callback to avoid modifying another
-    // provider's state during build, which Riverpod disallows.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(sessionExpiredCallbackProvider.notifier).state = () {
         ref.invalidateSelf();
       };
     });
 
-    // Clean up the callback when this notifier is disposed
-    // (e.g. on logout when invalidateSelf() is called).
     ref.onDispose(() {
-      // Only clear if we are still the registered callback.
-      // Use a try-catch because the container may already be
-      // disposed during hot restart.
       try {
         ref.read(sessionExpiredCallbackProvider.notifier).state = null;
       } catch (_) {}
@@ -125,13 +115,11 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
       final user = await getMe();
       return AuthStateAuthenticated(user: user);
     } catch (_) {
-      // Build errors must resolve to AuthStateUnauthenticated
       return const AuthStateUnauthenticated();
     }
   }
 
   /// Triggers user login flow and updates session states.
-  /// Throws non-auth failures.
   Future<void> login({
     required String email,
     required String password,
@@ -140,10 +128,6 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     try {
       final loginUseCase = ref.read(loginUseCaseProvider);
       await loginUseCase(email: email, password: password);
-      // Tokens are saved. Re-run build() which calls getMe()
-      // and resolves to AuthStateAuthenticated or falls back
-      // to AuthStateUnauthenticated on its own — no duplicate
-      // getMe call here that could falsely report login failure.
       ref.invalidateSelf();
     } on AuthFailure catch (e, stack) {
       state = AsyncValue.error(e, stack);
@@ -230,17 +214,19 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
   /// Logs out the user session and invalidates state caching.
   Future<void> logout() async {
-    state = const AsyncLoading<AuthState>();
+    // Set unauthenticated state FIRST so RouterNotifier fires exactly once
+    // with a definitive non-loading state. The router redirect then navigates
+    // to /login before any dependent providers are touched.
+    // Invalidating stale data afterwards is safe — the login page never reads
+    // those providers, so there is no risk of a stale-data flash.
+    state = const AsyncValue.data(AuthStateUnauthenticated());
+    _invalidateStaleData();
     try {
       final logoutUseCase = ref.read(logoutUseCaseProvider);
       await logoutUseCase();
-      _invalidateStaleData();
-      state = const AsyncValue.data(AuthStateUnauthenticated());
-      ref.invalidateSelf();
-    } catch (e) {
-      _invalidateStaleData();
-      state = const AsyncValue.data(AuthStateUnauthenticated());
-      ref.invalidateSelf();
+    } catch (_) {
+      // Tokens may already be cleared or storage unavailable.
+      // State is already unauthenticated — no recovery needed.
     }
   }
 

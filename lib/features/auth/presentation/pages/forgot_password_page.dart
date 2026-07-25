@@ -79,7 +79,13 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               const SizedBox(height: 32),
               PrimaryButton(
                 label: 'Back to Sign In',
-                onPressed: () => context.goNamed(AppRoutes.loginName),
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.goNamed(AppRoutes.loginName);
+                  }
+                },
               ),
             ] else ...[
               Form(
@@ -112,7 +118,13 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () => context.goNamed(AppRoutes.loginName),
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.goNamed(AppRoutes.loginName);
+                  }
+                },
                 child: const Text('Back to Sign In'),
               ),
             ],

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:splito_flutter/core/responsive/responsive_layout.dart';
+import 'package:splito_flutter/core/router/app_router.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
@@ -57,42 +59,83 @@ class ResponsiveNavigationShell extends ConsumerWidget {
     }
   }
 
+  GlobalKey<NavigatorState> _navigatorKeyForIndex(int index) {
+    return switch (index) {
+      0 => dashboardTabNavigatorKey,
+      1 => groupsTabNavigatorKey,
+      2 => expensesTabNavigatorKey,
+      3 => activityTabNavigatorKey,
+      4 => statisticsTabNavigatorKey,
+      5 => profileTabNavigatorKey,
+      _ => dashboardTabNavigatorKey,
+    };
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDesktop = ResponsiveLayout.isDesktop(context);
     final user = ref.watch(currentUserProvider);
 
     if (user == null) {
-      return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(
-            color: Theme.of(context).colorScheme.primary,
+      // Wrap in PopScope so the system back gesture doesn't exit the app
+      // during the transient auth-loading period (startup or post-logout).
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          // During loading there is no meaningful branch to switch to; exit.
+          SystemNavigator.pop();
+        },
+        child: Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
         ),
       );
     }
 
-    if (isDesktop) {
-      return _DesktopShell(
-        navigationShell: navigationShell,
-        user: user,
-      );
-    } else {
-      return _MobileShell(
-        navigationShell: navigationShell,
-        currentIndex: _branchToBottomNavIndex(navigationShell.currentIndex),
-        onTabSelected: (index) {
-          if (index == 2) {
-            _showAddExpenseGroupSelector(context, ref);
-          } else {
-            navigationShell.goBranch(
-              _bottomNavIndexToBranch(index),
-              initialLocation: _bottomNavIndexToBranch(index) == navigationShell.currentIndex,
-            );
-          }
-        },
-      );
-    }
+    final shellBody = isDesktop
+        ? _DesktopShell(
+            navigationShell: navigationShell,
+            user: user,
+          )
+        : _MobileShell(
+            navigationShell: navigationShell,
+            currentIndex: _branchToBottomNavIndex(navigationShell.currentIndex),
+            onTabSelected: (index) {
+              if (index == 2) {
+                _showAddExpenseGroupSelector(context, ref);
+              } else {
+                navigationShell.goBranch(
+                  _bottomNavIndexToBranch(index),
+                  initialLocation: _bottomNavIndexToBranch(index) == navigationShell.currentIndex,
+                );
+              }
+            },
+          );
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        final shell = navigationShell;
+        if (shell.currentIndex != 0) {
+          // Not on the home tab — go to dashboard first.
+          shell.goBranch(0, initialLocation: true);
+          return;
+        }
+        // On dashboard — pop if there's a child page, otherwise exit.
+        final navigatorKey = _navigatorKeyForIndex(0);
+        if (navigatorKey.currentState?.canPop() == true) {
+          navigatorKey.currentState?.pop();
+        } else {
+          SystemNavigator.pop();
+        }
+      },
+      child: shellBody,
+    );
   }
 
   void _showAddExpenseGroupSelector(BuildContext context, WidgetRef ref) {
@@ -220,7 +263,7 @@ class _MobileShell extends StatelessWidget {
           NavigationDestination(
             icon: Icon(Icons.add_circle_outline_rounded),
             selectedIcon: Icon(Icons.add_circle_rounded),
-            label: 'Add Expense',
+            label: 'Add',
           ),
           NavigationDestination(
             icon: Icon(Icons.history_outlined),

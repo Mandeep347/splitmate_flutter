@@ -1,5 +1,9 @@
 /// Defines route names and paths constants to avoid hardcoding strings.
 abstract class AppRoutes {
+  // Splash Route
+  static const String splashName = 'splash';
+  static const String splashPath = '/';
+
   // Auth Routes
   static const String loginName = 'login';
   static const String loginPath = '/login';

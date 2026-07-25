@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:splito_flutter/core/theme/financial_colors.dart';
+import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
+import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/settlements/domain/entities/settlement.dart';
 import 'amount_display.dart';
 
 /// Card tile representation for displaying summary details of a settlement.
-class SettlementListTile extends StatelessWidget {
+class SettlementListTile extends ConsumerWidget {
   /// The settlement transaction details.
   final Settlement settlement;
 
@@ -14,6 +17,18 @@ class SettlementListTile extends StatelessWidget {
     super.key,
     required this.settlement,
   });
+
+  String _displayName(String? userId, String name, LoggedInUser? me) {
+    if (me == null) return name;
+    if (userId != null && userId == me.id) return 'You';
+    if (userId == null && name == me.name) return 'You';
+    return name;
+  }
+
+  String _paidToLabel(String toUserId, String toName, LoggedInUser? me) {
+    if (me != null && toUserId == me.id) return 'you';
+    return toName;
+  }
 
   String _getRelativeDate(DateTime createdAt) {
     final now = DateTime.now();
@@ -31,9 +46,13 @@ class SettlementListTile extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final relativeDate = _getRelativeDate(settlement.createdAt);
+    final currentUser = ref.watch(currentUserProvider);
+
+    final fromLabel = _displayName(settlement.fromUserId, settlement.fromUserName, currentUser);
+    final toLabel = _paidToLabel(settlement.toUserId, settlement.toUserName, currentUser);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
@@ -76,12 +95,12 @@ class SettlementListTile extends StatelessWidget {
                       style: theme.textTheme.bodyMedium,
                       children: [
                         TextSpan(
-                          text: settlement.fromUserName,
+                          text: fromLabel,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const TextSpan(text: ' paid '),
                         TextSpan(
-                          text: settlement.toUserName,
+                          text: toLabel,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],

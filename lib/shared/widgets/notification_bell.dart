@@ -21,7 +21,9 @@ class NotificationBell extends ConsumerWidget {
           icon: const Icon(Icons.notifications_outlined),
           onPressed: () {
             ref.read(notificationsProvider.notifier).refresh();
-            context.goNamed(AppRoutes.notificationsName);
+            // Bug 6 fix: use pushNamed so back navigation returns to the
+            // originating page (profile / any screen) instead of replacing it.
+            context.pushNamed(AppRoutes.notificationsName);
           },
         ),
         if (hasUnread)

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense_split_input.dart';
@@ -75,8 +76,29 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
   }
 
   void _onAmountChanged() {
-    // Re-evaluate state on amount controller updates to refresh split summary card in real-time
     setState(() {});
+  }
+
+  String _displayName(String? userId, String name, LoggedInUser? me) {
+    if (me == null) return name;
+    if (userId != null && userId == me.id) return 'You';
+    if (userId == null && name == me.name) return 'You';
+    return name;
+  }
+
+  GroupMember _mapMember(GroupMember m, LoggedInUser? currentUser) {
+    final displayName = _displayName(m.userId, m.name, currentUser);
+    if (displayName == 'You') {
+      return GroupMember(
+        userId: m.userId,
+        name: 'You',
+        email: m.email,
+        role: m.role,
+        status: m.status,
+        joinedAt: m.joinedAt,
+      );
+    }
+    return m;
   }
 
   String _getCurrencySymbol(String currency) {
@@ -128,8 +150,7 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
             splitInput: _currentSplitInput!,
           );
     } catch (_) {
-      // Silent catch to suppress duplicate UI popups; the error is caught
-      // and displayed via ref.listen below.
+      // Error is caught via listener
     }
   }
 
@@ -170,6 +191,7 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(currentUserProvider);
     final defaultCurrency = ref.watch(defaultCurrencyProvider);
     _selectedCurrency ??= defaultCurrency;
 
@@ -177,7 +199,8 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
     final currencySymbol = _getCurrencySymbol(_selectedCurrency!);
     final expenseState = ref.watch(createExpenseProvider);
 
-    // Listen to changes in the createExpenseProvider to auto-pop on success or show snackbars on errors
+    final mappedMembers = widget.members.map((m) => _mapMember(m, currentUser)).toList();
+
     ref.listen<AsyncValue<Expense?>>(createExpenseProvider, (previous, next) {
       if (next is AsyncData<Expense?> && previous is AsyncLoading<Expense?>) {
         final expense = next.value;
@@ -288,7 +311,7 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
                 ),
                 const SizedBox(height: 8),
                 PaidBySelector(
-                  members: widget.members,
+                  members: mappedMembers,
                   selectedUserId: _selectedPaidByUserId,
                   onChanged: (userId) {
                     setState(() {
@@ -321,7 +344,7 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
                 ),
                 const SizedBox(height: 8),
                 ParticipantInputSection(
-                  members: widget.members,
+                  members: mappedMembers,
                   splitType: _selectedSplitType,
                   currency: widget.currency,
                   onSplitInputChanged: (input) {

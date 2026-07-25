@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+
 import 'package:splito_flutter/core/responsive/responsive_layout.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
@@ -18,8 +18,7 @@ import 'package:splito_flutter/features/dashboard/presentation/providers/dashboa
 import 'package:splito_flutter/features/dashboard/presentation/widgets/wallet_card_painter.dart';
 import 'package:splito_flutter/features/dashboard/presentation/widgets/dashboard_line_chart.dart';
 import 'package:splito_flutter/features/dashboard/presentation/widgets/dashboard_category_pie_chart.dart';
-import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
-import 'package:splito_flutter/features/analytics/domain/entities/monthly_spending.dart';
+
 import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
 import 'package:splito_flutter/shared/widgets/amount_display.dart';
@@ -293,78 +292,86 @@ class DashboardPage extends ConsumerWidget {
       );
     }
 
+    // Bug 1 Fix: Wrap body in SafeArea on mobile/tablet to prevent greeting
+    // text from overlapping the device status bar.
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(myGroupsProvider);
-          ref.invalidate(myOverallBalancesProvider);
-          ref.invalidate(globalActivityProvider);
-          ref.invalidate(userAnalyticsProvider);
-          try {
-            await ref.read(myGroupsProvider.future);
-            await ref.read(myOverallBalancesProvider.future);
-            await ref.read(userAnalyticsProvider.future);
-          } catch (_) {}
-        },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.all(isDesktop ? ext.spaceXL : ext.spaceLG),
-          child: AsyncValueWidget<List<Group>>(
-            value: groupsAsync,
-            data: (groups) {
-              return AsyncValueWidget<UserAnalytics>(
-                value: userAnalyticsAsync,
-                data: (analytics) {
-                  return AsyncValueWidget<List<ActivityItem>>(
-                    value: activityAsync,
-                    data: (activities) {
-                      return AsyncValueWidget<List<CategoryShare>>(
-                        value: categorySharesAsync,
-                        data: (categoryShares) {
-                          if (isDesktop) {
-                            // Desktop Layout (2 Columns)
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: ext.spaceLG),
-                                    child: mainContent(groups, analytics),
+      body: SafeArea(
+        // On desktop the shell already handles safe areas via the sidebar;
+        // only apply top SafeArea on mobile/tablet.
+        top: !isDesktop,
+        bottom: false,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(myGroupsProvider);
+            ref.invalidate(myOverallBalancesProvider);
+            ref.invalidate(globalActivityProvider);
+            ref.invalidate(userAnalyticsProvider);
+            try {
+              await ref.read(myGroupsProvider.future);
+              await ref.read(myOverallBalancesProvider.future);
+              await ref.read(userAnalyticsProvider.future);
+            } catch (_) {}
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.all(isDesktop ? ext.spaceXL : ext.spaceLG),
+            child: AsyncValueWidget<List<Group>>(
+              value: groupsAsync,
+              data: (groups) {
+                return AsyncValueWidget<UserAnalytics>(
+                  value: userAnalyticsAsync,
+                  data: (analytics) {
+                    return AsyncValueWidget<List<ActivityItem>>(
+                      value: activityAsync,
+                      data: (activities) {
+                        return AsyncValueWidget<List<CategoryShare>>(
+                          value: categorySharesAsync,
+                          data: (categoryShares) {
+                            if (isDesktop) {
+                              // Desktop Layout (2 Columns)
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: ext.spaceLG),
+                                      child: mainContent(groups, analytics),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: sidebarContent(
+                                  Expanded(
+                                    flex: 2,
+                                    child: sidebarContent(
+                                      activities,
+                                      analytics,
+                                      categoryShares,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              // Mobile / Tablet Layout (1 Column)
+                              return Column(
+                                children: [
+                                  mainContent(groups, analytics),
+                                  const SizedBox(height: 24),
+                                  sidebarContent(
                                     activities,
                                     analytics,
                                     categoryShares,
                                   ),
-                                ),
-                              ],
-                            );
-                          } else {
-                            // Mobile / Tablet Layout (1 Column)
-                            return Column(
-                              children: [
-                                mainContent(groups, analytics),
-                                const SizedBox(height: 24),
-                                sidebarContent(
-                                  activities,
-                                  analytics,
-                                  categoryShares,
-                                ),
-                                const SizedBox(height: 80),
-                              ],
-                            );
-                          }
-                        },
-                      );
-                    },
-                  );
-                },
-              );
-            },
+                                  const SizedBox(height: 80),
+                                ],
+                              );
+                            }
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -385,7 +392,7 @@ class _BalanceCard extends StatelessWidget {
 
     final isOwed = netBalance >= 0;
     final balanceText = isOwed ? 'You are owed' : 'You owe';
-    final balanceColor = Colors.white;
+    const balanceColor = Colors.white;
 
     return Card(
       margin: EdgeInsets.zero,

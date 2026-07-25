@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
+import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
+import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense.dart';
 import 'package:splito_flutter/shared/widgets/amount_display.dart';
 
@@ -20,6 +22,13 @@ class ExpenseListTile extends ConsumerWidget {
     required this.expense,
     this.compact = false,
   });
+
+  String _displayName(String? userId, String name, LoggedInUser? me) {
+    if (me == null) return name;
+    if (userId != null && userId == me.id) return 'You';
+    if (userId == null && name == me.name) return 'You';
+    return name;
+  }
 
   String _getRelativeDate(DateTime createdAt) {
     final now = DateTime.now();
@@ -41,6 +50,9 @@ class ExpenseListTile extends ConsumerWidget {
     final theme = Theme.of(context);
     final isReversed = !expense.isActive;
     final relativeDate = _getRelativeDate(expense.createdAt);
+    final currentUser = ref.watch(currentUserProvider);
+
+    final paidByLabel = _displayName(expense.paidByUserId, expense.paidByName, currentUser);
 
     Widget content = Card(
       margin: compact
@@ -56,7 +68,7 @@ class ExpenseListTile extends ConsumerWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => context.goNamed(
+        onTap: () => context.pushNamed(
           AppRoutes.expenseDetailName,
           pathParameters: {
             'groupId': expense.groupId,
@@ -100,7 +112,7 @@ class ExpenseListTile extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${expense.paidByName} · $relativeDate',
+                      '$paidByLabel · $relativeDate',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                         fontSize: compact ? 11 : null,

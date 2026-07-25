@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
+import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense.dart';
 import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
 import 'package:splito_flutter/shared/widgets/amount_display.dart';
@@ -22,6 +24,13 @@ class ExpenseDetailPage extends ConsumerWidget {
     super.key,
     required this.expenseId,
   });
+
+  String _displayName(String? userId, String name, LoggedInUser? me) {
+    if (me == null) return name;
+    if (userId != null && userId == me.id) return 'You';
+    if (userId == null && name == me.name) return 'You';
+    return name;
+  }
 
   Future<void> _onReverse(BuildContext context, WidgetRef ref, Expense expense) async {
     final confirm = await ConfirmationDialog.show(
@@ -49,6 +58,7 @@ class ExpenseDetailPage extends ConsumerWidget {
     final theme = Theme.of(context);
     final detailAsync = ref.watch(expenseDetailProvider(expenseId));
     final reverseState = ref.watch(reverseExpenseProvider);
+    final currentUser = ref.watch(currentUserProvider);
 
     // Listen to changes in the reverseExpenseProvider
     ref.listen<AsyncValue<void>>(reverseExpenseProvider, (previous, next) {
@@ -121,6 +131,7 @@ class ExpenseDetailPage extends ConsumerWidget {
           onRetry: () => ref.refresh(expenseDetailProvider(expenseId)),
           data: (expense) {
             final isReversed = !expense.isActive;
+            final paidByLabel = _displayName(expense.paidByUserId, expense.paidByName, currentUser);
 
             return ListView(
               padding: const EdgeInsets.all(16.0),
@@ -186,7 +197,7 @@ class ExpenseDetailPage extends ConsumerWidget {
                               ),
                             ),
                             Text(
-                              expense.paidByName,
+                              paidByLabel,
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -259,6 +270,7 @@ class ExpenseDetailPage extends ConsumerWidget {
                         ...expense.participants.map((p) {
                           final hasPercentage = p.percentage != null;
                           final hasShares = p.shares != null;
+                          final participantLabel = _displayName(p.userId, p.name, currentUser);
 
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -268,7 +280,7 @@ class ExpenseDetailPage extends ConsumerWidget {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Text(
-                                    p.name,
+                                    participantLabel,
                                     style: theme.textTheme.titleSmall,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
