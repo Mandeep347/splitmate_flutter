@@ -67,7 +67,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         // Show error and clear loading state on failure
         if (next is AsyncError) {
           final error = next.error;
-          if (error is Failure && error.code == 'EMAIL_NOT_VERIFIED') {
+          if (error is Failure &&
+              (error.code?.toUpperCase() == 'EMAIL_NOT_VERIFIED' ||
+               error.message.toLowerCase().contains('verify your email'))) {
             context.goNamed(
               AppRoutes.verifyEmailPendingName,
               extra: _emailController.text.trim(),

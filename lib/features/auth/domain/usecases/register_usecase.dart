@@ -27,17 +27,19 @@ class RegisterUseCase {
         password: password,
       );
     } on UnauthorizedException catch (e) {
-      throw AuthFailure(e.message, 'UNAUTHORIZED');
+      throw AuthFailure(e.message, e.code ?? 'UNAUTHORIZED');
     } on ForbiddenException catch (e) {
-      throw AuthFailure(e.message, 'FORBIDDEN');
+      throw AuthFailure(e.message, e.code ?? 'FORBIDDEN');
+    } on ConflictException catch (e) {
+      throw AuthFailure(e.message, e.code ?? 'USER_ALREADY_EXISTS');
     } on NetworkException catch (e) {
-      throw NetworkFailure(e.message, 'NETWORK_ERROR');
+      throw NetworkFailure(e.message, e.code ?? 'NETWORK_ERROR');
     } on ServerException catch (e) {
-      throw ServerFailure(e.message, e.statusCode?.toString());
+      throw ServerFailure(e.message, e.code ?? e.statusCode?.toString());
     } on BusinessRuleException catch (e) {
-      throw AuthFailure(e.message, 'VALIDATION_ERROR');
+      throw AuthFailure(e.message, e.code ?? 'VALIDATION_ERROR');
     } on NetworkClientException catch (e) {
-      throw ServerFailure(e.message);
+      throw ServerFailure(e.message, e.code);
     } catch (e) {
       throw UnknownFailure(e.toString());
     }

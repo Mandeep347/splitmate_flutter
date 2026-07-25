@@ -10,33 +10,53 @@ class AppErrorHandler {
       return 'An unexpected error occurred.';
     }
     if (error is Failure) {
-      if (error.code == 'EMAIL_NOT_VERIFIED') {
+      final code = error.code?.toUpperCase();
+      final msg = error.message.toLowerCase();
+
+      if (code == 'USER_ALREADY_EXISTS' ||
+          msg.contains('already registered') ||
+          msg.contains('already exists')) {
+        return 'User already registered';
+      }
+      if (code == 'EMAIL_NOT_VERIFIED' || msg.contains('verify your email')) {
         return 'Please verify your email address before logging in.';
       }
-      if (error.code == 'INVALID_TOKEN') {
+      if (code == 'INVALID_TOKEN') {
         return 'This link has expired or has already been used.';
       }
     }
     if (error is AuthFailure) {
-      return 'Incorrect email or password.';
+      final code = error.code?.toUpperCase();
+      if (code == 'USER_ALREADY_EXISTS') {
+        return 'User already registered';
+      }
+      if (code == 'UNAUTHORIZED') {
+        return error.message.isNotEmpty && error.message != 'An HTTP error occurred'
+            ? error.message
+            : 'Incorrect email or password.';
+      }
+      return error.message.isNotEmpty ? error.message : 'Authentication failed.';
     }
     if (error is NetworkFailure) {
       return 'No internet connection. Please try again.';
     }
     if (error is ServerFailure) {
-      if (error.code == 'USER_ALREADY_EXISTS') {
-        return 'An account with this email already exists.';
+      final code = error.code?.toUpperCase();
+      if (code == 'USER_ALREADY_EXISTS') {
+        return 'User already registered';
       }
-      if (error.code == 'VALIDATION_ERROR') {
+      if (code == 'VALIDATION_ERROR') {
         return error.message;
       }
-      return 'Something went wrong. Please try again.';
+      return error.message.isNotEmpty && error.message != 'An HTTP error occurred'
+          ? error.message
+          : 'Something went wrong. Please try again.';
     }
     if (error is UnknownFailure) {
       return 'An unexpected error occurred.';
     }
     if (error is Failure) {
-      return error.message;
+      return error.message.isNotEmpty ? error.message : 'An unexpected error occurred.';
     }
     return 'An unexpected error occurred.';
   }

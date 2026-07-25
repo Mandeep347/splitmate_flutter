@@ -208,7 +208,10 @@ class _ErrorInterceptor extends Interceptor {
       final messageVal = data is Map<String, dynamic> ? data['message'] : null;
       final detailVal = data is Map<String, dynamic> ? data['detail'] : null;
       final codeVal = data is Map<String, dynamic> ? data['code'] : null;
-      final code = codeVal is String ? codeVal : null;
+      final errorVal = data is Map<String, dynamic> ? data['error'] : null;
+      final String? code = (codeVal is String && codeVal.isNotEmpty)
+          ? codeVal
+          : (errorVal is String && errorVal.isNotEmpty ? errorVal : null);
 
       String message = 'An HTTP error occurred';
       if (messageVal is String) {
