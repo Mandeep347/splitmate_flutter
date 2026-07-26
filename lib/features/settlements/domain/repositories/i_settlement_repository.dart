@@ -15,5 +15,6 @@ abstract interface class ISettlementRepository {
     required double amount,
     required String currency,
     String? note,
+    String? idempotencyKey,
   });
 }

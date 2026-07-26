@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 import 'package:splito_flutter/features/activity/domain/entities/activity_item.dart';
 import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
 import 'package:splito_flutter/features/activity/presentation/widgets/activity_list_tile.dart';
-import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
-import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
-
 import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
+import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
 
 class GlobalActivityPage extends ConsumerWidget {
   const GlobalActivityPage({super.key});
@@ -22,8 +21,9 @@ class GlobalActivityPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final activityAsync = ref.watch(globalActivityProvider);
+    final isOnline = ref.watch(isOnlineProvider);
+    final activities = activityAsync.hasValue ? activityAsync.requireValue : const <ActivityItem>[];
 
     return Scaffold(
       appBar: AppBar(
@@ -35,31 +35,60 @@ class GlobalActivityPage extends ConsumerWidget {
           ),
         ],
       ),
-      body: AsyncValueWidget<List<ActivityItem>>(
-        value: activityAsync,
-        data: (activities) {
-          if (activities.isEmpty) {
-            return const EmptyStateWidget(
-              icon: Icons.history_rounded,
-              title: 'No activity yet',
-              subtitle: 'Transactions and group changes will appear here.',
-            );
-          }
+      body: (activityAsync.isLoading && activities.isEmpty)
+          ? const Center(child: CircularProgressIndicator())
+          : (activities.isEmpty)
+              ? const EmptyStateWidget(
+                  icon: Icons.history_rounded,
+                  title: 'No activity yet',
+                  subtitle: 'Transactions and group changes will appear here.',
+                )
+              : RefreshIndicator(
+                  onRefresh: () => _handleRefresh(ref),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    itemCount: activities.length + (!isOnline ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (!isOnline && index == 0) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.wifi_off_rounded, size: 14, color: Color(0xFFD97706)),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Offline mode — Showing saved activities (may not be latest)',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFD97706),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
 
-          return RefreshIndicator(
-            onRefresh: () => _handleRefresh(ref),
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: activities.length,
-              separatorBuilder: (context, index) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final activity = activities[index];
-                return ActivityListTile(activity: activity);
-              },
-            ),
-          );
-        },
-      ),
+                      final activityIndex = !isOnline ? index - 1 : index;
+                      final activity = activities[activityIndex];
+
+                      return Column(
+                        children: [
+                          ActivityListTile(activity: activity),
+                          const Divider(height: 1),
+                        ],
+                      );
+                    },
+                  ),
+                ),
     );
   }
 }

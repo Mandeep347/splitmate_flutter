@@ -26,9 +26,9 @@ class GroupRepositoryImpl implements IGroupRepository {
       final models = await datasource.getMyGroups();
       await localDatasource.cacheGroups(models);
       return models.map((m) => m.toEntity()).toList();
-    } on NetworkException {
+    } catch (_) {
       final cached = await localDatasource.getCachedGroups();
-      if (cached != null) {
+      if (cached != null && cached.isNotEmpty) {
         return cached.map((m) => m.toEntity()).toList();
       }
       rethrow;
@@ -41,7 +41,7 @@ class GroupRepositoryImpl implements IGroupRepository {
       final model = await datasource.getGroupById(groupId: groupId);
       await localDatasource.cacheGroup(model);
       return model.toEntity();
-    } on NetworkException {
+    } catch (_) {
       final cached = await localDatasource.getCachedGroup(groupId);
       if (cached != null) {
         return cached.toEntity();

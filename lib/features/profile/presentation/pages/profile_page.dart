@@ -48,6 +48,11 @@ class ProfilePage extends ConsumerWidget {
         title: const Text('Profile'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.sync_rounded),
+            tooltip: 'Offline Sync Status',
+            onPressed: () => context.pushNamed(AppRoutes.syncStatusName),
+          ),
+          IconButton(
             icon: const Icon(Icons.settings_outlined),
             tooltip: 'Settings',
             // Bug 6 fix: push settings so back navigation works.

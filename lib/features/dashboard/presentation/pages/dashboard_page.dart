@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 import 'package:splito_flutter/core/responsive/responsive_layout.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
@@ -46,11 +47,28 @@ class DashboardPage extends ConsumerWidget {
     final ext = theme.extension<AppThemeExtension>()!;
     final user = ref.watch(currentUserProvider);
     final isDesktop = ResponsiveLayout.isDesktop(context);
-
     final userAnalyticsAsync = ref.watch(userAnalyticsProvider);
     final groupsAsync = ref.watch(myGroupsProvider);
     final activityAsync = ref.watch(globalActivityProvider);
     final categorySharesAsync = ref.watch(globalCategorySharesProvider);
+    final isOnline = ref.watch(isOnlineProvider);
+
+    final groups = groupsAsync.hasValue ? groupsAsync.requireValue : const <Group>[];
+    final analytics = userAnalyticsAsync.hasValue ? userAnalyticsAsync.requireValue :
+        UserAnalytics(
+          userId: user?.id ?? '',
+          userName: user?.name ?? '',
+          totalPaidAllGroups: 0.0,
+          totalOwedToOthers: 0.0,
+          totalOthersOweUser: 0.0,
+          netBalance: 0.0,
+          totalGroupsCount: groups.length,
+          totalExpenseCount: 0,
+          groups: const [],
+          monthlySpending: const [],
+        );
+    final activities = activityAsync.hasValue ? activityAsync.requireValue : const <ActivityItem>[];
+    final categoryShares = categorySharesAsync.hasValue ? categorySharesAsync.requireValue : const <CategoryShare>[];
 
     final String greetingText = user != null ? '${_greeting()}, ${user.name}' : _greeting();
 
@@ -292,6 +310,75 @@ class DashboardPage extends ConsumerWidget {
       );
     }
 
+    Widget buildDashboardBody() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!isOnline) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.wifi_off_rounded, size: 14, color: Color(0xFFD97706)),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Offline mode — Showing saved data (may not be latest)',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFD97706),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+          if (isDesktop)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: ext.spaceLG),
+                    child: mainContent(groups, analytics),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: sidebarContent(
+                    activities,
+                    analytics,
+                    categoryShares,
+                  ),
+                ),
+              ],
+            )
+          else
+            Column(
+              children: [
+                mainContent(groups, analytics),
+                const SizedBox(height: 24),
+                sidebarContent(
+                  activities,
+                  analytics,
+                  categoryShares,
+                ),
+                const SizedBox(height: 80),
+              ],
+            ),
+        ],
+      );
+    }
+
     // Bug 1 Fix: Wrap body in SafeArea on mobile/tablet to prevent greeting
     // text from overlapping the device status bar.
     return Scaffold(
@@ -315,63 +402,14 @@ class DashboardPage extends ConsumerWidget {
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.all(isDesktop ? ext.spaceXL : ext.spaceLG),
-            child: AsyncValueWidget<List<Group>>(
-              value: groupsAsync,
-              data: (groups) {
-                return AsyncValueWidget<UserAnalytics>(
-                  value: userAnalyticsAsync,
-                  data: (analytics) {
-                    return AsyncValueWidget<List<ActivityItem>>(
-                      value: activityAsync,
-                      data: (activities) {
-                        return AsyncValueWidget<List<CategoryShare>>(
-                          value: categorySharesAsync,
-                          data: (categoryShares) {
-                            if (isDesktop) {
-                              // Desktop Layout (2 Columns)
-                              return Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(right: ext.spaceLG),
-                                      child: mainContent(groups, analytics),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: sidebarContent(
-                                      activities,
-                                      analytics,
-                                      categoryShares,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              // Mobile / Tablet Layout (1 Column)
-                              return Column(
-                                children: [
-                                  mainContent(groups, analytics),
-                                  const SizedBox(height: 24),
-                                  sidebarContent(
-                                    activities,
-                                    analytics,
-                                    categoryShares,
-                                  ),
-                                  const SizedBox(height: 80),
-                                ],
-                              );
-                            }
-                          },
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
+            child: (groupsAsync.isLoading && groups.isEmpty)
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(32.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : buildDashboardBody(),
           ),
         ),
       ),

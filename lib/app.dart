@@ -11,6 +11,9 @@ import 'package:splito_flutter/features/settings/presentation/providers/settings
 import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
 import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
 import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
+import 'package:splito_flutter/core/offline/data/services/sync_service_impl.dart';
+import 'package:splito_flutter/shared/widgets/connectivity_banner.dart';
 
 /// The root layout widget of the Splito application.
 /// Inherits [ConsumerStatefulWidget] to watch navigation configurations,
@@ -57,6 +60,15 @@ class _SplitoAppState extends ConsumerState<SplitoApp> {
   void _onAppResume() {
     _startPolling();
     _refreshData();
+
+    if (ref.read(isOnlineProvider)) {
+      ref.read(syncServiceProvider).sync().then((result) {
+        if (result.succeeded > 0) {
+          ref.invalidate(myGroupsProvider);
+          ref.invalidate(myOverallBalancesProvider);
+        }
+      });
+    }
   }
 
   void _onAppPause() {
@@ -108,6 +120,14 @@ class _SplitoAppState extends ConsumerState<SplitoApp> {
       theme: CustomTheme.lightTheme,
       darkTheme: CustomTheme.darkTheme,
       themeMode: selectedThemeMode,
+      builder: (context, child) {
+        return Stack(
+          children: [
+            if (child != null) child,
+            const ConnectivityBanner(),
+          ],
+        );
+      },
     );
   }
 }

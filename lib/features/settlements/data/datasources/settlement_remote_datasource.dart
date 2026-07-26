@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/constants/app_constants.dart';
 import 'package:splito_flutter/core/network/dio_client.dart';
@@ -18,6 +19,7 @@ abstract interface class ISettlementRemoteDatasource {
     required double amount,
     required String currency,
     String? note,
+    String? idempotencyKey,
   });
 }
 
@@ -51,7 +53,12 @@ class SettlementRemoteDatasource implements ISettlementRemoteDatasource {
     required double amount,
     required String currency,
     String? note,
+    String? idempotencyKey,
   }) async {
+    final options = idempotencyKey != null
+        ? Options(headers: {'Idempotency-Key': idempotencyKey})
+        : null;
+
     final response = await client.post<Map<String, dynamic>>(
       ApiEndpoints.groupSettlements(groupId),
       data: {
@@ -61,6 +68,7 @@ class SettlementRemoteDatasource implements ISettlementRemoteDatasource {
         'currency': currency,
         if (note != null) 'note': note,
       },
+      options: options,
     );
     return SettlementModel.fromJson(response.data!);
   }

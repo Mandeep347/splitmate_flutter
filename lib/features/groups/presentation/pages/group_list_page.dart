@@ -79,11 +79,11 @@ class GroupListPage extends ConsumerWidget {
 
           for (final group in activeGroups) {
             final balancesState = ref.watch(groupBalancesProvider(group.id));
-            final balances = balancesState.valueOrNull;
+            final balances = balancesState.hasValue ? balancesState.requireValue : null;
 
             if (balances != null && balances.isAllSettled) {
               final expensesState = ref.watch(groupExpensesProvider(group.id));
-              final expenses = expensesState.valueOrNull;
+              final expenses = expensesState.hasValue ? expensesState.requireValue : null;
 
               if (expenses != null && expenses.totalItems > 0) {
                 settledGroups.add(group);

@@ -4,6 +4,14 @@ import 'package:splito_flutter/core/errors/failures.dart';
 class AppErrorHandler {
   const AppErrorHandler._();
 
+  /// Maps an error to a user-friendly message, taking current connectivity into account.
+  static String toOfflineAwareMessage(Object? error, bool isOnline) {
+    if (!isOnline && error is NetworkFailure) {
+      return "You're offline. This will sync when you reconnect.";
+    }
+    return toUserMessage(error);
+  }
+
   /// Maps an error/failure to a user-friendly string message.
   static String toUserMessage(Object? error) {
     if (error == null) {

@@ -14,8 +14,8 @@ class OverallBalanceCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final balancesAsync = ref.watch(myOverallBalancesProvider);
 
-    // If loading, show shimmer-like placeholder container
-    if (balancesAsync.isLoading) {
+    // If loading and no previous data, show shimmer-like placeholder container
+    if (balancesAsync.isLoading && !balancesAsync.hasValue) {
       return Container(
         margin: const EdgeInsets.all(16),
         height: 64,

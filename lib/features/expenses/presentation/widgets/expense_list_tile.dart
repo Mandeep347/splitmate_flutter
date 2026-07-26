@@ -6,6 +6,7 @@ import 'package:splito_flutter/core/router/route_names.dart';
 import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense.dart';
+import 'package:splito_flutter/core/offline/domain/entities/pending_indicator.dart';
 import 'package:splito_flutter/shared/widgets/amount_display.dart';
 
 /// Card tile representation for displaying summary details of an expense.
@@ -48,8 +49,9 @@ class ExpenseListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final isReversed = !expense.isActive;
-    final relativeDate = _getRelativeDate(expense.createdAt);
+    final isReversed = !expense.isActive && expense.status == 'REVERSED';
+    final isPending = expense.status == 'PENDING';
+    final relativeDate = isPending ? 'Pending sync' : _getRelativeDate(expense.createdAt);
     final currentUser = ref.watch(currentUserProvider);
 
     final paidByLabel = _displayName(expense.paidByUserId, expense.paidByName, currentUser);
@@ -68,13 +70,15 @@ class ExpenseListTile extends ConsumerWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => context.pushNamed(
-          AppRoutes.expenseDetailName,
-          pathParameters: {
-            'groupId': expense.groupId,
-            'expenseId': expense.id,
-          },
-        ),
+        onTap: isPending
+            ? null
+            : () => context.pushNamed(
+                AppRoutes.expenseDetailName,
+                pathParameters: {
+                  'groupId': expense.groupId,
+                  'expenseId': expense.id,
+                },
+              ),
         child: Padding(
           padding: EdgeInsets.all(compact ? 10.0 : 14.0),
           child: Row(
@@ -84,12 +88,14 @@ class ExpenseListTile extends ConsumerWidget {
                 width: compact ? 36 : 44,
                 height: compact ? 36 : 44,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
+                  color: isPending
+                      ? const Color(0xFFF59E0B).withValues(alpha: 0.15)
+                      : theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
-                  Icons.receipt_long_outlined,
-                  color: theme.colorScheme.onPrimaryContainer,
+                  isPending ? Icons.access_time_rounded : Icons.receipt_long_outlined,
+                  color: isPending ? const Color(0xFFF59E0B) : theme.colorScheme.onPrimaryContainer,
                   size: compact ? 16 : 20,
                 ),
               ),
@@ -114,8 +120,9 @@ class ExpenseListTile extends ConsumerWidget {
                     Text(
                       '$paidByLabel · $relativeDate',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                        color: isPending ? const Color(0xFFD97706) : theme.colorScheme.onSurfaceVariant,
                         fontSize: compact ? 11 : null,
+                        fontWeight: isPending ? FontWeight.w600 : null,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -165,7 +172,12 @@ class ExpenseListTile extends ConsumerWidget {
       ),
     );
 
-    if (isReversed) {
+    if (isPending) {
+      content = PendingIndicatorWrapper(
+        state: PendingState.pending,
+        child: content,
+      );
+    } else if (isReversed) {
       content = Opacity(
         opacity: 0.6,
         child: content,

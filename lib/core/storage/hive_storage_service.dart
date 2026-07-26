@@ -24,6 +24,9 @@ abstract class IHiveStorageService {
   /// Checks if a key exists in a box.
   bool containsKey(String boxName, String key);
 
+  /// Returns all keys stored in a box.
+  List<String> getKeys(String boxName);
+
   /// Registers custom model adapters for binary encoding/decoding.
   void registerAdapter<T>(TypeAdapter<T> adapter);
 }
@@ -74,6 +77,12 @@ class HiveStorageService implements IHiveStorageService {
   bool containsKey(String boxName, String key) {
     final box = Hive.box<dynamic>(boxName);
     return box.containsKey(key);
+  }
+
+  @override
+  List<String> getKeys(String boxName) {
+    final box = Hive.box<dynamic>(boxName);
+    return box.keys.map((k) => k.toString()).toList();
   }
 
   @override

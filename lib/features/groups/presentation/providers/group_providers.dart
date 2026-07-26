@@ -1,6 +1,11 @@
 import 'dart:async';
+import 'package:uuid/uuid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
+import 'package:splito_flutter/core/offline/data/repositories/offline_queue_repository_impl.dart';
+import 'package:splito_flutter/core/offline/domain/entities/offline_action.dart';
+import 'package:splito_flutter/core/offline/presentation/providers/offline_queue_providers.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/groups/data/repositories/group_repository_impl.dart';
 import 'package:splito_flutter/features/groups/domain/entities/group.dart';
@@ -225,6 +230,14 @@ class GroupMembersNotifier extends FamilyAsyncNotifier<List<GroupMember>, String
     final useCase = ref.watch(getMembersUseCaseProvider);
     return useCase(groupId: groupId);
   }
+
+  /// Prepends an optimistic member locally to the list.
+  void prependMember(GroupMember member) {
+    final current = state.valueOrNull;
+    if (current != null) {
+      state = AsyncData([member, ...current]);
+    }
+  }
 }
 
 /// Family provider exposing the member list of a group.
@@ -246,6 +259,41 @@ class AddMemberNotifier extends AsyncNotifier<void> {
     required String email,
   }) async {
     state = const AsyncLoading<void>();
+
+    final isOnline = ref.read(isOnlineProvider);
+
+    if (!isOnline) {
+      final actionId = const Uuid().v4();
+      final action = AddMemberAction(
+        id: actionId,
+        createdAt: DateTime.now(),
+        groupId: groupId,
+        email: email,
+        idempotencyKey: const Uuid().v4(),
+      );
+
+      try {
+        await ref.read(offlineQueueRepositoryProvider).enqueue(action);
+      } catch (e) {
+        print('Error enqueuing AddMemberAction: $e');
+      }
+
+      final localMember = GroupMember(
+        userId: 'pending-$actionId',
+        name: email.split('@').first,
+        email: email,
+        role: 'MEMBER',
+        status: 'INVITED',
+        joinedAt: DateTime.now(),
+      );
+
+      ref.read(groupMembersProvider(groupId).notifier).prependMember(localMember);
+      ref.invalidate(pendingCountProvider);
+
+      state = const AsyncData<void>(null);
+      return;
+    }
+
     try {
       final useCase = ref.read(addMemberUseCaseProvider);
       await useCase(groupId: groupId, email: email);

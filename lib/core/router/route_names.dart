@@ -77,4 +77,8 @@ abstract class AppRoutes {
   // Profile Tab Routes (Nested inside StatefulShellRoute)
   static const String profileName = 'profile';
   static const String profilePath = '/profile';
+
+  // Offline Sync Status Route
+  static const String syncStatusName = 'syncStatus';
+  static const String syncStatusPath = '/sync-status';
 }

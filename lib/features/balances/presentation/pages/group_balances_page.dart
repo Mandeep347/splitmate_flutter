@@ -11,6 +11,7 @@ import 'package:splito_flutter/features/groups/presentation/providers/group_prov
 import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/balance_row.dart';
 import 'package:splito_flutter/shared/widgets/settle_up_button.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 
 /// Screen displaying the detailed pairwise and simplified debts of a group.
 class GroupBalancesPage extends ConsumerWidget {
@@ -39,6 +40,7 @@ class GroupBalancesPage extends ConsumerWidget {
     final groupDetailAsync = ref.watch(groupDetailProvider(groupId));
     final groupBalancesAsync = ref.watch(groupBalancesProvider(groupId));
     final simplifiedBalancesAsync = ref.watch(simplifiedBalancesProvider(groupId));
+    final isOnline = ref.watch(isOnlineProvider);
 
     final group = groupDetailAsync.valueOrNull;
     final members = group?.members ?? const [];
@@ -88,6 +90,33 @@ class GroupBalancesPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (!isOnline)
+                Container(
+                  margin: EdgeInsets.only(bottom: ext.spaceMD),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.wifi_off_rounded, size: 14, color: Color(0xFFD97706)),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Offline mode — Showing saved data (may not be latest)',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFD97706),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
               // Section 1: Simplified Balances (How to Settle Up)
               Card(
                 elevation: 0,
@@ -117,19 +146,37 @@ class GroupBalancesPage extends ConsumerWidget {
                         ),
                       ),
                       SizedBox(height: ext.spaceMD),
-                      AsyncValueWidget<SimplifiedBalances>(
-                        value: simplifiedBalancesAsync,
-                        loading: () => const SizedBox(
-                          height: 48,
-                          child: Center(
-                            child: SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                          ),
-                        ),
-                        data: (simplified) {
+                      Builder(
+                        builder: (context) {
+                          final simplified = simplifiedBalancesAsync.hasValue ? simplifiedBalancesAsync.requireValue : null;
+                          
+                          if (simplified == null) {
+                            if (simplifiedBalancesAsync.isLoading) {
+                              return const SizedBox(
+                                height: 48,
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                ),
+                              );
+                            }
+                            if (!isOnline) {
+                              return const Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Center(
+                                  child: Text('Connect to the internet to view balances.', textAlign: TextAlign.center),
+                                ),
+                              );
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Center(child: Text(simplifiedBalancesAsync.error.toString(), textAlign: TextAlign.center)),
+                            );
+                          }
+
                           if (simplified.isAllSettled) {
                             return Row(
                               children: [
@@ -198,19 +245,37 @@ class GroupBalancesPage extends ConsumerWidget {
                         ),
                       ),
                       SizedBox(height: ext.spaceMD),
-                      AsyncValueWidget<GroupBalances>(
-                        value: groupBalancesAsync,
-                        loading: () => const SizedBox(
-                          height: 48,
-                          child: Center(
-                            child: SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                          ),
-                        ),
-                        data: (groupBalances) {
+                      Builder(
+                        builder: (context) {
+                          final groupBalances = groupBalancesAsync.hasValue ? groupBalancesAsync.requireValue : null;
+
+                          if (groupBalances == null) {
+                            if (groupBalancesAsync.isLoading) {
+                              return const SizedBox(
+                                height: 48,
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                ),
+                              );
+                            }
+                            if (!isOnline) {
+                              return const Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Center(
+                                  child: Text('Connect to the internet to view balances.', textAlign: TextAlign.center),
+                                ),
+                              );
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Center(child: Text(groupBalancesAsync.error.toString(), textAlign: TextAlign.center)),
+                            );
+                          }
+
                           if (groupBalances.isAllSettled) {
                             return Row(
                               children: [
@@ -248,7 +313,7 @@ class GroupBalancesPage extends ConsumerWidget {
 
               // Bottom Settle Up button
               SettleUpButton(
-                onPressed: (groupBalancesAsync.valueOrNull?.isAllSettled ?? true)
+                onPressed: (!isOnline || (groupBalancesAsync.valueOrNull?.isAllSettled ?? true))
                     ? null
                     : navigateToCreateSettlement,
               ),

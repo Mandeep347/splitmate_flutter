@@ -29,6 +29,7 @@ class SettlementRepositoryImpl implements ISettlementRepository {
     required double amount,
     required String currency,
     String? note,
+    String? idempotencyKey,
   }) async {
     final model = await datasource.createSettlement(
       groupId: groupId,
@@ -37,6 +38,7 @@ class SettlementRepositoryImpl implements ISettlementRepository {
       amount: amount,
       currency: currency,
       note: note,
+      idempotencyKey: idempotencyKey,
     );
     return model.toEntity();
   }

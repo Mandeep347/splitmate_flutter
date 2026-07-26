@@ -35,7 +35,7 @@ class ExpenseRepositoryImpl implements IExpenseRepository {
         );
       }
       return model.toEntity();
-    } on NetworkException {
+    } catch (_) {
       if (page == 1) {
         final cached = await _localDatasource.getCachedGroupExpenses(groupId);
         if (cached != null) {
@@ -60,7 +60,7 @@ class ExpenseRepositoryImpl implements IExpenseRepository {
       final model = await _datasource.getExpenseById(expenseId: expenseId);
       await _localDatasource.cacheExpense(model);
       return model.toEntity();
-    } on NetworkException {
+    } catch (_) {
       final cached = await _localDatasource.getCachedExpense(expenseId);
       if (cached != null) {
         return cached.toEntity();

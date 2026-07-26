@@ -1,6 +1,11 @@
 import 'dart:async';
+import 'package:uuid/uuid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
+import 'package:splito_flutter/core/offline/data/repositories/offline_queue_repository_impl.dart';
+import 'package:splito_flutter/core/offline/domain/entities/offline_action.dart';
+import 'package:splito_flutter/core/offline/presentation/providers/offline_queue_providers.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
 import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
@@ -43,6 +48,14 @@ class GroupSettlementsNotifier extends FamilyAsyncNotifier<List<Settlement>, Str
     return useCase(groupId: groupId);
   }
 
+  /// Prepends an optimistic settlement locally to the list.
+  void prependSettlement(Settlement settlement) {
+    final current = state.valueOrNull;
+    if (current != null) {
+      state = AsyncData([settlement, ...current]);
+    }
+  }
+
   /// Invalidates this notifier to trigger a manual refresh.
   void refresh() {
     ref.invalidateSelf();
@@ -76,6 +89,52 @@ class CreateSettlementNotifier extends AsyncNotifier<Settlement?> {
     String? note,
   }) async {
     state = const AsyncLoading<Settlement?>();
+
+    final isOnline = ref.read(isOnlineProvider);
+
+    if (!isOnline) {
+      final actionId = const Uuid().v4();
+      final key = note ?? const Uuid().v4();
+
+      final action = CreateSettlementAction(
+        id: actionId,
+        createdAt: DateTime.now(),
+        groupId: groupId,
+        fromUserId: fromUserId,
+        toUserId: toUserId,
+        amount: amount,
+        currency: currency,
+        note: note,
+        idempotencyKey: key,
+      );
+
+      try {
+        await ref.read(offlineQueueRepositoryProvider).enqueue(action);
+      } catch (e) {
+        print('Error enqueuing CreateSettlementAction: $e');
+      }
+
+      final localSettlement = Settlement(
+        id: 'pending-$actionId',
+        groupId: groupId,
+        fromUserId: fromUserId,
+        fromUserName: 'You',
+        toUserId: toUserId,
+        toUserName: 'Member',
+        amount: amount,
+        currency: currency,
+        note: note,
+        status: 'PENDING',
+        createdAt: DateTime.now(),
+      );
+
+      ref.read(groupSettlementsProvider(groupId).notifier).prependSettlement(localSettlement);
+      ref.invalidate(pendingCountProvider);
+
+      state = AsyncData<Settlement?>(localSettlement);
+      return localSettlement;
+    }
+
     try {
       final useCase = ref.read(createSettlementUseCaseProvider);
       final settlement = await useCase(

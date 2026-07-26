@@ -132,7 +132,8 @@ final myOverallBalancesProvider =
 
 /// Total amount the current user owes across all groups.
 final totalOwedProvider = Provider<double>((ref) {
-  final balances = ref.watch(myOverallBalancesProvider).valueOrNull ?? [];
+  final balancesAsync = ref.watch(myOverallBalancesProvider);
+  final balances = balancesAsync.hasValue ? balancesAsync.requireValue : [];
   return balances
       .where((b) => b.youOwe)
       .fold(0.0, (sum, b) => sum + b.absAmount);
@@ -140,7 +141,8 @@ final totalOwedProvider = Provider<double>((ref) {
 
 /// Total amount owed TO the current user across all groups.
 final totalOwedToMeProvider = Provider<double>((ref) {
-  final balances = ref.watch(myOverallBalancesProvider).valueOrNull ?? [];
+  final balancesAsync = ref.watch(myOverallBalancesProvider);
+  final balances = balancesAsync.hasValue ? balancesAsync.requireValue : [];
   return balances
       .where((b) => b.theyOwe)
       .fold(0.0, (sum, b) => sum + b.absAmount);

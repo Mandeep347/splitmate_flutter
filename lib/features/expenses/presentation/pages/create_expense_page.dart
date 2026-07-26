@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/core/errors/error_handler.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense.dart';
@@ -226,8 +228,8 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
           context.pop();
         }
       } else if (next is AsyncError<Expense?> && previous is AsyncLoading<Expense?>) {
-        final failure = next.error;
-        final message = failure is Failure ? failure.message : 'Failed to add expense. Please try again.';
+        final isOnline = ref.read(isOnlineProvider);
+        final message = AppErrorHandler.toOfflineAwareMessage(next.error, isOnline);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/core/errors/error_handler.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/groups/domain/entities/group_member.dart';
@@ -346,8 +348,8 @@ class _CreateSettlementPageState extends ConsumerState<CreateSettlementPage> {
           context.pop();
         }
       } else if (next is AsyncError<Settlement?> && previous is AsyncLoading<Settlement?>) {
-        final failure = next.error;
-        final message = failure is Failure ? failure.message : 'Failed to record payment.';
+        final isOnline = ref.read(isOnlineProvider);
+        final message = AppErrorHandler.toOfflineAwareMessage(next.error, isOnline);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),

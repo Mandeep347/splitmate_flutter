@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splito_flutter/core/offline/presentation/pages/sync_status_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
@@ -183,6 +184,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: AppRoutes.settingsName,
         path: AppRoutes.settingsPath,
         builder: (context, state) => const SettingsPage(),
+      ),
+
+      // Offline Sync Status Route
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        name: AppRoutes.syncStatusName,
+        path: AppRoutes.syncStatusPath,
+        builder: (context, state) => const SyncStatusPage(),
       ),
 
       // Main Navigation Shell with Stateful Tabs

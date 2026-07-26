@@ -42,6 +42,7 @@ dependencies:
 
   # Networking
   dio: ^5.5.0
+  connectivity_plus: ^6.0.0
 
   # Modeling & Code Generation Annotations
   freezed_annotation: ^2.4.4

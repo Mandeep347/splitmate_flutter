@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/core/errors/error_handler.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
 import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
 import 'package:splito_flutter/shared/widgets/app_text_field.dart';
@@ -67,8 +69,8 @@ class _AddMemberSheetState extends ConsumerState<AddMemberSheet> {
           const SnackBar(content: Text('Member added!')),
         );
       } else if (next is AsyncError<void> && previous is AsyncLoading<void>) {
-        final errorMessage =
-            next.error is Failure ? (next.error as Failure).message : 'Failed to add member.';
+        final isOnline = ref.read(isOnlineProvider);
+        final errorMessage = AppErrorHandler.toOfflineAwareMessage(next.error, isOnline);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),

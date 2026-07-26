@@ -1,6 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:uuid/uuid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
+import 'package:splito_flutter/core/offline/data/repositories/offline_queue_repository_impl.dart';
+import 'package:splito_flutter/core/offline/domain/entities/offline_action.dart';
+import 'package:splito_flutter/core/offline/presentation/providers/offline_queue_providers.dart';
 import 'package:splito_flutter/features/expenses/data/repositories/expense_repository_impl.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense_split_input.dart';
@@ -93,6 +99,20 @@ class GroupExpensesNotifier extends FamilyAsyncNotifier<PaginatedExpenses, Strin
     }
   }
 
+  /// Prepends an optimistic expense locally to the list.
+  void prependExpense(Expense expense) {
+    final current = state.valueOrNull;
+    if (current != null) {
+      state = AsyncData(PaginatedExpenses(
+        items: [expense, ...current.items],
+        page: current.page,
+        limit: current.limit,
+        totalPages: current.totalPages,
+        totalItems: current.totalItems + 1,
+      ));
+    }
+  }
+
   /// Refreshes the list by invalidating the notifier.
   void refresh() {
     ref.invalidateSelf();
@@ -152,6 +172,56 @@ class CreateExpenseNotifier extends AsyncNotifier<Expense?> {
     String? idempotencyKey,
   }) async {
     state = const AsyncLoading<Expense?>();
+
+    final isOnline = ref.read(isOnlineProvider);
+
+    if (!isOnline) {
+      final actionId = const Uuid().v4();
+      final key = idempotencyKey ?? const Uuid().v4();
+      final participantsJsonStr = jsonEncode(_participantsToJson(splitInput));
+
+      final action = CreateExpenseAction(
+        id: actionId,
+        createdAt: DateTime.now(),
+        groupId: groupId,
+        title: title,
+        description: description,
+        totalAmount: totalAmount,
+        currency: currency,
+        paidByUserId: paidByUserId,
+        splitType: splitInput.splitType.name.toUpperCase(),
+        participantsJson: participantsJsonStr,
+        idempotencyKey: key,
+      );
+
+      try {
+        await ref.read(offlineQueueRepositoryProvider).enqueue(action);
+      } catch (e) {
+        print('Error enqueuing CreateExpenseAction: $e');
+      }
+
+      final localExpense = Expense(
+        id: 'pending-$actionId',
+        groupId: groupId,
+        paidByUserId: paidByUserId,
+        paidByName: 'You',
+        title: title,
+        description: description,
+        totalAmount: totalAmount,
+        currency: currency,
+        splitType: splitInput.splitType,
+        status: 'PENDING',
+        createdAt: DateTime.now(),
+        participants: const [],
+      );
+
+      ref.read(groupExpensesProvider(groupId).notifier).prependExpense(localExpense);
+      ref.invalidate(pendingCountProvider);
+
+      state = AsyncData<Expense?>(localExpense);
+      return localExpense;
+    }
+
     try {
       final useCase = ref.read(createExpenseUseCaseProvider);
       final expense = await useCase(
@@ -179,6 +249,36 @@ class CreateExpenseNotifier extends AsyncNotifier<Expense?> {
       state = AsyncError<Expense?>(failure, stackTrace);
       rethrow;
     }
+  }
+
+  List<Map<String, dynamic>> _participantsToJson(ExpenseSplitInput input) {
+    return switch (input) {
+      EqualSplitInput p => p.participants
+          .map((item) => {'userId': item.userId, 'user_id': item.userId})
+          .toList(),
+      ExactSplitInput p => p.participants
+          .map((item) => {
+                'userId': item.userId,
+                'user_id': item.userId,
+                'owedAmount': item.owedAmount,
+                'owed_amount': item.owedAmount,
+              })
+          .toList(),
+      PercentageSplitInput p => p.participants
+          .map((item) => {
+                'userId': item.userId,
+                'user_id': item.userId,
+                'percentage': item.percentage,
+              })
+          .toList(),
+      ShareSplitInput p => p.participants
+          .map((item) => {
+                'userId': item.userId,
+                'user_id': item.userId,
+                'shares': item.shares,
+              })
+          .toList(),
+    };
   }
 }
 

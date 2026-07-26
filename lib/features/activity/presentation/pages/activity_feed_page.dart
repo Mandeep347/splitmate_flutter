@@ -7,6 +7,7 @@ import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
 import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
 import 'package:splito_flutter/features/settlements/presentation/providers/settlement_providers.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 
 /// Screen displaying the paginated feed of activities in a group.
 class ActivityFeedPage extends ConsumerStatefulWidget {
@@ -69,15 +70,25 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
           ],
         ),
       ),
-      body: AsyncValueWidget<ActivityFeed>(
-        value: activityState,
-        data: (feed) {
-          if (feed.items.isEmpty) {
-            return EmptyStateWidget(
-              icon: Icons.history_outlined,
-              title: 'No activity yet',
-              subtitle:
-                  'Activity will appear here as your group adds expenses and settlements.',
+      body: Builder(
+        builder: (context) {
+          final feed = activityState.hasValue ? activityState.requireValue : null;
+          final isOnline = ref.watch(isOnlineProvider);
+
+          if (feed == null) {
+            if (activityState.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  activityState.error != null 
+                      ? 'Error: ${activityState.error}' 
+                      : 'An error occurred',
+                  textAlign: TextAlign.center,
+                ),
+              ),
             );
           }
 
@@ -87,21 +98,60 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
               ref.invalidate(groupSettlementsProvider(widget.groupId));
               ref.invalidate(groupActivityProvider(widget.groupId));
             },
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              itemCount: feed.items.length + (feed.hasMore ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == feed.items.length) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: CircularProgressIndicator(),
+            child: Column(
+              children: [
+                if (!isOnline)
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
                     ),
-                  );
-                }
-                return ActivityListTile(activity: feed.items[index]);
-              },
+                    child: const Row(
+                      children: [
+                        Icon(Icons.wifi_off_rounded, size: 14, color: Color(0xFFD97706)),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Offline mode — Showing saved data (may not be latest)',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFD97706),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                Expanded(
+                  child: feed.items.isEmpty 
+                    ? const EmptyStateWidget(
+                        icon: Icons.history_outlined,
+                        title: 'No activity yet',
+                        subtitle: 'Activity will appear here as your group adds expenses and settlements.',
+                      )
+                    : ListView.builder(
+                        controller: _scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        itemCount: feed.items.length + (feed.hasMore ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == feed.items.length) {
+                            return const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          return ActivityListTile(activity: feed.items[index]);
+                        },
+                      ),
+                ),
+              ],
             ),
           );
         },
