@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:splito_flutter/core/theme/financial_colors.dart';
 import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
 import 'amount_display.dart';
 

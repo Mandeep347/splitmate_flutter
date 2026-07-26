@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:splito_flutter/core/errors/exceptions.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense_split_input.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/paginated_expenses.dart';

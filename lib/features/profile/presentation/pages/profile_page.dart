@@ -61,7 +61,10 @@ class ProfilePage extends ConsumerWidget {
           const NotificationBell(),
         ],
       ),
-      body: ListView(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: ListView(
         padding: const EdgeInsets.all(24.0),
         children: [
           // Section 1: Avatar + Name Header
@@ -347,7 +350,9 @@ class ProfilePage extends ConsumerWidget {
               ],
             ),
           ),
-        ],
+          ],
+        ),
+      ),
       ),
     );
   }

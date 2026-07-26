@@ -16,6 +16,8 @@ import 'package:splito_flutter/core/offline/data/services/sync_service_impl.dart
 import 'package:splito_flutter/core/notifications/local_notification_service.dart';
 import 'package:splito_flutter/shared/widgets/connectivity_banner.dart';
 
+import 'package:splito_flutter/core/config/app_branding.dart';
+
 /// The root layout widget of the Splito application.
 /// Inherits [ConsumerStatefulWidget] to watch navigation configurations,
 /// active theme states, and monitor application lifecycle events.
@@ -129,7 +131,7 @@ class _SplitoAppState extends ConsumerState<SplitoApp> {
     final selectedThemeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
-      title: 'Splitmate',
+      title: AppBranding.name,
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       theme: CustomTheme.lightTheme,

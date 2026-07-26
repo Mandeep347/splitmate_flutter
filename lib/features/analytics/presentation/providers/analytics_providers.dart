@@ -4,7 +4,6 @@ import 'package:splito_flutter/features/auth/presentation/providers/auth_provide
 import 'package:splito_flutter/features/expenses/data/repositories/expense_repository_impl.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/split_type.dart';
-import 'package:splito_flutter/features/settlements/data/repositories/settlement_repository_impl.dart';
 import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
 import 'package:splito_flutter/features/analytics/domain/entities/group_analytics.dart';
 import 'package:splito_flutter/features/analytics/domain/entities/member_contribution.dart';

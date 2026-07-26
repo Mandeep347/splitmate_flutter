@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:splito_flutter/features/activity/domain/entities/activity_feed.dart';
+import 'package:splito_flutter/core/network/connectivity_notifier.dart';
+import 'package:splito_flutter/core/responsive/responsive_layout.dart';
 import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
 import 'package:splito_flutter/features/activity/presentation/widgets/activity_list_tile.dart';
-import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
 import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
 import 'package:splito_flutter/features/settlements/presentation/providers/settlement_providers.dart';
-import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
 import 'package:splito_flutter/shared/widgets/skeletons/activity_list_tile_skeleton.dart';
 
@@ -76,6 +75,7 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
         builder: (context) {
           final feed = activityState.hasValue ? activityState.requireValue : null;
           final isOnline = ref.watch(isOnlineProvider);
+          final isDesktop = ResponsiveLayout.isDesktop(context);
 
           if (feed == null) {
             if (activityState.isLoading) {
@@ -109,7 +109,7 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
             },
             child: Column(
               children: [
-                if (!isOnline)
+                if (!isOnline && !isDesktop)
                   Container(
                     margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

@@ -25,7 +25,6 @@ class _GlobalExpensesPageState extends ConsumerState<GlobalExpensesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final expensesAsync = ref.watch(allExpensesProvider);
 
     return Scaffold(

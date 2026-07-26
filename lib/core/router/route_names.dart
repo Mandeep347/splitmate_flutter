@@ -23,6 +23,12 @@ abstract class AppRoutes {
   static const String resetPasswordName = 'resetPassword';
   static const String resetPasswordPath = '/reset-password';
 
+  // Legal Routes
+  static const String privacyPolicyName = 'privacyPolicy';
+  static const String privacyPolicyPath = '/privacy-policy';
+  static const String termsOfServiceName = 'termsOfService';
+  static const String termsOfServicePath = '/terms-of-service';
+
   // Groups Tab Routes (Nested inside StatefulShellRoute)
   static const String dashboardName = 'dashboard';
   static const String dashboardPath = '/dashboard';

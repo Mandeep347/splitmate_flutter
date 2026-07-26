@@ -47,7 +47,6 @@ class _ConnectivityBannerState extends ConsumerState<ConnectivityBanner> {
     }
 
     final isOffline = !isOnline;
-    final theme = Theme.of(context);
     final mediaQuery = MediaQuery.of(context);
     final topPadding = mediaQuery.padding.top;
 

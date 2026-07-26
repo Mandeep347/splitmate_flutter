@@ -12,16 +12,16 @@ void main() {
   late MockISettingsRepository mockRepo;
   late ProviderContainer container;
 
-  final tSettings = AppSettings(
+  const tSettings = AppSettings(
     themeMode: 'dark',
     notificationsEnabled: true,
     defaultCurrency: 'USD',
     compactExpenseList: false,
   );
-  final tDefaultSettings = const AppSettings.defaults();
+  const tDefaultSettings = AppSettings.defaults();
 
   setUpAll(() {
-    registerFallbackValue(AppSettings.defaults());
+    registerFallbackValue(const AppSettings.defaults());
   });
 
   setUp(() {

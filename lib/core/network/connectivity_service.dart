@@ -20,9 +20,8 @@ class ConnectivityService implements IConnectivityService {
   /// Creates a new [ConnectivityService] instance.
   ConnectivityService({
     Connectivity? connectivity,
-    Future<List<InternetAddress>> Function(String host)? addressLookup,
-  })  : _connectivity = connectivity ?? Connectivity(),
-        _addressLookup = addressLookup;
+    this._addressLookup,
+  }) : _connectivity = connectivity ?? Connectivity();
 
   Stream<bool>? _debouncedStream;
 
@@ -59,7 +58,7 @@ class ConnectivityService implements IConnectivityService {
           return await _checkReachability();
         })
         .distinct()
-        .transform(_DebounceTransformer<bool>(const Duration(milliseconds: 500)));
+        .transform(const _DebounceTransformer<bool>(Duration(milliseconds: 500)));
 
     return _debouncedStream!;
   }
@@ -83,20 +82,20 @@ class _DebounceTransformer<T> extends StreamTransformerBase<T, T> {
           (data) {
             timer?.cancel();
             timer = Timer(duration, () {
-              if (controller != null && !controller!.isClosed) {
-                controller!.add(data);
+              if (controller != null && !controller.isClosed) {
+                controller.add(data);
               }
             });
           },
-          onError: (error, stackTrace) {
-            if (controller != null && !controller!.isClosed) {
-              controller!.addError(error, stackTrace);
+          onError: (Object error, StackTrace stackTrace) {
+            if (controller != null && !controller.isClosed) {
+              controller.addError(error, stackTrace);
             }
           },
           onDone: () {
             timer?.cancel();
-            if (controller != null && !controller!.isClosed) {
-              controller!.close();
+            if (controller != null && !controller.isClosed) {
+              controller.close();
             }
           },
         );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:splito_flutter/core/config/app_branding.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/core/errors/error_handler.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
@@ -98,7 +99,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       isLoading: isLoading,
       child: AuthFormWrapper(
         title: 'Welcome back',
-        subtitle: 'Sign in to your Splito account',
+        subtitle: 'Sign in to your ${AppBranding.name} account',
         child: Form(
           key: _formKey,
           child: Column(

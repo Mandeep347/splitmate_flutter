@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/core/errors/error_handler.dart';
 import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';

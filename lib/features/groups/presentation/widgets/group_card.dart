@@ -184,19 +184,4 @@ class _GroupCardState extends ConsumerState<GroupCard> {
     ];
     return gradients[hash % gradients.length];
   }
-
-  String _currencySymbol(String c) {
-    switch (c) {
-      case 'INR':
-        return '₹';
-      case 'USD':
-        return '\$';
-      case 'EUR':
-        return '€';
-      case 'GBP':
-        return '£';
-      default:
-        return '$c ';
-    }
-  }
 }

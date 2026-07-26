@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/core/errors/error_handler.dart';
-import 'package:splito_flutter/core/theme/theme_extensions.dart';
 
 /// Generic widget to handle [AsyncValue] states automatically.
 class AsyncValueWidget<T> extends StatelessWidget {
@@ -34,7 +32,7 @@ class AsyncValueWidget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final ext = theme.extension<AppThemeExtension>()!;
+    // ext is available if per-theme custom colors are needed: theme.extension<AppThemeExtension>()
 
     return value.when(
       skipLoadingOnRefresh: true,

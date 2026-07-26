@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:splito_flutter/core/responsive/responsive_layout.dart';
 import 'package:splito_flutter/core/router/app_router.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
+import 'package:splito_flutter/core/config/app_branding.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
@@ -172,7 +173,7 @@ class ResponsiveNavigationShell extends ConsumerWidget {
               SizedBox(height: ext.spaceMD),
               groupsAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, _) => Center(child: Text('Error loading groups')),
+                error: (err, _) => const Center(child: Text('Error loading groups')),
                 data: (groups) {
                   final activeGroups = groups.where((g) => g.isActive).toList();
                   if (activeGroups.isEmpty) {
@@ -313,7 +314,7 @@ class _DesktopShell extends ConsumerWidget {
       case 5:
         return 'Profile';
       default:
-        return 'Splito';
+        return AppBranding.name;
     }
   }
 
@@ -350,7 +351,7 @@ class _DesktopShell extends ConsumerWidget {
                       ),
                       SizedBox(width: ext.spaceMD),
                       Text(
-                        'Splito',
+                        AppBranding.name,
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w900,
                           letterSpacing: -0.5,
@@ -546,7 +547,6 @@ class _DesktopShell extends ConsumerWidget {
   }
 
   void _showAddExpenseSelector(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final groupsAsync = ref.read(myGroupsProvider);
 
     showDialog<void>(

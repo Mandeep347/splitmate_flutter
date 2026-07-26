@@ -29,6 +29,8 @@ import 'package:splito_flutter/features/dashboard/presentation/pages/dashboard_p
 import 'package:splito_flutter/features/expenses/presentation/pages/global_expenses_page.dart';
 import 'package:splito_flutter/features/activity/presentation/pages/global_activity_page.dart';
 import 'package:splito_flutter/features/activity/presentation/pages/activity_feed_page.dart';
+import 'package:splito_flutter/features/legal/presentation/pages/privacy_policy_page.dart';
+import 'package:splito_flutter/features/legal/presentation/pages/terms_of_service_page.dart';
 import 'package:splito_flutter/features/analytics/presentation/pages/global_statistics_page.dart';
 import 'package:splito_flutter/features/navigation/presentation/widgets/responsive_navigation_shell.dart';
 
@@ -159,6 +161,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: AppRoutes.forgotPasswordName,
         path: AppRoutes.forgotPasswordPath,
         builder: (context, state) => const ForgotPasswordPage(),
+      ),
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        name: AppRoutes.privacyPolicyName,
+        path: AppRoutes.privacyPolicyPath,
+        builder: (context, state) => const PrivacyPolicyPage(),
+      ),
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        name: AppRoutes.termsOfServiceName,
+        path: AppRoutes.termsOfServicePath,
+        builder: (context, state) => const TermsOfServicePage(),
       ),
       GoRoute(
         parentNavigatorKey: rootNavigatorKey,

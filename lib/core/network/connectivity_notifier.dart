@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/network/connectivity_service.dart';
-import 'package:splito_flutter/core/offline/domain/services/sync_service.dart';
 import 'package:splito_flutter/core/offline/data/services/sync_service_impl.dart';
 import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
 import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
@@ -18,11 +17,11 @@ class ConnectivityNotifier extends AsyncNotifier<bool> {
     ref.keepAlive();
     final service = ref.watch(connectivityServiceProvider);
 
-    _subscription?.cancel();
+    unawaited(_subscription?.cancel());
     _subscription = service.onConnectivityChanged.listen((isOnline) {
       state = AsyncData(isOnline);
       if (isOnline) {
-        _triggerAutoSync();
+        unawaited(_triggerAutoSync());
       }
     });
 
@@ -32,26 +31,24 @@ class ConnectivityNotifier extends AsyncNotifier<bool> {
 
     final initialIsOnline = await service.isOnline();
     if (initialIsOnline) {
-      _triggerAutoSync();
+      unawaited(_triggerAutoSync());
     }
     return initialIsOnline;
   }
 
-  void _triggerAutoSync() {
-    Future.microtask(() async {
-      final queueRepo = ref.read(offlineQueueRepositoryProvider);
-      final count = await queueRepo.getPendingCount();
-      if (count > 0) {
-        final result = await ref.read(syncServiceProvider).sync();
-        ref.invalidate(pendingCountProvider);
-        if (result.succeeded > 0) {
-          ref.invalidate(myGroupsProvider);
-          ref.invalidate(myOverallBalancesProvider);
-          ref.invalidate(globalActivityProvider);
-          ref.invalidate(userAnalyticsProvider);
-        }
+  Future<void> _triggerAutoSync() async {
+    final queueRepo = ref.read(offlineQueueRepositoryProvider);
+    final count = await queueRepo.getPendingCount();
+    if (count > 0) {
+      final result = await ref.read(syncServiceProvider).sync();
+      ref.invalidate(pendingCountProvider);
+      if (result.succeeded > 0) {
+        ref.invalidate(myGroupsProvider);
+        ref.invalidate(myOverallBalancesProvider);
+        ref.invalidate(globalActivityProvider);
+        ref.invalidate(userAnalyticsProvider);
       }
-    });
+    }
   }
 }
 

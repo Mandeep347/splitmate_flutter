@@ -10,12 +10,12 @@ import 'package:splito_flutter/features/settlements/domain/entities/settlement.d
 
 class MockIExpenseRepository extends Mock implements IExpenseRepository {}
 
-final tParticipant1 = ExpenseParticipant(
+const tParticipant1 = ExpenseParticipant(
   userId: 'user-1',
   name: 'Mandeep',
   owedAmount: 1000.0,
 );
-final tParticipant2 = ExpenseParticipant(
+const tParticipant2 = ExpenseParticipant(
   userId: 'user-2',
   name: 'Rahul',
   owedAmount: 2000.0,

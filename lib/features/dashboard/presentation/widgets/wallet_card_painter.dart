@@ -12,7 +12,6 @@ class WalletCardPainter extends CustomPainter {
     final paint = Paint()..isAntiAlias = true;
 
     // Draw background glowing circle 1 (top-right)
-    final path1 = Path();
     paint.color = Colors.white.withValues(alpha: 0.08);
     canvas.drawCircle(Offset(size.width * 0.85, size.height * 0.2), size.height * 0.6, paint);
 

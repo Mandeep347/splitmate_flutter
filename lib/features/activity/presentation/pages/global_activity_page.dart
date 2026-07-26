@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/network/connectivity_notifier.dart';
+import 'package:splito_flutter/core/responsive/responsive_layout.dart';
 import 'package:splito_flutter/features/activity/domain/entities/activity_item.dart';
 import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
 import 'package:splito_flutter/features/activity/presentation/widgets/activity_list_tile.dart';
@@ -25,6 +26,7 @@ class GlobalActivityPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final activityAsync = ref.watch(globalActivityProvider);
     final isOnline = ref.watch(isOnlineProvider);
+    final isDesktop = ResponsiveLayout.isDesktop(context);
     final activities = activityAsync.hasValue ? activityAsync.requireValue : const <ActivityItem>[];
 
     return Scaffold(
@@ -37,7 +39,10 @@ class GlobalActivityPage extends ConsumerWidget {
           ),
         ],
       ),
-      body: (activityAsync.isLoading && activities.isEmpty)
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: (activityAsync.isLoading && activities.isEmpty)
           ? ShimmerWrapper(
               isLoading: true,
               child: ListView.builder(
@@ -56,9 +61,9 @@ class GlobalActivityPage extends ConsumerWidget {
                   onRefresh: () => _handleRefresh(ref),
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16.0),
-                    itemCount: activities.length + (!isOnline ? 1 : 0),
+                    itemCount: activities.length + ((!isOnline && !isDesktop) ? 1 : 0),
                     itemBuilder: (context, index) {
-                      if (!isOnline && index == 0) {
+                      if (!isOnline && !isDesktop && index == 0) {
                         return Container(
                           margin: const EdgeInsets.only(bottom: 16),
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -86,7 +91,7 @@ class GlobalActivityPage extends ConsumerWidget {
                         );
                       }
 
-                      final activityIndex = !isOnline ? index - 1 : index;
+                      final activityIndex = (!isOnline && !isDesktop) ? index - 1 : index;
                       final activity = activities[activityIndex];
 
                       return Column(
@@ -98,6 +103,8 @@ class GlobalActivityPage extends ConsumerWidget {
                     },
                   ),
                 ),
+        ),
+      ),
     );
   }
 }

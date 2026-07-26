@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/core/network/connectivity_notifier.dart';
-import 'package:splito_flutter/core/offline/data/repositories/offline_queue_repository_impl.dart';
 import 'package:splito_flutter/core/offline/domain/entities/offline_action.dart';
 import 'package:splito_flutter/core/offline/presentation/providers/offline_queue_providers.dart';
 import 'package:splito_flutter/features/expenses/data/repositories/expense_repository_impl.dart';
@@ -196,8 +196,8 @@ class CreateExpenseNotifier extends AsyncNotifier<Expense?> {
 
       try {
         await ref.read(offlineQueueRepositoryProvider).enqueue(action);
-      } catch (e) {
-        print('Error enqueuing CreateExpenseAction: $e');
+      } catch (e, st) {
+        debugPrint('Error enqueuing CreateExpenseAction: $e\n$st');
       }
 
       final localExpense = Expense(
@@ -253,26 +253,26 @@ class CreateExpenseNotifier extends AsyncNotifier<Expense?> {
 
   List<Map<String, dynamic>> _participantsToJson(ExpenseSplitInput input) {
     return switch (input) {
-      EqualSplitInput p => p.participants
-          .map((item) => {'userId': item.userId, 'user_id': item.userId})
+      final EqualSplitInput p => p.participants
+          .map((final item) => {'userId': item.userId, 'user_id': item.userId})
           .toList(),
-      ExactSplitInput p => p.participants
-          .map((item) => {
+      final ExactSplitInput p => p.participants
+          .map((final item) => {
                 'userId': item.userId,
                 'user_id': item.userId,
                 'owedAmount': item.owedAmount,
                 'owed_amount': item.owedAmount,
               })
           .toList(),
-      PercentageSplitInput p => p.participants
-          .map((item) => {
+      final PercentageSplitInput p => p.participants
+          .map((final item) => {
                 'userId': item.userId,
                 'user_id': item.userId,
                 'percentage': item.percentage,
               })
           .toList(),
-      ShareSplitInput p => p.participants
-          .map((item) => {
+      final ShareSplitInput p => p.participants
+          .map((final item) => {
                 'userId': item.userId,
                 'user_id': item.userId,
                 'shares': item.shares,

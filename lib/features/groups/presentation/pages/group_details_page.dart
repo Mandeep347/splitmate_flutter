@@ -564,7 +564,7 @@ class GroupDetailsPage extends ConsumerWidget {
     }
 
     void showMembersBottomSheet(Group g) {
-      showModalBottomSheet(
+      showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
         backgroundColor: theme.colorScheme.surface,

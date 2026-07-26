@@ -22,7 +22,7 @@ class DeepLinkService {
     // Handle warm start links
     _sub = _appLinks.uriLinkStream.listen(
       (uri) => _handleLink(uri, router),
-      onError: (err) {
+      onError: (Object err) {
         debugPrint('DeepLink error: $err');
       },
     );

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:uuid/uuid.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/core/network/connectivity_notifier.dart';
-import 'package:splito_flutter/core/offline/data/repositories/offline_queue_repository_impl.dart';
 import 'package:splito_flutter/core/offline/domain/entities/offline_action.dart';
 import 'package:splito_flutter/core/offline/presentation/providers/offline_queue_providers.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
@@ -260,8 +260,8 @@ class AddMemberNotifier extends AsyncNotifier<void> {
 
       try {
         await ref.read(offlineQueueRepositoryProvider).enqueue(action);
-      } catch (e) {
-        print('Error enqueuing AddMemberAction: $e');
+      } catch (e, st) {
+        debugPrint('Error enqueuing AddMemberAction: $e\n$st');
       }
 
       final localMember = GroupMember(

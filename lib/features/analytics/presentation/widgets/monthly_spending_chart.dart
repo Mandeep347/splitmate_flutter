@@ -220,7 +220,7 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                                         return const SizedBox.shrink();
                                       }
                                       final symbol = _currencySymbol(widget.currency);
-                                      String label = value >= 1000
+                                      final String label = value >= 1000
                                           ? '$symbol${(value / 1000).toStringAsFixed(value % 1000 == 0 ? 0 : 1)}k'
                                           : '$symbol${value.toStringAsFixed(0)}';
                                       return SideTitleWidget(

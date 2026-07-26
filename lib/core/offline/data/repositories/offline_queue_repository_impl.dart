@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/constants/storage_keys.dart';
 import 'package:splito_flutter/core/offline/domain/entities/offline_action.dart';
@@ -38,7 +39,7 @@ class OfflineQueueRepositoryImpl implements IOfflineQueueRepository {
               pendingActions.add(action);
             }
           } catch (e) {
-            print('Failed to parse offline action for key $key: $e');
+            debugPrint('Failed to parse offline action for key $key: $e');
           }
         }
       }
@@ -46,7 +47,7 @@ class OfflineQueueRepositoryImpl implements IOfflineQueueRepository {
       pendingActions.sort((a, b) => a.createdAt.compareTo(b.createdAt));
       return pendingActions;
     } catch (e) {
-      print('Error retrieving pending offline actions: $e');
+      debugPrint('Error retrieving pending offline actions: $e');
       return [];
     }
   }
@@ -84,7 +85,7 @@ class OfflineQueueRepositoryImpl implements IOfflineQueueRepository {
         await storage.write<String>(_boxName, actionKey, jsonEncode(updatedAction.toJson()));
       }
     } catch (e) {
-      print('Error incrementing retry for action $actionId: $e');
+      debugPrint('Error incrementing retry for action $actionId: $e');
     }
   }
 
@@ -99,7 +100,7 @@ class OfflineQueueRepositoryImpl implements IOfflineQueueRepository {
     if (raw != null) {
       await storage.write<String>(_boxName, exhaustedKey, raw);
     }
-    print('WARNING: OfflineAction $actionId reached max retries and was marked as exhausted.');
+    debugPrint('WARNING: OfflineAction $actionId reached max retries and was marked as exhausted.');
   }
 
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:splito_flutter/core/config/app_branding.dart';
 import 'package:splito_flutter/core/responsive/responsive_layout.dart';
-import 'package:splito_flutter/core/theme/theme_extensions.dart';
 import 'package:splito_flutter/features/dashboard/presentation/widgets/wallet_card_painter.dart';
 
 /// Redesigned premium responsive form wrapper for Authentication pages.
@@ -19,7 +19,6 @@ class AuthFormWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final ext = theme.extension<AppThemeExtension>()!;
     final isDesktop = ResponsiveLayout.isDesktop(context);
 
     if (isDesktop) {
@@ -63,7 +62,7 @@ class AuthFormWrapper extends StatelessWidget {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(16),
                                 child: Image.asset(
-                                  'assets/icon/splash_logo.png',
+                                  AppBranding.logoIcon,
                                   width: 52,
                                   height: 52,
                                   fit: BoxFit.cover,
@@ -71,7 +70,7 @@ class AuthFormWrapper extends StatelessWidget {
                               ),
                               const SizedBox(width: 16),
                               Text(
-                                'Splito',
+                                AppBranding.name,
                                 style: theme.textTheme.headlineMedium?.copyWith(
                                   fontWeight: FontWeight.w900,
                                   color: Colors.white,
@@ -214,7 +213,7 @@ class AuthFormWrapper extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Splito',
+                  AppBranding.name,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w900,
                     letterSpacing: -0.5,

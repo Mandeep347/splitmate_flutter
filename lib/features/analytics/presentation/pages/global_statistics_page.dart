@@ -16,7 +16,6 @@ class GlobalStatisticsPage extends ConsumerWidget {
     final ext = theme.extension<AppThemeExtension>()!;
 
     final statsAsync = ref.watch(dashboardStatsProvider);
-    final monthlySpendingAsync = ref.watch(globalMonthlySpendingProvider);
     final categorySharesAsync = ref.watch(globalCategorySharesProvider);
 
     return Scaffold(

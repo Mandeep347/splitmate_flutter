@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:splito_flutter/core/config/app_branding.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
@@ -84,12 +85,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
     final authAsync = ref.watch(authNotifierProvider);
     final isLoading = authAsync is AsyncLoading;
+    final theme = Theme.of(context);
 
     return LoadingOverlay(
       isLoading: isLoading,
       child: AuthFormWrapper(
         title: 'Create Account',
-        subtitle: 'Sign up to start splitting expenses with Splito',
+        subtitle: 'Sign up to start splitting expenses with ${AppBranding.name}',
         child: Form(
           key: _formKey,
           child: Column(
@@ -176,6 +178,44 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 24),
+              Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  Text(
+                    'By creating an account, you agree to our ',
+                    style: theme.textTheme.bodySmall,
+                  ),
+                  GestureDetector(
+                    onTap: () => context.pushNamed(AppRoutes.termsOfServiceName),
+                    child: Text(
+                      'Terms of Service',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    ' and ',
+                    style: theme.textTheme.bodySmall,
+                  ),
+                  GestureDetector(
+                    onTap: () => context.pushNamed(AppRoutes.privacyPolicyName),
+                    child: Text(
+                      'Privacy Policy',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '.',
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ],
               ),
               const SizedBox(height: 24),
               PrimaryButton(

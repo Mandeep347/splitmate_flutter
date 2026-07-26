@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:splito_flutter/core/config/app_branding.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 
 /// Initial loading splash page shown during app authentication state initialization.
@@ -58,7 +59,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
-                  'assets/icon/splash_logo.png',
+                  AppBranding.logoIcon,
                   width: 72,
                   height: 72,
                   fit: BoxFit.cover,
@@ -66,7 +67,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Splitmate',
+                AppBranding.name,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.primary,

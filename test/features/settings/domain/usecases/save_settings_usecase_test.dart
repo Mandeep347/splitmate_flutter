@@ -11,7 +11,7 @@ void main() {
   late MockISettingsRepository mockRepo;
   late SaveSettingsUseCase usecase;
 
-  final tSettings = AppSettings(
+  const tSettings = AppSettings(
     themeMode: 'dark',
     notificationsEnabled: true,
     defaultCurrency: 'USD',
@@ -19,7 +19,7 @@ void main() {
   );
 
   setUpAll(() {
-    registerFallbackValue(AppSettings.defaults());
+    registerFallbackValue(const AppSettings.defaults());
   });
 
   setUp(() {

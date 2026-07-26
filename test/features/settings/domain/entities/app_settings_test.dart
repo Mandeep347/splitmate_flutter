@@ -2,13 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:splito_flutter/features/settings/domain/entities/app_settings.dart';
 
 void main() {
-  final tSettings = AppSettings(
+  const tSettings = AppSettings(
     themeMode: 'dark',
     notificationsEnabled: true,
     defaultCurrency: 'USD',
     compactExpenseList: false,
   );
-  final tDefaultSettings = const AppSettings.defaults();
+  const tDefaultSettings = AppSettings.defaults();
 
   group('AppSettings', () {
     test('defaults() returns correct default values', () {

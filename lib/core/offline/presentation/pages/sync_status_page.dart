@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:splito_flutter/core/network/connectivity_notifier.dart';
-import 'package:splito_flutter/core/offline/data/repositories/offline_queue_repository_impl.dart';
 import 'package:splito_flutter/core/offline/data/services/sync_service_impl.dart';
 import 'package:splito_flutter/core/offline/domain/entities/offline_action.dart';
 import 'package:splito_flutter/core/offline/presentation/providers/offline_queue_providers.dart';
@@ -97,9 +96,9 @@ class _SyncStatusPageState extends ConsumerState<SyncStatusPage> {
 
   String _formatActionType(OfflineAction action) {
     return switch (action) {
-      CreateExpenseAction a => 'Create Expense ("${a.title}")',
-      CreateSettlementAction a => 'Record Settlement (${a.currency} ${a.amount.toStringAsFixed(2)})',
-      AddMemberAction a => 'Add Member (${a.email})',
+      final CreateExpenseAction a => 'Create Expense ("${a.title}")',
+      final CreateSettlementAction a => 'Record Settlement (${a.currency} ${a.amount.toStringAsFixed(2)})',
+      final AddMemberAction a => 'Add Member (${a.email})',
     };
   }
 
@@ -132,7 +131,10 @@ class _SyncStatusPageState extends ConsumerState<SyncStatusPage> {
           ),
         ],
       ),
-      body: RefreshIndicator(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: RefreshIndicator(
         onRefresh: _loadPendingActions,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -336,6 +338,8 @@ class _SyncStatusPageState extends ConsumerState<SyncStatusPage> {
             ],
           ),
         ),
+      ),
+      ),
       ),
     );
   }

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/exceptions.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
-import 'package:splito_flutter/core/offline/data/repositories/offline_queue_repository_impl.dart';
 import 'package:splito_flutter/core/offline/domain/entities/offline_action.dart';
 import 'package:splito_flutter/core/offline/domain/repositories/i_offline_queue_repository.dart';
 import 'package:splito_flutter/core/offline/domain/services/sync_service.dart';
@@ -98,7 +97,7 @@ class SyncServiceImpl implements ISyncService {
 
   Future<void> _processAction(OfflineAction action) async {
     switch (action) {
-      case CreateExpenseAction a:
+      case final CreateExpenseAction a:
         final participantsRaw = jsonDecode(a.participantsJson) as List<dynamic>;
         final splitInput = _rebuildSplitInput(a.splitType, participantsRaw);
         await expenseRepository.createExpense(
@@ -112,7 +111,7 @@ class SyncServiceImpl implements ISyncService {
           idempotencyKey: a.idempotencyKey,
         );
 
-      case CreateSettlementAction a:
+      case final CreateSettlementAction a:
         await settlementRepository.createSettlement(
           groupId: a.groupId,
           fromUserId: a.fromUserId,
@@ -123,7 +122,7 @@ class SyncServiceImpl implements ISyncService {
           idempotencyKey: a.idempotencyKey,
         );
 
-      case AddMemberAction a:
+      case final AddMemberAction a:
         await groupRepository.addMember(
           groupId: a.groupId,
           email: a.email,

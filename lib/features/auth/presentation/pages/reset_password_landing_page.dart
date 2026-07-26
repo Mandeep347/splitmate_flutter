@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:splito_flutter/core/config/app_branding.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/core/router/route_names.dart';
 import 'package:splito_flutter/core/errors/error_handler.dart';
@@ -90,7 +91,7 @@ class _ResetPasswordLandingPageState extends ConsumerState<ResetPasswordLandingP
               ),
               const SizedBox(height: 24),
               Text(
-                'Your password has been updated. You can now use your new password to sign in to Splito.',
+                'Your password has been updated. You can now use your new password to sign in to ${AppBranding.name}.',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium,
               ),

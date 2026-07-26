@@ -12,7 +12,7 @@ void main() {
   late MockIHiveStorageService mockStorage;
   late SettingsRepositoryImpl repo;
 
-  final tSettings = AppSettings(
+  const tSettings = AppSettings(
     themeMode: 'dark',
     notificationsEnabled: true,
     defaultCurrency: 'USD',

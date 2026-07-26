@@ -137,7 +137,7 @@ class DashboardLineChart extends StatelessWidget {
                   getTitlesWidget: (value, meta) {
                     if (value == 0 || value >= meta.max * 0.95) return const SizedBox.shrink();
                     final symbol = _currencySymbol(currency);
-                    String label = value >= 1000
+                    final String label = value >= 1000
                         ? '$symbol${(value / 1000).toStringAsFixed(value % 1000 == 0 ? 0 : 1)}k'
                         : '$symbol${value.toStringAsFixed(0)}';
                     return SideTitleWidget(

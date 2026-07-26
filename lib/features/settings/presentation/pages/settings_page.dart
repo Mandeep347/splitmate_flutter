@@ -34,7 +34,10 @@ class SettingsPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: settingsState.when(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: settingsState.when(
         loading: () => ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
@@ -289,6 +292,8 @@ class SettingsPage extends ConsumerWidget {
           ],
         ),
       ),
+      ),
+      ),
     );
   }
 
@@ -352,10 +357,7 @@ class SettingsPage extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              RadioListTile<String>(
-                secondary: const Icon(Icons.brightness_auto_outlined),
-                title: const Text('Follow system'),
-                value: 'system',
+              RadioGroup<String>(
                 groupValue: settings.themeMode,
                 onChanged: (v) {
                   if (v != null) {
@@ -363,30 +365,25 @@ class SettingsPage extends ConsumerWidget {
                     Navigator.pop(context);
                   }
                 },
-              ),
-              RadioListTile<String>(
-                secondary: const Icon(Icons.light_mode_outlined),
-                title: const Text('Light'),
-                value: 'light',
-                groupValue: settings.themeMode,
-                onChanged: (v) {
-                  if (v != null) {
-                    ref.read(settingsProvider.notifier).updateThemeMode(v);
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-              RadioListTile<String>(
-                secondary: const Icon(Icons.dark_mode_outlined),
-                title: const Text('Dark'),
-                value: 'dark',
-                groupValue: settings.themeMode,
-                onChanged: (v) {
-                  if (v != null) {
-                    ref.read(settingsProvider.notifier).updateThemeMode(v);
-                    Navigator.pop(context);
-                  }
-                },
+                child: const Column(
+                  children: [
+                    RadioListTile<String>(
+                      secondary: Icon(Icons.brightness_auto_outlined),
+                      title: Text('Follow system'),
+                      value: 'system',
+                    ),
+                    RadioListTile<String>(
+                      secondary: Icon(Icons.light_mode_outlined),
+                      title: Text('Light'),
+                      value: 'light',
+                    ),
+                    RadioListTile<String>(
+                      secondary: Icon(Icons.dark_mode_outlined),
+                      title: Text('Dark'),
+                      value: 'dark',
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

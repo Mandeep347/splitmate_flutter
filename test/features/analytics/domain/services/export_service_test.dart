@@ -8,12 +8,12 @@ import 'package:splito_flutter/features/expenses/domain/entities/expense_partici
 import 'package:splito_flutter/features/expenses/domain/entities/split_type.dart';
 import 'package:splito_flutter/features/settlements/domain/entities/settlement.dart';
 
-final tParticipant1 = ExpenseParticipant(
+const tParticipant1 = ExpenseParticipant(
   userId: 'user-1',
   name: 'Mandeep',
   owedAmount: 1000.0,
 );
-final tParticipant2 = ExpenseParticipant(
+const tParticipant2 = ExpenseParticipant(
   userId: 'user-2',
   name: 'Rahul',
   owedAmount: 2000.0,
@@ -78,7 +78,7 @@ void main() {
   const service = ExportService();
 
   group('generateGroupSummary', () {
-    final analytics = GroupAnalytics(
+    const analytics = GroupAnalytics(
       groupId: 'group-1',
       groupName: 'Test Group',
       currency: 'INR',
@@ -90,7 +90,7 @@ void main() {
       largestExpenseTitle: 'Dinner',
       topSpenderName: 'Mandeep',
       settlementRate: 0.5,
-      memberContributions: const [
+      memberContributions: [
         MemberContribution(
           userId: 'u1',
           name: 'Mandeep',
@@ -101,7 +101,7 @@ void main() {
           percentageOfTotal: 0.33,
         ),
       ],
-      monthlySpending: const [
+      monthlySpending: [
         MonthlySpending(
           year: 2026,
           month: 1,
@@ -168,7 +168,7 @@ void main() {
     });
 
     test('USD symbol is \$', () {
-      final usdAnalytics = GroupAnalytics(
+      const usdAnalytics = GroupAnalytics(
         groupId: 'group-1',
         groupName: 'G',
         currency: 'USD',
@@ -180,7 +180,7 @@ void main() {
         largestExpenseTitle: 'Dinner',
         topSpenderName: 'Mandeep',
         settlementRate: 0.5,
-        memberContributions: const [
+        memberContributions: [
           MemberContribution(
             userId: 'u1',
             name: 'Mandeep',
@@ -191,7 +191,7 @@ void main() {
             percentageOfTotal: 0.33,
           ),
         ],
-        monthlySpending: const [
+        monthlySpending: [
           MonthlySpending(
             year: 2026,
             month: 1,

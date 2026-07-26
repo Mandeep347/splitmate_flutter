@@ -4,7 +4,6 @@ import '../../domain/entities/group_member.dart';
 import '../../domain/repositories/i_group_repository.dart';
 import '../datasources/group_local_datasource.dart';
 import '../datasources/group_remote_datasource.dart';
-import 'package:splito_flutter/core/errors/exceptions.dart';
 
 /// Implementation of the domain [IGroupRepository] contract.
 class GroupRepositoryImpl implements IGroupRepository {

@@ -62,25 +62,6 @@ class ExportService {
         return '$c ';
     }
   }
-
-  String _fmtDate(DateTime dt) {
-    return '${dt.day} ${_months[dt.month - 1]} ${dt.year}';
-  }
-
-  static const _months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec'
-  ];
 }
 
 /// Provider exposing the [ExportService].
