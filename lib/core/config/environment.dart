@@ -26,7 +26,7 @@ abstract class AppEnvironment {
 
   static const String _rawAppName = String.fromEnvironment(
     _appNameKey,
-    defaultValue: 'Splito (Dev)',
+    defaultValue: 'Splitmate (Dev)',
   );
 
   /// Resolves the current [EnvironmentType] from compilation values.

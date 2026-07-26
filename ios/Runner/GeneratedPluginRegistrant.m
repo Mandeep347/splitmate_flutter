@@ -18,6 +18,12 @@
 @import connectivity_plus;
 #endif
 
+#if __has_include(<flutter_local_notifications/FlutterLocalNotificationsPlugin.h>)
+#import <flutter_local_notifications/FlutterLocalNotificationsPlugin.h>
+#else
+@import flutter_local_notifications;
+#endif
+
 #if __has_include(<flutter_secure_storage/FlutterSecureStoragePlugin.h>)
 #import <flutter_secure_storage/FlutterSecureStoragePlugin.h>
 #else
@@ -41,6 +47,7 @@
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [AppLinksIosPlugin registerWithRegistrar:[registry registrarForPlugin:@"AppLinksIosPlugin"]];
   [ConnectivityPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"ConnectivityPlusPlugin"]];
+  [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
   [FlutterSecureStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStoragePlugin"]];
   [FPPPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FPPPackageInfoPlusPlugin"]];
   [FPPSharePlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FPPSharePlusPlugin"]];

@@ -13,6 +13,7 @@ import 'package:splito_flutter/features/expenses/presentation/providers/expense_
 import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
 import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 import 'package:splito_flutter/core/offline/data/services/sync_service_impl.dart';
+import 'package:splito_flutter/core/notifications/local_notification_service.dart';
 import 'package:splito_flutter/shared/widgets/connectivity_banner.dart';
 
 /// The root layout widget of the Splito application.
@@ -42,6 +43,7 @@ class _SplitoAppState extends ConsumerState<SplitoApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final router = ref.read(goRouterProvider);
       ref.read(deepLinkServiceProvider).initialize(router);
+      ref.read(localNotificationServiceProvider).initialize();
     });
   }
 
@@ -83,6 +85,20 @@ class _SplitoAppState extends ConsumerState<SplitoApp> {
       ref.read(myGroupsProvider.notifier).refresh();
       ref.read(myOverallBalancesProvider.notifier).refresh();
 
+      // Trigger system tray notifications outside app for unread items
+      ref.read(notificationsProvider.future).then((notifications) {
+        final localNotifService = ref.read(localNotificationServiceProvider);
+        for (final notif in notifications) {
+          if (!notif.isRead) {
+            localNotifService.notifyIfNew(
+              notificationId: notif.id,
+              title: notif.title ?? 'New Update',
+              body: notif.message ?? '',
+            );
+          }
+        }
+      }).catchError((_) {});
+
       // Dynamically detect if we are on a group details or nested group page,
       // and refresh providers for that group.
       try {
@@ -113,7 +129,7 @@ class _SplitoAppState extends ConsumerState<SplitoApp> {
     final selectedThemeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
-      title: 'Splito',
+      title: 'Splitmate',
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       theme: CustomTheme.lightTheme,

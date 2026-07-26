@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
 import 'package:splito_flutter/core/network/session_invalidator.dart';
+import 'package:splito_flutter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:splito_flutter/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
 import 'package:splito_flutter/features/auth/domain/usecases/get_me_usecase.dart';
@@ -114,7 +115,13 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     try {
       final user = await getMe();
       return AuthStateAuthenticated(user: user);
-    } catch (_) {
+    } catch (e) {
+      // Offline fallback / network hiccup: If tokens exist, restore from local cache
+      final localDatasource = ref.read(authLocalDatasourceProvider);
+      final cachedUser = await localDatasource.getCachedUser();
+      if (cachedUser != null) {
+        return AuthStateAuthenticated(user: cachedUser.toEntity());
+      }
       return const AuthStateUnauthenticated();
     }
   }

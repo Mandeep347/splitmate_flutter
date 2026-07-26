@@ -63,7 +63,7 @@ class AuthFormWrapper extends StatelessWidget {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(16),
                                 child: Image.asset(
-                                  'assets/icon/app_logo.png',
+                                  'assets/icon/splash_logo.png',
                                   width: 52,
                                   height: 52,
                                   fit: BoxFit.cover,
@@ -204,7 +204,7 @@ class AuthFormWrapper extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.asset(
-                        'assets/icon/app_logo.png',
+                        'assets/icon/splash_logo.png',
                         width: 64,
                         height: 64,
                         fit: BoxFit.cover,

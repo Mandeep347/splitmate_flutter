@@ -58,7 +58,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
-                  'assets/icon/app_logo.png',
+                  'assets/icon/splash_logo.png',
                   width: 72,
                   height: 72,
                   fit: BoxFit.cover,
@@ -66,7 +66,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Splito',
+                'Splitmate',
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.primary,

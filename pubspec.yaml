@@ -1,5 +1,5 @@
 name: splito_flutter
-description: "A new Flutter project."
+description: "Group expense splitting made simple"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -58,6 +58,7 @@ dependencies:
   uuid: ^4.4.0
   shimmer: ^3.0.0
   package_info_plus: ^8.0.0
+  flutter_local_notifications: ^17.2.1
 
 dev_dependencies:
   flutter_test:
@@ -75,14 +76,14 @@ dev_dependencies:
 
 # Configuration for flutter_launcher_icons
 # Pixel requirements:
-# app_icon.png: 1024x1024, no transparency, no rounded corners (tools add rounding)
+# splash_logo.png: 1024x1024, no transparency, no rounded corners (tools add rounding)
 # app_icon_fg.png: 432x432 for adaptive icons
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/app_icon.png"
+  image_path: "assets/icon/splash_logo.png"
   adaptive_icon_background: "#4F46E5"
-  adaptive_icon_foreground: "assets/icon/app_icon_fg.png"
+  adaptive_icon_foreground: "assets/icon/splash_logo.png"
   web:
     generate: false
 

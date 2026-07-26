@@ -1,5 +1,6 @@
-package com.example.splito_flutter
+package com.astera.splitmate
 
 import io.flutter.embedding.android.FlutterActivity
 
-class MainActivity : FlutterActivity()
+// Moved to com/astera/splitmate/MainActivity.kt — this file is kept for reference only
+// class MainActivity : FlutterActivity()

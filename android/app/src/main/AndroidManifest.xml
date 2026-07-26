@@ -3,12 +3,15 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
-        android:label="Splito"
+        android:label="Splitmate"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
+        <meta-data android:name="company" android:value="Astera" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

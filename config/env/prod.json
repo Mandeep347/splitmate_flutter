@@ -1,5 +1,5 @@
 {
   "ENV": "prod",
-  "APP_NAME": "Splito",
+  "APP_NAME": "Splitmate",
   "API_BASE_URL": "https://api.splito.app/api/v1"
 }

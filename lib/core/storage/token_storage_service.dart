@@ -57,15 +57,15 @@ class TokenStorageService implements ITokenStorageService {
     _memoryCache[_accessTokenKey] = accessToken;
     _memoryCache[_refreshTokenKey] = refreshToken;
 
+    // Write to both primary and fallback storage so key resets on Android don't erase tokens
     try {
       await Future.wait([
         _storage.write(key: _accessTokenKey, value: accessToken),
         _storage.write(key: _refreshTokenKey, value: refreshToken),
       ]);
-      return; // Primary succeeded — done.
-    } catch (_) {
+    } catch (e) {
       // ignore: avoid_print
-      print('Warning: Secure storage write failed. Trying fallback.');
+      print('Warning: Secure storage write failed: $e');
     }
 
     try {
@@ -73,9 +73,9 @@ class TokenStorageService implements ITokenStorageService {
         _fallbackStorage.write(key: _accessTokenKey, value: accessToken),
         _fallbackStorage.write(key: _refreshTokenKey, value: refreshToken),
       ]);
-    } catch (_) {
+    } catch (e) {
       // ignore: avoid_print
-      print('Warning: Fallback storage write also failed. Using in-memory only.');
+      print('Warning: Fallback storage write failed: $e');
     }
   }
 
