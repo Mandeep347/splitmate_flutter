@@ -14,6 +14,8 @@ import 'package:splito_flutter/shared/widgets/notification_bell.dart';
 import 'package:splito_flutter/features/notifications/presentation/providers/notification_providers.dart';
 import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
+import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
+import 'package:splito_flutter/shared/widgets/skeletons/group_card_skeleton.dart';
 
 /// Redesigned Screen listing all groups in a responsive grid.
 class GroupListPage extends ConsumerWidget {
@@ -61,6 +63,15 @@ class GroupListPage extends ConsumerWidget {
             ),
       body: AsyncValueWidget<List<Group>>(
         value: groupsAsync,
+        onRetry: () => ref.invalidate(myGroupsProvider),
+        loading: () => ShimmerWrapper(
+          isLoading: true,
+          child: ListView.builder(
+            padding: EdgeInsets.all(ext.spaceMD),
+            itemCount: 5,
+            itemBuilder: (context, index) => const GroupCardSkeleton(),
+          ),
+        ),
         data: (groups) {
           final activeGroups = groups.where((g) => g.isActive).toList();
 

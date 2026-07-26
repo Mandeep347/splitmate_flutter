@@ -951,6 +951,7 @@ class GroupDetailsPage extends ConsumerWidget {
     return Scaffold(
       body: AsyncValueWidget<Group>(
         value: detailAsync,
+        onRetry: () => ref.invalidate(groupDetailProvider(groupId)),
         data: (group) {
           return CustomScrollView(
             slivers: [

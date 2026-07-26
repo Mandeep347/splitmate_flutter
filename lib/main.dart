@@ -5,12 +5,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
 import 'core/constants/storage_keys.dart';
 import 'core/logger/app_logger.dart';
+import 'core/errors/global_error_handler.dart';
 import 'core/storage/hive_storage_service.dart';
+import 'core/utils/package_info_service.dart';
 import 'features/settings/presentation/providers/settings_providers.dart';
 
 void main() async {
+  // Global error handler initialized first before any other framework calls
+  GlobalErrorHandler.initialize();
+
   // Ensure native bindings are bound before initializing asynchronous services
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Accessibility Audit: Ensure system text scaling is respected without clamping limits.
 
   // Instantiate Riverpod ProviderContainer for pre-boot DI queries
   final providerContainer = ProviderContainer();
@@ -66,6 +73,9 @@ void main() async {
       // settings load failure is non-fatal — defaults apply
       logger.warning('Failed to pre-warm settings. Using default configurations.');
     }
+
+    logger.info('Initializing package info service...');
+    await PackageInfoService.init();
   } catch (error, stack) {
     logger.error(
       'Pre-boot initialization failed',

@@ -13,6 +13,7 @@ import 'package:splito_flutter/features/groups/presentation/providers/group_prov
 import 'package:splito_flutter/features/groups/presentation/widgets/group_card.dart';
 import 'package:splito_flutter/features/groups/presentation/widgets/create_group_sheet.dart';
 import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
+import 'package:splito_flutter/features/notifications/presentation/providers/notification_providers.dart';
 import 'package:splito_flutter/features/activity/domain/entities/activity_item.dart';
 import 'package:splito_flutter/features/activity/presentation/widgets/activity_list_tile.dart';
 import 'package:splito_flutter/features/dashboard/presentation/providers/dashboard_providers.dart';
@@ -43,6 +44,12 @@ class DashboardPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Pre-warm providers so data is ready when
+    // user navigates to these screens
+    ref.watch(myGroupsProvider);
+    ref.watch(myOverallBalancesProvider);
+    ref.watch(notificationsProvider);
+
     final theme = Theme.of(context);
     final ext = theme.extension<AppThemeExtension>()!;
     final user = ref.watch(currentUserProvider);
@@ -402,14 +409,23 @@ class DashboardPage extends ConsumerWidget {
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.all(isDesktop ? ext.spaceXL : ext.spaceLG),
-            child: (groupsAsync.isLoading && groups.isEmpty)
-                ? const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(32.0),
-                      child: CircularProgressIndicator(),
-                    ),
+            child: (groupsAsync.hasError && groups.isEmpty)
+                ? AsyncValueWidget<List<Group>>(
+                    value: groupsAsync,
+                    onRetry: () {
+                      ref.invalidate(myGroupsProvider);
+                      ref.invalidate(myOverallBalancesProvider);
+                    },
+                    data: (_) => buildDashboardBody(),
                   )
-                : buildDashboardBody(),
+                : (groupsAsync.isLoading && groups.isEmpty)
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(32.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : buildDashboardBody(),
           ),
         ),
       ),

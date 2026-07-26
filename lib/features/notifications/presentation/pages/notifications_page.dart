@@ -6,6 +6,8 @@ import 'package:splito_flutter/features/notifications/presentation/providers/not
 import 'package:splito_flutter/features/notifications/presentation/widgets/notification_list_tile.dart';
 import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
+import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
+import 'package:splito_flutter/shared/widgets/skeletons/notification_list_tile_skeleton.dart';
 
 /// Screen presenting the notifications list, mark-all-read action, and pull-to-refresh.
 class NotificationsPage extends ConsumerWidget {
@@ -78,6 +80,14 @@ class NotificationsPage extends ConsumerWidget {
       ),
       body: AsyncValueWidget<List<AppNotification>>(
         value: notificationsState,
+        loading: () => ShimmerWrapper(
+          isLoading: true,
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            itemCount: 5,
+            itemBuilder: (context, index) => const NotificationListTileSkeleton(),
+          ),
+        ),
         data: (notifications) {
           if (notifications.isEmpty) {
             return const EmptyStateWidget(

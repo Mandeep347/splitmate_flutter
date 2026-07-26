@@ -8,6 +8,7 @@ import 'package:splito_flutter/features/notifications/domain/usecases/get_unread
 import 'package:splito_flutter/features/notifications/domain/usecases/mark_all_read_usecase.dart';
 import 'package:splito_flutter/features/notifications/domain/usecases/mark_notification_read_usecase.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/core/utils/provider_ttl.dart';
 
 // ============================================================================
 // UseCase Providers
@@ -49,6 +50,9 @@ class NotificationsNotifier extends AsyncNotifier<List<AppNotification>> {
     if (!isAuthenticated) {
       return const [];
     }
+    
+    ref.cacheWithTTL(ProviderTTL.shortTTL);
+    
     final useCase = ref.watch(getNotificationsUseCaseProvider);
     return useCase();
   }

@@ -8,6 +8,8 @@ import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
 import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
 import 'package:splito_flutter/features/settlements/presentation/providers/settlement_providers.dart';
 import 'package:splito_flutter/core/network/connectivity_notifier.dart';
+import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
+import 'package:splito_flutter/shared/widgets/skeletons/activity_list_tile_skeleton.dart';
 
 /// Screen displaying the paginated feed of activities in a group.
 class ActivityFeedPage extends ConsumerStatefulWidget {
@@ -77,7 +79,14 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
 
           if (feed == null) {
             if (activityState.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return ShimmerWrapper(
+                isLoading: true,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  itemCount: 5,
+                  itemBuilder: (context, index) => const ActivityListTileSkeleton(),
+                ),
+              );
             }
             return Center(
               child: Padding(

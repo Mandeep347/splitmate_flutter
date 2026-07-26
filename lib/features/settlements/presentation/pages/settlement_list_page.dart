@@ -8,6 +8,8 @@ import 'package:splito_flutter/features/settlements/presentation/providers/settl
 import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
 import 'package:splito_flutter/shared/widgets/settlement_list_tile.dart';
+import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
+import 'package:splito_flutter/shared/widgets/skeletons/settlement_list_tile_skeleton.dart';
 
 /// Screen displaying the settlement logs of a group.
 class SettlementListPage extends ConsumerWidget {
@@ -77,6 +79,14 @@ class SettlementListPage extends ConsumerWidget {
       body: AsyncValueWidget<List<Settlement>>(
         value: settlementsAsync,
         onRetry: handleRefresh,
+        loading: () => ShimmerWrapper(
+          isLoading: true,
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            itemCount: 5,
+            itemBuilder: (context, index) => const SettlementListTileSkeleton(),
+          ),
+        ),
         data: (settlements) {
           if (settlements.isEmpty) {
             return EmptyStateWidget(

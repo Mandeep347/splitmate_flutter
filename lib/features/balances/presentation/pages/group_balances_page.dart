@@ -12,6 +12,8 @@ import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/balance_row.dart';
 import 'package:splito_flutter/shared/widgets/settle_up_button.dart';
 import 'package:splito_flutter/core/network/connectivity_notifier.dart';
+import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
+import 'package:splito_flutter/shared/widgets/skeletons/balance_row_skeleton.dart';
 
 /// Screen displaying the detailed pairwise and simplified debts of a group.
 class GroupBalancesPage extends ConsumerWidget {
@@ -152,13 +154,12 @@ class GroupBalancesPage extends ConsumerWidget {
                           
                           if (simplified == null) {
                             if (simplifiedBalancesAsync.isLoading) {
-                              return const SizedBox(
-                                height: 48,
-                                child: Center(
-                                  child: SizedBox(
-                                    width: 18,
-                                    height: 18,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                              return ShimmerWrapper(
+                                isLoading: true,
+                                child: Column(
+                                  children: List.generate(
+                                    3,
+                                    (_) => const BalanceRowSkeleton(),
                                   ),
                                 ),
                               );
@@ -251,13 +252,12 @@ class GroupBalancesPage extends ConsumerWidget {
 
                           if (groupBalances == null) {
                             if (groupBalancesAsync.isLoading) {
-                              return const SizedBox(
-                                height: 48,
-                                child: Center(
-                                  child: SizedBox(
-                                    width: 18,
-                                    height: 18,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                              return ShimmerWrapper(
+                                isLoading: true,
+                                child: Column(
+                                  children: List.generate(
+                                    3,
+                                    (_) => const BalanceRowSkeleton(),
                                   ),
                                 ),
                               );

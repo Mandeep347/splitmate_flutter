@@ -6,6 +6,8 @@ import 'package:splito_flutter/features/activity/presentation/providers/activity
 import 'package:splito_flutter/features/activity/presentation/widgets/activity_list_tile.dart';
 import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
+import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
+import 'package:splito_flutter/shared/widgets/skeletons/activity_list_tile_skeleton.dart';
 
 class GlobalActivityPage extends ConsumerWidget {
   const GlobalActivityPage({super.key});
@@ -36,7 +38,14 @@ class GlobalActivityPage extends ConsumerWidget {
         ],
       ),
       body: (activityAsync.isLoading && activities.isEmpty)
-          ? const Center(child: CircularProgressIndicator())
+          ? ShimmerWrapper(
+              isLoading: true,
+              child: ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: 5,
+                itemBuilder: (context, index) => const ActivityListTileSkeleton(),
+              ),
+            )
           : (activities.isEmpty)
               ? const EmptyStateWidget(
                   icon: Icons.history_rounded,

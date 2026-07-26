@@ -15,6 +15,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:splito_flutter/features/analytics/domain/services/export_service.dart';
 import 'package:splito_flutter/features/analytics/presentation/widgets/settlement_progress_bar.dart';
 import 'package:splito_flutter/features/analytics/domain/utils/analytics_utils.dart';
+import 'package:splito_flutter/shared/widgets/skeletons/analytics_skeleton.dart';
 
 /// Screen presenting client-side visual statistics and charts for a group's expenses.
 class GroupAnalyticsPage extends ConsumerWidget {
@@ -74,7 +75,7 @@ class GroupAnalyticsPage extends ConsumerWidget {
       ),
       body: AsyncValueWidget<GroupAnalytics>(
         value: analyticsAsync,
-        loading: () => const _AnalyticsSkeleton(),
+        loading: () => const AnalyticsSkeleton(),
         error: (error, stack) => Center(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
@@ -324,43 +325,3 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _AnalyticsSkeleton extends StatelessWidget {
-  const _AnalyticsSkeleton();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Container(
-            height: 80,
-            margin: const EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          Container(
-            height: 200,
-            margin: const EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          Container(
-            height: 160,
-            margin: const EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

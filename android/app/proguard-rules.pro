@@ -1,20 +1,22 @@
-# Flutter Wrapper Rules
--keep class io.flutter.app.** { *; }
--keep class io.flutter.plugin.** { *; }
--keep class io.flutter.util.** { *; }
--keep class io.flutter.view.** { *; }
--keep class io.flutter.embedding.** { *; }
--keep class io.flutter.provider.** { *; }
+# Flutter
+-keep class io.flutter.** { *; }
 -keep class io.flutter.plugins.** { *; }
 
-# Ignore warnings for optional Google Play SplitCompat referenced by Flutter Engine
--dontwarn com.google.android.play.core.**
--dontwarn io.flutter.embedding.engine.deferredcomponents.**
+# Hive
+-keep class com.hivedb.** { *; }
 
-# Keep native C/C++ or JNI methods
--keepclasseswithmembernames class * {
-    native <methods>;
-}
+# Dio / OkHttp
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
 
-# Flutter Secure Storage
--keep class com.it_neer.flutter_secure_storage.** { *; }
+# Riverpod
+-keep class dev.rverpod.** { *; }
+
+# flutter_secure_storage
+-keep class com.it_nomads.fluttersecurestorage.** { *; }
+
+# Keep model classes
+-keep class com.splito.splito_flutter.** { *; }
+-keep class com.example.splito_flutter.** { *; }

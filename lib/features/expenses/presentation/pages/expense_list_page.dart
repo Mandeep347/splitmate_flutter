@@ -14,6 +14,8 @@ import 'package:splito_flutter/features/groups/presentation/providers/group_prov
 import 'package:splito_flutter/features/settings/presentation/providers/settings_providers.dart';
 import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
+import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
+import 'package:splito_flutter/shared/widgets/skeletons/expense_list_tile_skeleton.dart';
 
 /// Screen displaying a paginated list of expenses for a specific group.
 class ExpenseListPage extends ConsumerStatefulWidget {
@@ -205,6 +207,16 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
               onRetry: () async {
                 await ref.read(expenseSearchProvider(widget.groupId).future);
               },
+              loading: () => ShimmerWrapper(
+                isLoading: true,
+                child: ListView.builder(
+                  padding: isCompact
+                      ? const EdgeInsets.fromLTRB(12, 8, 12, 100)
+                      : const EdgeInsets.fromLTRB(16, 12, 16, 100),
+                  itemCount: 5,
+                  itemBuilder: (context, index) => const ExpenseListTileSkeleton(),
+                ),
+              ),
               data: (items) {
                 if (items.isEmpty) {
                   return Column(
@@ -245,7 +257,17 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
             )
           : AsyncValueWidget<PaginatedExpenses>(
               value: state,
-              onRetry: _onRefresh,
+              onRetry: () => ref.invalidate(groupExpensesProvider(widget.groupId)),
+              loading: () => ShimmerWrapper(
+                isLoading: true,
+                child: ListView.builder(
+                  padding: isCompact
+                      ? const EdgeInsets.fromLTRB(12, 8, 12, 100)
+                      : const EdgeInsets.fromLTRB(16, 12, 16, 100),
+                  itemCount: 5,
+                  itemBuilder: (context, index) => const ExpenseListTileSkeleton(),
+                ),
+              ),
               data: (paginatedData) {
                 final items = paginatedData.items;
 

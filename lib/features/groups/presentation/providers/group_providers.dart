@@ -19,6 +19,7 @@ import 'package:splito_flutter/features/groups/domain/usecases/get_my_groups_use
 import 'package:splito_flutter/features/groups/domain/usecases/remove_member_usecase.dart';
 import 'package:splito_flutter/features/groups/domain/usecases/update_group_usecase.dart';
 import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
+import 'package:splito_flutter/core/utils/provider_ttl.dart';
 
 /// Provider exposing [GetMyGroupsUseCase].
 final getMyGroupsUseCaseProvider = Provider<GetMyGroupsUseCase>((ref) {
@@ -68,32 +69,15 @@ final removeMemberUseCaseProvider = Provider<RemoveMemberUseCase>((ref) {
   return RemoveMemberUseCase(repository: repository);
 });
 
-/// Notifier that manages retrieving and listing the user's joined groups.
 class MyGroupsNotifier extends AsyncNotifier<List<Group>> {
-  Timer? _pollingTimer;
-
   @override
   FutureOr<List<Group>> build() async {
     final isAuthenticated = ref.watch(authStateProvider);
     if (!isAuthenticated) {
-      _pollingTimer?.cancel();
       return [];
     }
 
-    _pollingTimer?.cancel();
-    _pollingTimer = Timer.periodic(const Duration(seconds: 20), (_) {
-      if (ref.read(authStateProvider)) {
-        ref.invalidateSelf();
-        final groups = state.valueOrNull ?? [];
-        for (final g in groups) {
-          ref.invalidate(groupActivityProvider(g.id));
-        }
-      }
-    });
-
-    ref.onDispose(() {
-      _pollingTimer?.cancel();
-    });
+    ref.cacheWithTTL(ProviderTTL.mediumTTL);
 
     final useCase = ref.watch(getMyGroupsUseCaseProvider);
     return useCase();
@@ -115,6 +99,8 @@ final myGroupsProvider =
 class GroupDetailNotifier extends FamilyAsyncNotifier<Group, String> {
   @override
   FutureOr<Group> build(String groupId) {
+    ref.cacheWithTTL(ProviderTTL.longTTL);
+    
     final useCase = ref.watch(getGroupByIdUseCaseProvider);
     return useCase(groupId: groupId);
   }

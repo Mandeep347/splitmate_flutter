@@ -6,6 +6,7 @@ import 'package:splito_flutter/features/auth/presentation/providers/auth_provide
 import 'package:splito_flutter/features/settings/domain/entities/app_settings.dart';
 import 'package:splito_flutter/features/settings/presentation/providers/settings_providers.dart';
 import 'package:splito_flutter/shared/widgets/confirmation_dialog.dart';
+import 'package:splito_flutter/core/utils/package_info_service.dart';
 
 /// Full screen view containing advanced user configurations, danger zones, and app legal info.
 class SettingsPage extends ConsumerWidget {
@@ -174,7 +175,9 @@ class SettingsPage extends ConsumerWidget {
                   ListTile(
                     title: const Text('Version'),
                     trailing: Text(
-                      '1.0.0',
+                      PackageInfoService.fullVersion.isNotEmpty
+                          ? PackageInfoService.fullVersion
+                          : '1.0.0+1',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),

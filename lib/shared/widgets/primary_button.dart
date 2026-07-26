@@ -71,10 +71,15 @@ class PrimaryButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
     );
 
-    return ElevatedButton(
-      onPressed: (isLoading || onPressed == null) ? null : onPressed,
-      style: buttonStyle,
-      child: buttonContent,
+    return Semantics(
+      label: label,
+      button: true,
+      enabled: onPressed != null && !isLoading,
+      child: ElevatedButton(
+        onPressed: (isLoading || onPressed == null) ? null : onPressed,
+        style: buttonStyle,
+        child: buttonContent,
+      ),
     );
   }
 }

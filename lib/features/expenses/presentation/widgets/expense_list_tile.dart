@@ -184,6 +184,11 @@ class ExpenseListTile extends ConsumerWidget {
       );
     }
 
-    return content;
+    return Semantics(
+      label: '${expense.title}, ${expense.currency} ${expense.totalAmount}, paid by $paidByLabel',
+      button: true,
+      enabled: !isPending,
+      child: content,
+    );
   }
 }

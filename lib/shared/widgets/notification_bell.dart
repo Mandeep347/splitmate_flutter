@@ -13,33 +13,45 @@ class NotificationBell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final hasUnread = ref.watch(hasUnreadProvider);
+    final unreadCount = ref.watch(unreadCountProvider).valueOrNull ?? 0;
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.notifications_outlined),
-          onPressed: () {
-            ref.read(notificationsProvider.notifier).refresh();
-            // Bug 6 fix: use pushNamed so back navigation returns to the
-            // originating page (profile / any screen) instead of replacing it.
-            context.pushNamed(AppRoutes.notificationsName);
-          },
-        ),
-        if (hasUnread)
-          Positioned(
-            top: 8,
-            right: 8,
-            child: Container(
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: theme.colorScheme.error,
+    final label = hasUnread
+        ? 'Notifications, $unreadCount unread'
+        : 'Notifications, no unread';
+
+    return Semantics(
+      label: label,
+      button: true,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            tooltip: 'Notifications',
+            onPressed: () {
+              ref.read(notificationsProvider.notifier).refresh();
+              // Bug 6 fix: use pushNamed so back navigation returns to the
+              // originating page (profile / any screen) instead of replacing it.
+              context.pushNamed(AppRoutes.notificationsName);
+            },
+          ),
+          if (hasUnread)
+            Positioned(
+              top: 8,
+              right: 8,
+              child: ExcludeSemantics(
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: theme.colorScheme.error,
+                  ),
+                ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

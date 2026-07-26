@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/core/errors/error_handler.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
 
 /// Generic widget to handle [AsyncValue] states automatically.
@@ -45,32 +46,36 @@ class AsyncValueWidget<T> extends StatelessWidget {
               ),
       error: error ??
           (err, stack) {
-            final errorMessage = err is Failure ? err.message : 'An unexpected error occurred.';
             return Center(
               child: Padding(
-                padding: EdgeInsets.all(ext.spaceLG),
+                padding: const EdgeInsets.all(24.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       Icons.error_outline,
-                      color: theme.colorScheme.error,
                       size: 48,
+                      color: theme.colorScheme.error,
                     ),
-                    SizedBox(height: ext.spaceMD),
+                    const SizedBox(height: 12),
                     Text(
-                      errorMessage,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: theme.colorScheme.onSurface,
+                      'Something went wrong',
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      AppErrorHandler.toUserMessage(err),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     if (onRetry != null) ...[
-                      SizedBox(height: ext.spaceLG),
+                      const SizedBox(height: 20),
                       OutlinedButton.icon(
+                        icon: const Icon(Icons.refresh_outlined),
+                        label: const Text('Try Again'),
                         onPressed: onRetry,
-                        icon: const Icon(Icons.refresh),
-                        label: const Text('Retry'),
                       ),
                     ],
                   ],

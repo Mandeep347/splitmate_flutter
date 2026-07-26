@@ -9,6 +9,8 @@ import 'package:splito_flutter/features/groups/presentation/widgets/add_member_s
 import 'package:splito_flutter/shared/widgets/async_value_widget.dart';
 import 'package:splito_flutter/shared/widgets/confirmation_dialog.dart';
 import 'package:splito_flutter/shared/widgets/member_avatar.dart';
+import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
+import 'package:splito_flutter/shared/widgets/skeletons/member_tile_skeleton.dart';
 
 /// Screen displaying the full list of members in a group.
 class GroupMembersPage extends ConsumerWidget {
@@ -63,6 +65,15 @@ class GroupMembersPage extends ConsumerWidget {
       ),
       body: AsyncValueWidget<List<GroupMember>>(
         value: membersAsync,
+        loading: () => ShimmerWrapper(
+          isLoading: true,
+          child: ListView.separated(
+            padding: EdgeInsets.symmetric(vertical: ext.spaceMD),
+            itemCount: 3,
+            separatorBuilder: (context, index) => const Divider(height: 1),
+            itemBuilder: (context, index) => const MemberTileSkeleton(),
+          ),
+        ),
         data: (members) {
           if (members.isEmpty) {
             return const Center(

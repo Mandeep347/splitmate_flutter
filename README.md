@@ -15,3 +15,22 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## Generate Icons & Splash
+
+```bash
+dart run flutter_launcher_icons
+dart run flutter_native_splash:create
+```
+
+## Build Release
+
+```bash
+# Android
+flutter build apk --release
+flutter build appbundle --release
+
+# iOS
+flutter build ios --release
+```
+

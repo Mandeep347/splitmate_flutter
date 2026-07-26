@@ -8,6 +8,7 @@ import 'package:splito_flutter/features/balances/domain/entities/user_overall_ba
 import 'package:splito_flutter/features/balances/domain/usecases/get_group_balances_usecase.dart';
 import 'package:splito_flutter/features/balances/domain/usecases/get_my_overall_balances_usecase.dart';
 import 'package:splito_flutter/features/balances/domain/usecases/get_simplified_balances_usecase.dart';
+import 'package:splito_flutter/core/utils/provider_ttl.dart';
 
 // ============================================================================
 // SECTION A — UseCase Providers
@@ -109,6 +110,8 @@ class MyOverallBalancesNotifier extends AsyncNotifier<List<UserOverallBalance>> 
     if (!isAuthenticated) {
       return const [];
     }
+
+    ref.cacheWithTTL(ProviderTTL.shortTTL);
 
     final useCase = ref.watch(getMyOverallBalancesUseCaseProvider);
     return useCase();
