@@ -175,9 +175,13 @@ void main() {
       ).thenAnswer((_) async => [tSettlementModel]);
 
       final result = await repository.getGroupSettlements(groupId: 'group-1');
+      final expected = DateTime.parse('2026-01-01T00:00:00.000Z');
       expect(
-        result.first.createdAt,
-        DateTime.parse('2026-01-01T00:00:00.000Z'),
+        result.first.createdAt.isAtSameMomentAs(expected),
+        isTrue,
+        reason:
+            'createdAt should represent the same instant as the ISO string, '
+            'regardless of local timezone conversion.',
       );
     });
 
