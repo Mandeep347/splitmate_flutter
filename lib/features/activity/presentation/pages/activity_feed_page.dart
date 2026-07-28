@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/network/connectivity_notifier.dart';
-import 'package:splito_flutter/core/responsive/responsive_layout.dart';
 import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
 import 'package:splito_flutter/features/activity/presentation/widgets/activity_list_tile.dart';
 import 'package:splito_flutter/shared/widgets/empty_state_widget.dart';
@@ -77,7 +76,6 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
               ? activityState.requireValue
               : null;
           final isOnline = ref.watch(isOnlineProvider);
-          final isDesktop = ResponsiveLayout.isDesktop(context);
 
           if (feed == null) {
             if (activityState.isLoading) {
@@ -115,7 +113,7 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
             },
             child: Column(
               children: [
-                if (!isOnline && !isDesktop)
+                if (!isOnline)
                   Container(
                     margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                     padding: const EdgeInsets.symmetric(

@@ -1,7 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:splito_flutter/core/constants/app_constants.dart';
+
+// On non-web platforms we also import dart:io for InternetAddress.
+import 'connectivity_service_io.dart'
+    if (dart.library.html) 'connectivity_service_web.dart'
+    as platform;
 
 /// Abstract contract for checking network connectivity and monitoring state changes.
 abstract interface class IConnectivityService {
@@ -15,10 +22,9 @@ abstract interface class IConnectivityService {
 /// Service implementing [IConnectivityService] using [Connectivity] and real IP reachability lookups.
 class ConnectivityService implements IConnectivityService {
   final Connectivity _connectivity;
-  final Future<List<InternetAddress>> Function(String host)? _addressLookup;
 
   /// Creates a new [ConnectivityService] instance.
-  ConnectivityService({Connectivity? connectivity, this._addressLookup})
+  ConnectivityService({Connectivity? connectivity})
     : _connectivity = connectivity ?? Connectivity();
 
   Stream<bool>? _debouncedStream;
@@ -26,23 +32,45 @@ class ConnectivityService implements IConnectivityService {
   @override
   Future<bool> isOnline() async {
     try {
-      final results = await _connectivity.checkConnectivity();
-      final hasInterface = results.any((r) => r != ConnectivityResult.none);
-      if (!hasInterface) return false;
+      // On web, connectivity_plus always reports "wifi" or "ethernet" even when
+      // offline, so we skip the interface check and go straight to reachability.
+      if (!kIsWeb) {
+        final results = await _connectivity.checkConnectivity();
+        final hasInterface = results.any((r) => r != ConnectivityResult.none);
+        if (!hasInterface) return false;
+      }
       return await _checkReachability();
     } catch (_) {
       return false;
     }
   }
 
-  /// Performs a real reachability check via DNS lookup to 8.8.8.8 with 3s timeout.
+  /// Performs a real reachability check.
+  /// - On **web**: fires a HEAD request to the backend (avoids dart:io / CORS issues).
+  /// - On **native**: delegates to platform-specific DNS lookup (InternetAddress.lookup).
   Future<bool> _checkReachability() async {
+    if (kIsWeb) {
+      return _checkWebReachability();
+    }
+    return platform.checkNativeReachability();
+  }
+
+  /// Web reachability: HEAD request to the API base URL with a short timeout.
+  Future<bool> _checkWebReachability() async {
     try {
-      final lookupFn = _addressLookup ?? InternetAddress.lookup;
-      final result = await lookupFn(
-        '8.8.8.8',
-      ).timeout(const Duration(seconds: 3));
-      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+      final dio = Dio();
+      final response = await dio
+          .head<dynamic>(
+            AppConstants.baseUrl,
+            options: Options(
+              sendTimeout: const Duration(seconds: 5),
+              receiveTimeout: const Duration(seconds: 5),
+              validateStatus: (_) => true, // Accept any HTTP status, we just want a response
+            ),
+          )
+          .timeout(const Duration(seconds: 6));
+      // Any valid HTTP response means we are online (even 404/405 etc.)
+      return response.statusCode != null;
     } catch (_) {
       return false;
     }
@@ -52,8 +80,12 @@ class ConnectivityService implements IConnectivityService {
   Stream<bool> get onConnectivityChanged {
     _debouncedStream ??= _connectivity.onConnectivityChanged
         .asyncMap((results) async {
-          final hasInterface = results.any((r) => r != ConnectivityResult.none);
-          if (!hasInterface) return false;
+          if (!kIsWeb) {
+            final hasInterface = results.any(
+              (r) => r != ConnectivityResult.none,
+            );
+            if (!hasInterface) return false;
+          }
           return await _checkReachability();
         })
         .distinct()

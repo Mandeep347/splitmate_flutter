@@ -332,7 +332,7 @@ class DashboardPage extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!isOnline && !isDesktop) ...[
+          if (!isOnline) ...[
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(

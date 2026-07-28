@@ -7,7 +7,7 @@ class AppConstants {
   /// The base URL of the FastAPI backend.
   static String get baseUrl => dotenv.get(
     'API_BASE_URL',
-    fallback: 'https://splitmate-hosting.onrender.com/api/v1',
+    fallback: 'https://apiv1.splitmate.page/api/v1',
   );
 
   /// Connection timeout in milliseconds.

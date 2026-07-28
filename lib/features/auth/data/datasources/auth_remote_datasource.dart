@@ -96,8 +96,9 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   Future<UserModel> updateMe({String? name, String? preferredCurrency}) async {
     final data = <String, dynamic>{};
     if (name != null) data['name'] = name;
-    if (preferredCurrency != null)
+    if (preferredCurrency != null) {
       data['preferred_currency'] = preferredCurrency;
+    }
 
     final response = await _client.patch<Map<String, dynamic>>(
       ApiEndpoints.usersMe,

@@ -146,8 +146,9 @@ class DashboardLineChart extends StatelessWidget {
                   reservedSize: 42,
                   interval: maxY > 0 ? (maxY / 3) : 1,
                   getTitlesWidget: (value, meta) {
-                    if (value == 0 || value >= meta.max * 0.95)
+                    if (value == 0 || value >= meta.max * 0.95) {
                       return const SizedBox.shrink();
+                    }
                     final symbol = _currencySymbol(currency);
                     final String label = value >= 1000
                         ? '$symbol${(value / 1000).toStringAsFixed(value % 1000 == 0 ? 0 : 1)}k'
