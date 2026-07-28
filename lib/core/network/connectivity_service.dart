@@ -65,7 +65,8 @@ class ConnectivityService implements IConnectivityService {
             options: Options(
               sendTimeout: const Duration(seconds: 5),
               receiveTimeout: const Duration(seconds: 5),
-              validateStatus: (_) => true, // Accept any HTTP status, we just want a response
+              validateStatus: (_) =>
+                  true, // Accept any HTTP status, we just want a response
             ),
           )
           .timeout(const Duration(seconds: 6));

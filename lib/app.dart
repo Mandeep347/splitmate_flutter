@@ -15,6 +15,7 @@ import 'package:splito_flutter/core/network/connectivity_notifier.dart';
 import 'package:splito_flutter/core/offline/data/services/sync_service_impl.dart';
 import 'package:splito_flutter/core/notifications/local_notification_service.dart';
 import 'package:splito_flutter/shared/widgets/connectivity_banner.dart';
+import 'package:splito_flutter/shared/widgets/download_app_banner.dart';
 
 import 'package:splito_flutter/core/config/app_branding.dart';
 
@@ -145,7 +146,11 @@ class _SplitoAppState extends ConsumerState<SplitoApp> {
       themeMode: selectedThemeMode,
       builder: (context, child) {
         return Stack(
-          children: [if (child != null) child, const ConnectivityBanner()],
+          children: [
+            if (child != null) child,
+            const ConnectivityBanner(),
+            const DownloadAppBanner(),
+          ],
         );
       },
     );

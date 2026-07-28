@@ -87,4 +87,8 @@ abstract class AppRoutes {
   // Offline Sync Status Route
   static const String syncStatusName = 'syncStatus';
   static const String syncStatusPath = '/sync-status';
+
+  // Download / Marketing Page (public — no auth required)
+  static const String downloadName = 'download';
+  static const String downloadPath = '/download';
 }

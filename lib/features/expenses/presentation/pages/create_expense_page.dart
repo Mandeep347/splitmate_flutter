@@ -273,144 +273,144 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
               child: Form(
                 key: _formKey,
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Title Field
-                AppTextField(
-                  labelText: 'Title',
-                  hintText: 'e.g. Dinner, Groceries',
-                  controller: _titleController,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Title is required';
-                    }
-                    if (value.length > 255) {
-                      return 'Title cannot exceed 255 characters';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title Field
+                    AppTextField(
+                      labelText: 'Title',
+                      hintText: 'e.g. Dinner, Groceries',
+                      controller: _titleController,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Title is required';
+                        }
+                        if (value.length > 255) {
+                          return 'Title cannot exceed 255 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
 
-                // Amount Field
-                AppTextField(
-                  labelText: 'Amount',
-                  hintText: '0.00',
-                  controller: _amountController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Text(
-                      currencySymbol,
-                      style: theme.textTheme.titleMedium?.copyWith(
+                    // Amount Field
+                    AppTextField(
+                      labelText: 'Amount',
+                      hintText: '0.00',
+                      controller: _amountController,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Text(
+                          currencySymbol,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Amount is required';
+                        }
+                        final parsed = double.tryParse(value);
+                        if (parsed == null || parsed <= 0) {
+                          return 'Please enter a valid amount';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Currency selector
+                    Text(
+                      'Currency',
+                      style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.primary,
                       ),
                     ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Amount is required';
-                    }
-                    final parsed = double.tryParse(value);
-                    if (parsed == null || parsed <= 0) {
-                      return 'Please enter a valid amount';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                    CurrencyChipSelector(
+                      selectedCurrency: _selectedCurrency!,
+                      onChanged: (v) => setState(() => _selectedCurrency = v),
+                    ),
+                    const SizedBox(height: 16),
 
-                // Currency selector
-                Text(
-                  'Currency',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                CurrencyChipSelector(
-                  selectedCurrency: _selectedCurrency!,
-                  onChanged: (v) => setState(() => _selectedCurrency = v),
-                ),
-                const SizedBox(height: 16),
+                    // Description Field
+                    AppTextField(
+                      labelText: 'Description (Optional)',
+                      hintText: 'Add details or notes',
+                      controller: _descriptionController,
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 20),
 
-                // Description Field
-                AppTextField(
-                  labelText: 'Description (Optional)',
-                  hintText: 'Add details or notes',
-                  controller: _descriptionController,
-                  maxLines: 3,
-                ),
-                const SizedBox(height: 20),
+                    // Paid By Section
+                    Text(
+                      'Paid by',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    PaidBySelector(
+                      members: mappedMembers,
+                      selectedUserId: _selectedPaidByUserId,
+                      onChanged: (userId) {
+                        setState(() {
+                          _selectedPaidByUserId = userId;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
 
-                // Paid By Section
-                Text(
-                  'Paid by',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                PaidBySelector(
-                  members: mappedMembers,
-                  selectedUserId: _selectedPaidByUserId,
-                  onChanged: (userId) {
-                    setState(() {
-                      _selectedPaidByUserId = userId;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
+                    // Split Type Section
+                    Text(
+                      'Split type',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SplitTypeSelector(
+                      selectedType: _selectedSplitType,
+                      onChanged: (type) {
+                        setState(() {
+                          _selectedSplitType = type;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
 
-                // Split Type Section
-                Text(
-                  'Split type',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                SplitTypeSelector(
-                  selectedType: _selectedSplitType,
-                  onChanged: (type) {
-                    setState(() {
-                      _selectedSplitType = type;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
+                    // Participants Section
+                    Text(
+                      'Participants',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ParticipantInputSection(
+                      members: mappedMembers,
+                      splitType: _selectedSplitType,
+                      currency: widget.currency,
+                      onSplitInputChanged: (input) {
+                        setState(() {
+                          _currentSplitInput = input;
+                        });
+                      },
+                    ),
 
-                // Participants Section
-                Text(
-                  'Participants',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ParticipantInputSection(
-                  members: mappedMembers,
-                  splitType: _selectedSplitType,
-                  currency: widget.currency,
-                  onSplitInputChanged: (input) {
-                    setState(() {
-                      _currentSplitInput = input;
-                    });
-                  },
-                ),
+                    // Split Summary Card
+                    _buildSplitSummaryCard(currencySymbol),
+                    const SizedBox(height: 24),
 
-                // Split Summary Card
-                _buildSplitSummaryCard(currencySymbol),
-                const SizedBox(height: 24),
-
-                // Submit Button
-                PrimaryButton(label: 'Add Expense', onPressed: _submit),
-              ],
-            ),
-          ),
+                    // Submit Button
+                    PrimaryButton(label: 'Add Expense', onPressed: _submit),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

@@ -33,6 +33,7 @@ import 'package:splito_flutter/features/legal/presentation/pages/privacy_policy_
 import 'package:splito_flutter/features/legal/presentation/pages/terms_of_service_page.dart';
 import 'package:splito_flutter/features/analytics/presentation/pages/global_statistics_page.dart';
 import 'package:splito_flutter/features/navigation/presentation/widgets/responsive_navigation_shell.dart';
+import 'package:splito_flutter/features/updates/presentation/pages/download_page.dart';
 
 /// Global navigator keys for context access.
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -108,7 +109,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           loc == AppRoutes.verifyEmailPendingPath ||
           loc == AppRoutes.verifyEmailPath ||
           loc == AppRoutes.forgotPasswordPath ||
-          loc == AppRoutes.resetPasswordPath;
+          loc == AppRoutes.resetPasswordPath ||
+          loc == AppRoutes.downloadPath;
 
       if (!isAuthenticated) {
         // Allow the user to stay on any auth form route (login, register, etc.).
@@ -226,6 +228,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: AppRoutes.settingsName,
         path: AppRoutes.settingsPath,
         builder: (context, state) => const SettingsPage(),
+      ),
+
+      // Download / Marketing Route (public — no auth required)
+      GoRoute(
+        parentNavigatorKey: rootNavigatorKey,
+        name: AppRoutes.downloadName,
+        path: AppRoutes.downloadPath,
+        builder: (context, state) => const DownloadPage(),
       ),
 
       // Offline Sync Status Route

@@ -339,7 +339,6 @@ class _DesktopShell extends ConsumerWidget {
                   ),
                   child: Row(
                     children: [
-
                       Text(
                         AppBranding.name,
                         style: theme.textTheme.titleLarge?.copyWith(

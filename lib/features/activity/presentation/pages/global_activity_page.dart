@@ -63,8 +63,7 @@ class GlobalActivityPage extends ConsumerWidget {
                   onRefresh: () => _handleRefresh(ref),
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16.0),
-                    itemCount:
-                        activities.length + ((!isOnline) ? 1 : 0),
+                    itemCount: activities.length + ((!isOnline) ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (!isOnline && index == 0) {
                         return Container(
@@ -107,9 +106,7 @@ class GlobalActivityPage extends ConsumerWidget {
                         );
                       }
 
-                      final activityIndex = (!isOnline)
-                          ? index - 1
-                          : index;
+                      final activityIndex = (!isOnline) ? index - 1 : index;
                       final activity = activities[activityIndex];
 
                       return Column(

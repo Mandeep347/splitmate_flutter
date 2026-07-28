@@ -10,7 +10,9 @@ class AppDateUtils {
       return DateTime.now();
     }
     String parseStr = dateStr;
-    if (!dateStr.endsWith('Z') && !dateStr.contains('+') && !dateStr.contains(RegExp(r'-[0-9]{2}:[0-9]{2}'))) {
+    if (!dateStr.endsWith('Z') &&
+        !dateStr.contains('+') &&
+        !dateStr.contains(RegExp(r'-[0-9]{2}:[0-9]{2}'))) {
       parseStr = '${dateStr}Z';
     }
     return DateTime.parse(parseStr).toLocal();

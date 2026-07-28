@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +9,7 @@ import 'package:splito_flutter/core/theme/theme_extensions.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/settings/domain/entities/app_settings.dart';
 import 'package:splito_flutter/features/settings/presentation/providers/settings_providers.dart';
+import 'package:splito_flutter/features/updates/update_notifier.dart';
 import 'package:splito_flutter/shared/widgets/confirmation_dialog.dart';
 import 'package:splito_flutter/core/utils/package_info_service.dart';
 
@@ -206,6 +209,68 @@ class SettingsPage extends ConsumerWidget {
                           context.push(AppRoutes.termsOfServicePath);
                         },
                       ),
+                      // Check for Updates — Android only
+                      if (!kIsWeb && Platform.isAndroid) ...[
+                        const Divider(height: 1),
+                        Consumer(
+                          builder: (context, ref, _) {
+                            final updateState =
+                                ref.watch(updateNotifierProvider).valueOrNull ??
+                                const UpdateState();
+                            final bodySmall = theme.textTheme.bodySmall;
+                            final colorScheme = theme.colorScheme;
+                            return ListTile(
+                              leading: const Icon(Icons.system_update_outlined),
+                              title: const Text('Check for Updates'),
+                              subtitle: switch (updateState.status) {
+                                UpdateStatus.idle => null,
+                                UpdateStatus.checking => Text(
+                                  'Checking…',
+                                  style: bodySmall,
+                                ),
+                                UpdateStatus.upToDate => Text(
+                                  'You\'re up to date ✓',
+                                  style: bodySmall?.copyWith(
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                UpdateStatus.updateAvailable => Text(
+                                  'Update available: '
+                                  '${updateState.updateInfo?.latestVersion ?? ''}',
+                                  style: bodySmall?.copyWith(
+                                    color: colorScheme.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              },
+                              trailing: switch (updateState.status) {
+                                UpdateStatus.checking => const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                                UpdateStatus.updateAvailable => TextButton(
+                                  onPressed: () => ref
+                                      .read(updateNotifierProvider.notifier)
+                                      .downloadUpdate(),
+                                  child: const Text('Download'),
+                                ),
+                                _ => const Icon(Icons.chevron_right_rounded),
+                              },
+                              onTap:
+                                  updateState.status == UpdateStatus.checking ||
+                                      updateState.status ==
+                                          UpdateStatus.updateAvailable
+                                  ? null
+                                  : () => ref
+                                        .read(updateNotifierProvider.notifier)
+                                        .checkForUpdate(),
+                            );
+                          },
+                        ),
+                      ],
                     ],
                   ),
                 ),
