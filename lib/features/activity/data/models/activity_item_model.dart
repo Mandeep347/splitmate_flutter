@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:splito_flutter/core/utils/date_utils.dart';
 import '../../domain/entities/activity_item.dart';
 
 part 'activity_item_model.freezed.dart';
@@ -31,7 +32,7 @@ class ActivityItemModel with _$ActivityItemModel {
       description: _deriveDescription(type, actor),
       entityId: null,
       entityType: _deriveEntityType(type),
-      createdAt: DateTime.parse(createdAt),
+      createdAt: AppDateUtils.parseApiDate(createdAt),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:splito_flutter/core/utils/date_utils.dart';
 import '../../domain/entities/group_member.dart';
 
 part 'group_member_model.freezed.dart';
@@ -31,7 +32,7 @@ class GroupMemberModel with _$GroupMemberModel {
       email: email,
       role: role,
       status: status,
-      joinedAt: DateTime.parse(joinedAt),
+      joinedAt: AppDateUtils.parseApiDate(joinedAt),
     );
   }
 }

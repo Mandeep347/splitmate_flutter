@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:splito_flutter/core/utils/date_utils.dart';
 import '../../domain/entities/group.dart';
 import 'group_member_model.dart';
 
@@ -34,7 +35,7 @@ class GroupModel with _$GroupModel {
       defaultCurrency: defaultCurrency,
       status: status,
       createdBy: createdBy,
-      createdAt: DateTime.parse(createdAt),
+      createdAt: AppDateUtils.parseApiDate(createdAt),
       membersCount: membersCount,
       members: members.map((m) => m.toEntity()).toList(),
     );

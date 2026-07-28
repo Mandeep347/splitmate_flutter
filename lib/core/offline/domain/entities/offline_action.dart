@@ -1,4 +1,5 @@
 import 'package:uuid/uuid.dart';
+import 'package:splito_flutter/core/utils/date_utils.dart';
 
 /// Sealed base class representing an offline action queued for synchronization.
 sealed class OfflineAction {
@@ -102,7 +103,7 @@ final class CreateExpenseAction extends OfflineAction {
   factory CreateExpenseAction.fromJson(Map<String, dynamic> json) {
     return CreateExpenseAction(
       id: json['id'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: AppDateUtils.parseApiDate(json['createdAt'] as String),
       retryCount: (json['retryCount'] as num?)?.toInt() ?? 0,
       maxRetries: (json['maxRetries'] as num?)?.toInt() ?? 3,
       groupId: json['groupId'] as String,
@@ -182,7 +183,7 @@ final class CreateSettlementAction extends OfflineAction {
   factory CreateSettlementAction.fromJson(Map<String, dynamic> json) {
     return CreateSettlementAction(
       id: json['id'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: AppDateUtils.parseApiDate(json['createdAt'] as String),
       retryCount: (json['retryCount'] as num?)?.toInt() ?? 0,
       maxRetries: (json['maxRetries'] as num?)?.toInt() ?? 3,
       groupId: json['groupId'] as String,
@@ -246,7 +247,7 @@ final class AddMemberAction extends OfflineAction {
   factory AddMemberAction.fromJson(Map<String, dynamic> json) {
     return AddMemberAction(
       id: json['id'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: AppDateUtils.parseApiDate(json['createdAt'] as String),
       retryCount: (json['retryCount'] as num?)?.toInt() ?? 0,
       maxRetries: (json['maxRetries'] as num?)?.toInt() ?? 3,
       groupId: json['groupId'] as String,

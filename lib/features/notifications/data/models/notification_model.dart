@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:splito_flutter/core/utils/date_utils.dart';
 import '../../domain/entities/app_notification.dart';
 
 part 'notification_model.freezed.dart';
@@ -33,7 +34,7 @@ class NotificationModel with _$NotificationModel {
       message: message,
       isRead: isRead,
       metadata: metadata,
-      createdAt: DateTime.parse(createdAt),
+      createdAt: AppDateUtils.parseApiDate(createdAt),
     );
   }
 }

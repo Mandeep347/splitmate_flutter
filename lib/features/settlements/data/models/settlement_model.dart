@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:splito_flutter/core/utils/date_utils.dart';
 import '../../domain/entities/settlement.dart';
 
 part 'settlement_model.freezed.dart';
@@ -41,7 +42,7 @@ class SettlementModel with _$SettlementModel {
       currency: currency,
       note: note,
       status: status,
-      createdAt: DateTime.parse(createdAt),
+      createdAt: AppDateUtils.parseApiDate(createdAt),
     );
   }
 }

@@ -345,10 +345,11 @@ class _DesktopShell extends ConsumerWidget {
                           gradient: ext.primaryGradient,
                           borderRadius: BorderRadius.circular(ext.radiusSM),
                         ),
-                        child: const Icon(
-                          Icons.grain_rounded,
+                        child: Image.asset(
+                          AppBranding.logoIcon,
+                          width: 24,
+                          height: 24,
                           color: Colors.white,
-                          size: 24,
                         ),
                       ),
                       SizedBox(width: ext.spaceMD),

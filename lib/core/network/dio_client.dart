@@ -147,7 +147,9 @@ class _AuthInterceptor extends QueuedInterceptor {
     final response = err.response;
     if (response != null &&
         response.statusCode == 401 &&
-        err.requestOptions.path != ApiEndpoints.refresh) {
+        err.requestOptions.path != ApiEndpoints.refresh &&
+        err.requestOptions.path != ApiEndpoints.login &&
+        err.requestOptions.path != ApiEndpoints.register) {
       try {
         final tokenStorage = _ref.read(tokenStorageServiceProvider);
         final refreshToken = await tokenStorage.getRefreshToken();

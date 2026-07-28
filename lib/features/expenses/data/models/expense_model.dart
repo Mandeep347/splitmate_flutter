@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:splito_flutter/core/utils/date_utils.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/expense.dart';
 import 'package:splito_flutter/features/expenses/domain/entities/split_type.dart';
 import 'expense_participant_model.dart';
@@ -44,7 +45,7 @@ class ExpenseModel with _$ExpenseModel {
       currency: currency,
       splitType: SplitType.fromApiValue(splitType),
       status: status,
-      createdAt: DateTime.parse(createdAt),
+      createdAt: AppDateUtils.parseApiDate(createdAt),
       participants: participants.map((p) => p.toEntity()).toList(),
     );
   }
