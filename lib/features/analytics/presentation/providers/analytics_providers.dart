@@ -12,6 +12,7 @@ import 'package:splito_flutter/features/analytics/domain/usecases/compute_group_
 import 'package:splito_flutter/features/analytics/domain/usecases/get_expense_search_results_usecase.dart';
 import 'package:splito_flutter/features/analytics/domain/usecases/get_user_analytics_usecase.dart';
 import 'package:splito_flutter/features/analytics/data/repositories/analytics_repository_impl.dart';
+import 'package:splito_flutter/core/events/app_events.dart';
 
 // ============================================================================
 // SECTION A — Infrastructure Providers
@@ -88,6 +89,7 @@ class UserAnalyticsNotifier extends AsyncNotifier<UserAnalytics> {
   @override
   FutureOr<UserAnalytics> build() {
     final isAuthenticated = ref.watch(authStateProvider);
+    ref.watch(syncCompletedProvider);
     if (!isAuthenticated) {
       return const UserAnalytics(
         userId: '',

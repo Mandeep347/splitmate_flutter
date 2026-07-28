@@ -13,7 +13,6 @@ import 'package:splito_flutter/features/groups/presentation/providers/group_prov
 import 'package:splito_flutter/features/groups/presentation/widgets/group_card.dart';
 import 'package:splito_flutter/features/groups/presentation/widgets/create_group_sheet.dart';
 import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
-import 'package:splito_flutter/features/notifications/presentation/providers/notification_providers.dart';
 import 'package:splito_flutter/features/activity/domain/entities/activity_item.dart';
 import 'package:splito_flutter/features/activity/presentation/widgets/activity_list_tile.dart';
 import 'package:splito_flutter/features/dashboard/presentation/providers/dashboard_providers.dart';
@@ -44,12 +43,7 @@ class DashboardPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Pre-warm providers so data is ready when
-    // user navigates to these screens
-    ref.watch(myGroupsProvider);
-    ref.watch(myOverallBalancesProvider);
-    ref.watch(notificationsProvider);
-
+    // Providers used in this widget
     final theme = Theme.of(context);
     final ext = theme.extension<AppThemeExtension>()!;
     final user = ref.watch(currentUserProvider);
@@ -80,13 +74,11 @@ class DashboardPage extends ConsumerWidget {
     final String greetingText = user != null ? '${_greeting()}, ${user.name}' : _greeting();
 
     Widget mainContent(List<Group> groups, UserAnalytics analytics) {
-      final shownGroups = <Group>[];
-      for (final rg in analytics.groups) {
-        final matches = groups.where((g) => g.id == rg.groupId);
-        if (matches.isNotEmpty) {
-          shownGroups.add(matches.first);
-        }
-      }
+      final groupMap = {for (var g in groups) g.id: g};
+      final shownGroups = analytics.groups
+          .map((rg) => groupMap[rg.groupId])
+          .whereType<Group>()
+          .toList();
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,

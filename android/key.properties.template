@@ -1,0 +1,4 @@
+storePassword=<password>
+keyPassword=<password>
+keyAlias=<alias>
+storeFile=<path_to_keystore_file>

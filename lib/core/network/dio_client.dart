@@ -127,7 +127,7 @@ class _AuthInterceptor extends QueuedInterceptor {
       }
     } catch (e) {
       // ignore: avoid_print
-      print('Warning: Failed to read access token in interceptor: $e');
+      debugPrint('Warning: Failed to read access token in interceptor: $e');
     }
 
     return handler.next(options);
@@ -181,7 +181,7 @@ class _AuthInterceptor extends QueuedInterceptor {
         }
       } catch (e) {
         // ignore: avoid_print
-        print('Warning: Token storage error during 401 handling: $e');
+        debugPrint('Warning: Token storage error during 401 handling: $e');
         // Changed: replaced _ref.invalidate(authProvider) with
         // sessionExpiredCallbackProvider to remove the dependency
         // from core/network on features/auth/presentation.

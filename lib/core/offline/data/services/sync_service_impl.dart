@@ -25,6 +25,7 @@ class SyncServiceImpl implements ISyncService {
   final Ref? ref;
 
   final _progressController = StreamController<SyncProgress>.broadcast();
+  bool _isSyncing = false;
 
   /// Creates a new [SyncServiceImpl] instance.
   SyncServiceImpl({
@@ -40,59 +41,67 @@ class SyncServiceImpl implements ISyncService {
 
   @override
   Future<SyncResult> sync() async {
-    final pending = await queue.getPending();
-    if (pending.isEmpty) {
-      ref?.invalidate(pendingCountProvider);
+    if (_isSyncing) {
       return const SyncResult(0, 0, 0);
     }
-
-    int succeeded = 0;
-    int failed = 0;
-    int exhausted = 0;
-    final total = pending.length;
-
-    for (int i = 0; i < pending.length; i++) {
-      final action = pending[i];
-      final actionTypeStr = _getActionTypeString(action);
-
-      _progressController.add(SyncProgress(
-        total: total,
-        completed: i,
-        currentActionType: actionTypeStr,
-      ));
-
-      try {
-        await _processAction(action);
-        await queue.markCompleted(action.id);
-        succeeded++;
+    _isSyncing = true;
+    try {
+      final pending = await queue.getPending();
+      if (pending.isEmpty) {
         ref?.invalidate(pendingCountProvider);
-      } catch (e) {
-        if (action is AddMemberAction && _isConflictError(e)) {
-          // 409 Conflict treated as success (member already added)
+        return const SyncResult(0, 0, 0);
+      }
+
+      int succeeded = 0;
+      int failed = 0;
+      int exhausted = 0;
+      final total = pending.length;
+
+      for (int i = 0; i < pending.length; i++) {
+        final action = pending[i];
+        final actionTypeStr = _getActionTypeString(action);
+
+        _progressController.add(SyncProgress(
+          total: total,
+          completed: i,
+          currentActionType: actionTypeStr,
+        ));
+
+        try {
+          await _processAction(action);
           await queue.markCompleted(action.id);
           succeeded++;
           ref?.invalidate(pendingCountProvider);
-        } else {
-          await queue.incrementRetry(action.id);
-          final nextCount = action.retryCount + 1;
-          if (nextCount >= action.maxRetries) {
-            exhausted++;
+        } catch (e) {
+          if (action is AddMemberAction && _isConflictError(e)) {
+            // 409 Conflict treated as success (member already added)
+            await queue.markCompleted(action.id);
+            succeeded++;
+            ref?.invalidate(pendingCountProvider);
           } else {
-            failed++;
+            await queue.incrementRetry(action.id);
+            final nextCount = action.retryCount + 1;
+            if (nextCount >= action.maxRetries) {
+              exhausted++;
+            } else {
+              failed++;
+            }
+            ref?.invalidate(pendingCountProvider);
           }
-          ref?.invalidate(pendingCountProvider);
         }
       }
+
+      _progressController.add(SyncProgress(
+        total: total,
+        completed: total,
+        currentActionType: 'DONE',
+      ));
+
+      ref?.invalidate(pendingCountProvider);
+      return SyncResult(succeeded, failed, exhausted);
+    } finally {
+      _isSyncing = false;
     }
-
-    _progressController.add(SyncProgress(
-      total: total,
-      completed: total,
-      currentActionType: 'DONE',
-    ));
-
-    ref?.invalidate(pendingCountProvider);
-    return SyncResult(succeeded, failed, exhausted);
   }
 
   Future<void> _processAction(OfflineAction action) async {

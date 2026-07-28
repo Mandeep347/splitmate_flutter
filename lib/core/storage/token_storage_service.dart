@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -65,7 +66,7 @@ class TokenStorageService implements ITokenStorageService {
       ]);
     } catch (e) {
       // ignore: avoid_print
-      print('Warning: Secure storage write failed: $e');
+      debugPrint('Warning: Secure storage write failed: $e');
     }
 
     try {
@@ -75,7 +76,7 @@ class TokenStorageService implements ITokenStorageService {
       ]);
     } catch (e) {
       // ignore: avoid_print
-      print('Warning: Fallback storage write failed: $e');
+      debugPrint('Warning: Fallback storage write failed: $e');
     }
   }
 
@@ -97,7 +98,7 @@ class TokenStorageService implements ITokenStorageService {
       if (value != null) return value;
     } catch (_) {
       // ignore: avoid_print
-      print('Warning: Secure storage read failed for $key. Trying fallback.');
+      debugPrint('Warning: Secure storage read failed for $key. Trying fallback.');
     }
 
     try {
@@ -105,7 +106,7 @@ class TokenStorageService implements ITokenStorageService {
       if (value != null) return value;
     } catch (_) {
       // ignore: avoid_print
-      print('Warning: Fallback storage read also failed for $key. Using in-memory.');
+      debugPrint('Warning: Fallback storage read also failed for $key. Using in-memory.');
     }
 
     return _memoryCache[key];
@@ -123,7 +124,7 @@ class TokenStorageService implements ITokenStorageService {
       ]);
     } catch (_) {
       // ignore: avoid_print
-      print('Warning: Secure storage delete failed. Trying fallback.');
+      debugPrint('Warning: Secure storage delete failed. Trying fallback.');
     }
 
     try {
@@ -133,7 +134,7 @@ class TokenStorageService implements ITokenStorageService {
       ]);
     } catch (_) {
       // ignore: avoid_print
-      print('Warning: Fallback storage delete also failed.');
+      debugPrint('Warning: Fallback storage delete also failed.');
     }
   }
 

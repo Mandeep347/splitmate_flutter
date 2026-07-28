@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:splito_flutter/core/errors/failures.dart';
+import 'package:splito_flutter/core/router/route_names.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/settings/domain/entities/app_settings.dart';
@@ -191,9 +193,7 @@ class SettingsPage extends ConsumerWidget {
                     title: const Text('Privacy Policy'),
                     trailing: const Icon(Icons.open_in_new_outlined, size: 16),
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Coming soon')),
-                      );
+                      context.push(AppRoutes.privacyPolicyPath);
                     },
                   ),
                   const Divider(height: 1),
@@ -201,9 +201,7 @@ class SettingsPage extends ConsumerWidget {
                     title: const Text('Terms of Service'),
                     trailing: const Icon(Icons.open_in_new_outlined, size: 16),
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Coming soon')),
-                      );
+                      context.push(AppRoutes.termsOfServicePath);
                     },
                   ),
                 ],

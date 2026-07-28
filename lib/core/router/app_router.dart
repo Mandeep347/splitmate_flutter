@@ -116,6 +116,24 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       return null;
     },
+    errorBuilder: (context, state) => Scaffold(
+      appBar: AppBar(title: const Text('Page Not Found')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('404', style: Theme.of(context).textTheme.displayLarge),
+            const SizedBox(height: 16),
+            const Text('The page you are looking for does not exist.'),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: () => context.goNamed(AppRoutes.dashboardName),
+              child: const Text('Go Home'),
+            ),
+          ],
+        ),
+      ),
+    ),
     routes: [
       // Splash Route
       GoRoute(

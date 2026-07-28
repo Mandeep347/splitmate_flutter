@@ -6,6 +6,7 @@ import 'package:splito_flutter/features/activity/domain/entities/activity_item.d
 import 'package:splito_flutter/features/activity/domain/usecases/get_group_activities_usecase.dart';
 import 'package:splito_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
+import 'package:splito_flutter/core/events/app_events.dart';
 
 // ============================================================================
 // UseCase Providers
@@ -84,6 +85,7 @@ final groupActivityProvider =
 
 /// Aggregates recent activity items across all active groups.
 final globalActivityProvider = Provider<AsyncValue<List<ActivityItem>>>((ref) {
+  ref.watch(syncCompletedProvider);
   final groupsState = ref.watch(myGroupsProvider);
 
   return groupsState.when(

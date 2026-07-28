@@ -1,0 +1,16 @@
+.git
+.dart_tool
+.idea
+.vscode
+
+android
+ios
+linux
+macos
+windows
+
+test
+coverage
+
+build
+!build/web

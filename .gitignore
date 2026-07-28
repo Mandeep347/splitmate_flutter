@@ -11,6 +11,9 @@
 .svn/
 .swiftpm/
 migrate_working_dir/
+*.jks
+*.keystore
+key.properties
 
 # IntelliJ related
 *.iml
@@ -43,3 +46,12 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Env / Secrets
+config/env/.env
+config/env/dev.json
+config/env/staging.json
+config/env/prod.json
+android/key.properties
+.vercel
+.env*

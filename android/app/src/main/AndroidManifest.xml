@@ -9,8 +9,7 @@
     <application
         android:label="Splitmate"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
+        android:icon="@mipmap/ic_launcher">
         <meta-data android:name="company" android:value="Astera" />
         <activity
             android:name=".MainActivity"

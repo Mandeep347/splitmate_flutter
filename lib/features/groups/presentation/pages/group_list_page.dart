@@ -12,7 +12,6 @@ import 'package:splito_flutter/shared/widgets/overall_balance_card.dart';
 import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
 import 'package:splito_flutter/shared/widgets/notification_bell.dart';
 import 'package:splito_flutter/features/notifications/presentation/providers/notification_providers.dart';
-import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
 import 'package:splito_flutter/core/theme/theme_extensions.dart';
 import 'package:splito_flutter/shared/widgets/shimmer_wrapper.dart';
 import 'package:splito_flutter/shared/widgets/skeletons/group_card_skeleton.dart';
@@ -87,20 +86,11 @@ class GroupListPage extends ConsumerWidget {
 
           final unsettledGroups = <Group>[];
           final settledGroups = <Group>[];
+          final settledIds = ref.watch(settledGroupIdsProvider);
 
           for (final group in activeGroups) {
-            final balancesState = ref.watch(groupBalancesProvider(group.id));
-            final balances = balancesState.hasValue ? balancesState.requireValue : null;
-
-            if (balances != null && balances.isAllSettled) {
-              final expensesState = ref.watch(groupExpensesProvider(group.id));
-              final expenses = expensesState.hasValue ? expensesState.requireValue : null;
-
-              if (expenses != null && expenses.totalItems > 0) {
-                settledGroups.add(group);
-              } else {
-                unsettledGroups.add(group);
-              }
+            if (settledIds.contains(group.id)) {
+              settledGroups.add(group);
             } else {
               unsettledGroups.add(group);
             }

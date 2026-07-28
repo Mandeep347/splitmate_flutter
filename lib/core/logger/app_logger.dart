@@ -95,7 +95,10 @@ class AppLogger implements ILogger {
         ..write('$emoji [$timestamp] [$tag]: $message');
 
       if (context != null && context.isNotEmpty) {
-        buffer.write('\nContext: $context');
+        final sensitiveKeys = {'password', 'token', 'authorization', 'secret', 'refresh'};
+        final sanitized = context.map((k, v) =>
+            MapEntry(k, sensitiveKeys.any((s) => k.toLowerCase().contains(s)) ? '***' : v));
+        buffer.write('\nContext: $sanitized');
       }
       if (error != null) {
         buffer.write('\nError Detail: $error');

@@ -9,6 +9,8 @@ import 'package:splito_flutter/shared/widgets/confirmation_dialog.dart';
 import 'package:splito_flutter/shared/widgets/info_row.dart';
 import 'package:splito_flutter/shared/widgets/notification_bell.dart';
 import '../widgets/edit_profile_sheet.dart';
+import 'package:splito_flutter/features/auth/domain/entities/logged_in_user.dart';
+import 'package:splito_flutter/features/settings/domain/entities/app_settings.dart';
 
 /// Screen displaying user profile dashboard, local app preferences, and session controls.
 class ProfilePage extends ConsumerWidget {
@@ -68,81 +70,14 @@ class ProfilePage extends ConsumerWidget {
         padding: const EdgeInsets.all(24.0),
         children: [
           // Section 1: Avatar + Name Header
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  child: Text(
-                    user.initials,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  user.name,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  user.email,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                OutlinedButton.icon(
-                  onPressed: () => EditProfileSheet.show(context, ref, user),
-                  icon: const Icon(Icons.edit_outlined, size: 18),
-                  label: const Text('Edit Profile'),
-                ),
-              ],
-            ),
-          ),
+          _buildAvatarHeader(context, ref, user, theme),
           const SizedBox(height: 24),
 
           // Section 2: Account Info Card
-          Card(
-            elevation: 0,
-            color: theme.colorScheme.surface,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-              side: BorderSide(
-                color: theme.colorScheme.outlineVariant,
-              ),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(ext.spaceMD),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  InfoRow(
-                    icon: Icons.currency_rupee_rounded,
-                    label: 'Preferred Currency',
-                    value: user.preferredCurrency,
-                  ),
-                  Divider(height: ext.spaceLG),
-                  InfoRow(
-                    icon: Icons.verified_user_outlined,
-                    label: 'Account Status',
-                    value: 'Active',
-                    valueColor: Colors.green.shade600,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _buildAccountInfoCard(theme, ext, user),
           const SizedBox(height: 24),
 
           // Section 3: App Settings Card
-          // Bug 4 fix: render section header and user info regardless of settings
-          // load state; only gate the settings-specific widgets.
           Text(
             'Preferences',
             style: theme.textTheme.titleMedium?.copyWith(
@@ -150,130 +85,7 @@ class ProfilePage extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Card(
-            elevation: 0,
-            color: theme.colorScheme.surface,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-              side: BorderSide(
-                color: theme.colorScheme.outlineVariant,
-              ),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(ext.spaceMD),
-              child: settingsState.when(
-                loading: () => Column(
-                  children: [
-                    _buildSkeleton(ext, theme),
-                    Divider(height: ext.spaceLG),
-                    _buildSkeleton(ext, theme),
-                    Divider(height: ext.spaceLG),
-                    _buildSkeleton(ext, theme),
-                    Divider(height: ext.spaceLG),
-                    _buildSkeleton(ext, theme),
-                  ],
-                ),
-                error: (_, __) => const SizedBox.shrink(),
-                data: (settings) => Column(
-                  children: [
-                    // Theme Selector
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Theme',
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          width: double.infinity,
-                          child: SegmentedButton<String>(
-                            showSelectedIcon: false,
-                            segments: const [
-                              ButtonSegment(
-                                value: 'system',
-                                label: Text('System'),
-                                icon: Icon(Icons.brightness_auto_outlined, size: 16),
-                              ),
-                              ButtonSegment(
-                                value: 'light',
-                                label: Text('Light'),
-                                icon: Icon(Icons.light_mode_outlined, size: 16),
-                              ),
-                              ButtonSegment(
-                                value: 'dark',
-                                label: Text('Dark'),
-                                icon: Icon(Icons.dark_mode_outlined, size: 16),
-                              ),
-                            ],
-                            selected: {settings.themeMode},
-                            onSelectionChanged: (selected) {
-                              ref.read(settingsProvider.notifier).updateThemeMode(selected.first);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(height: ext.spaceLG),
-                    // Notifications
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Notifications'),
-                      subtitle: Text(
-                        'Expense and settlement alerts',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      value: settings.notificationsEnabled,
-                      onChanged: (v) {
-                        ref.read(settingsProvider.notifier).updateNotifications(v);
-                      },
-                    ),
-                    Divider(height: ext.spaceLG),
-                    // Default Currency
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Default Currency'),
-                      trailing: DropdownButton<String>(
-                        value: settings.defaultCurrency,
-                        underline: const SizedBox.shrink(),
-                        items: _currencies.map((c) {
-                          return DropdownMenuItem(
-                            value: c,
-                            child: Text(c),
-                          );
-                        }).toList(),
-                        onChanged: (v) {
-                          if (v != null) {
-                            ref.read(settingsProvider.notifier).updateDefaultCurrency(v);
-                          }
-                        },
-                      ),
-                    ),
-                    Divider(height: ext.spaceLG),
-                    // Compact Expense List
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Compact Expense List'),
-                      subtitle: Text(
-                        'Show more expenses on screen',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      value: settings.compactExpenseList,
-                      onChanged: (v) {
-                        ref.read(settingsProvider.notifier).updateCompactList(v);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          _buildSettingsCard(ref, theme, ext, settingsState),
           const SizedBox(height: 24),
 
           // Section 4: Danger Zone
@@ -285,71 +97,7 @@ class ProfilePage extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Card(
-            elevation: 0,
-            color: theme.colorScheme.errorContainer.withValues(alpha: 0.05),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-              side: BorderSide(
-                color: theme.colorScheme.error.withValues(alpha: 0.3),
-              ),
-            ),
-            child: Column(
-              children: [
-                ListTile(
-                  title: Text(
-                    'Reset App Settings',
-                    style: TextStyle(
-                      color: theme.colorScheme.error,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onTap: () async {
-                    final confirm = await ConfirmationDialog.show(
-                      context,
-                      title: 'Reset Settings',
-                      message:
-                          'This will reset all preferences to defaults. Your account and data are not affected.',
-                      confirmLabel: 'Reset',
-                      isDestructive: true,
-                    );
-                    if (confirm == true && context.mounted) {
-                      final messenger = ScaffoldMessenger.of(context);
-                      await ref.read(settingsProvider.notifier).resetToDefaults();
-                      messenger.showSnackBar(
-                        const SnackBar(content: Text('Settings reset to defaults')),
-                      );
-                    }
-                  },
-                ),
-                Divider(height: 1, color: theme.colorScheme.error.withValues(alpha: 0.1)),
-                ListTile(
-                  title: Text(
-                    'Sign Out',
-                    style: TextStyle(
-                      color: theme.colorScheme.error,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  // Bug 5 fix: guard against null dialog result; use try/catch
-                  // so the router redirect handles navigation automatically.
-                  onTap: () async {
-                    final confirmed = await ConfirmationDialog.show(
-                      context,
-                      title: 'Sign Out',
-                      message: 'You will need to sign in again to access your groups.',
-                      confirmLabel: 'Sign Out',
-                      isDestructive: true,
-                    );
-                    if (confirmed != true) return;
-                    try {
-                      await ref.read(authNotifierProvider.notifier).logout();
-                    } catch (_) {}
-                  },
-                ),
-              ],
-            ),
-          ),
+          _buildDangerZoneCard(context, ref, theme),
           ],
         ),
       ),
@@ -363,6 +111,268 @@ class ProfilePage extends ConsumerWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
+      ),
+    );
+  }
+
+  Widget _buildAvatarHeader(BuildContext context, WidgetRef ref, LoggedInUser user, ThemeData theme) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundColor: theme.colorScheme.primaryContainer,
+            child: Text(
+              user.initials,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            user.name,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            user.email,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: () => EditProfileSheet.show(context, ref, user),
+            icon: const Icon(Icons.edit_outlined, size: 18),
+            label: const Text('Edit Profile'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAccountInfoCard(ThemeData theme, AppThemeExtension ext, LoggedInUser user) {
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(ext.spaceMD),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            InfoRow(
+              icon: Icons.currency_rupee_rounded,
+              label: 'Preferred Currency',
+              value: user.preferredCurrency,
+            ),
+            Divider(height: ext.spaceLG),
+            InfoRow(
+              icon: Icons.verified_user_outlined,
+              label: 'Account Status',
+              value: 'Active',
+              valueColor: Colors.green.shade600,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsCard(WidgetRef ref, ThemeData theme, AppThemeExtension ext, AsyncValue<AppSettings> settingsState) {
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(ext.spaceMD),
+        child: settingsState.when(
+          loading: () => Column(
+            children: [
+              _buildSkeleton(ext, theme),
+              Divider(height: ext.spaceLG),
+              _buildSkeleton(ext, theme),
+              Divider(height: ext.spaceLG),
+              _buildSkeleton(ext, theme),
+              Divider(height: ext.spaceLG),
+              _buildSkeleton(ext, theme),
+            ],
+          ),
+          error: (_, __) => const SizedBox.shrink(),
+          data: (settings) => Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Theme',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: SegmentedButton<String>(
+                      showSelectedIcon: false,
+                      segments: const [
+                        ButtonSegment(
+                          value: 'system',
+                          label: Text('System'),
+                          icon: Icon(Icons.brightness_auto_outlined, size: 16),
+                        ),
+                        ButtonSegment(
+                          value: 'light',
+                          label: Text('Light'),
+                          icon: Icon(Icons.light_mode_outlined, size: 16),
+                        ),
+                        ButtonSegment(
+                          value: 'dark',
+                          label: Text('Dark'),
+                          icon: Icon(Icons.dark_mode_outlined, size: 16),
+                        ),
+                      ],
+                      selected: {settings.themeMode},
+                      onSelectionChanged: (selected) {
+                        ref.read(settingsProvider.notifier).updateThemeMode(selected.first);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Divider(height: ext.spaceLG),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Notifications'),
+                subtitle: Text(
+                  'Expense and settlement alerts',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                value: settings.notificationsEnabled,
+                onChanged: (v) {
+                  ref.read(settingsProvider.notifier).updateNotifications(v);
+                },
+              ),
+              Divider(height: ext.spaceLG),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Default Currency'),
+                trailing: DropdownButton<String>(
+                  value: settings.defaultCurrency,
+                  underline: const SizedBox.shrink(),
+                  items: _currencies.map((c) {
+                    return DropdownMenuItem(
+                      value: c,
+                      child: Text(c),
+                    );
+                  }).toList(),
+                  onChanged: (v) {
+                    if (v != null) {
+                      ref.read(settingsProvider.notifier).updateDefaultCurrency(v);
+                    }
+                  },
+                ),
+              ),
+              Divider(height: ext.spaceLG),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Compact Expense List'),
+                subtitle: Text(
+                  'Show more expenses on screen',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                value: settings.compactExpenseList,
+                onChanged: (v) {
+                  ref.read(settingsProvider.notifier).updateCompactList(v);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDangerZoneCard(BuildContext context, WidgetRef ref, ThemeData theme) {
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.errorContainer.withValues(alpha: 0.05),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        side: BorderSide(
+          color: theme.colorScheme.error.withValues(alpha: 0.3),
+        ),
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              'Reset App Settings',
+              style: TextStyle(
+                color: theme.colorScheme.error,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () async {
+              final confirm = await ConfirmationDialog.show(
+                context,
+                title: 'Reset Settings',
+                message:
+                    'This will reset all preferences to defaults. Your account and data are not affected.',
+                confirmLabel: 'Reset',
+                isDestructive: true,
+              );
+              if (confirm == true && context.mounted) {
+                final messenger = ScaffoldMessenger.of(context);
+                await ref.read(settingsProvider.notifier).resetToDefaults();
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Settings reset to defaults')),
+                );
+              }
+            },
+          ),
+          Divider(height: 1, color: theme.colorScheme.error.withValues(alpha: 0.1)),
+          ListTile(
+            title: Text(
+              'Sign Out',
+              style: TextStyle(
+                color: theme.colorScheme.error,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () async {
+              final confirmed = await ConfirmationDialog.show(
+                context,
+                title: 'Sign Out',
+                message: 'You will need to sign in again to access your groups.',
+                confirmLabel: 'Sign Out',
+                isDestructive: true,
+              );
+              if (confirmed != true) return;
+              try {
+                await ref.read(authNotifierProvider.notifier).logout();
+              } catch (_) {}
+            },
+          ),
+        ],
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'package:splito_flutter/features/balances/domain/entities/user_overall_ba
 import 'package:splito_flutter/features/balances/domain/usecases/get_group_balances_usecase.dart';
 import 'package:splito_flutter/features/balances/domain/usecases/get_my_overall_balances_usecase.dart';
 import 'package:splito_flutter/features/balances/domain/usecases/get_simplified_balances_usecase.dart';
+import 'package:splito_flutter/core/events/app_events.dart';
 import 'package:splito_flutter/core/utils/provider_ttl.dart';
 
 // ============================================================================
@@ -107,6 +108,7 @@ class MyOverallBalancesNotifier extends AsyncNotifier<List<UserOverallBalance>> 
   @override
   FutureOr<List<UserOverallBalance>> build() {
     final isAuthenticated = ref.watch(authStateProvider);
+    ref.watch(syncCompletedProvider);
     if (!isAuthenticated) {
       return const [];
     }

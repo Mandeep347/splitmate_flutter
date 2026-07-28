@@ -31,8 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.8
-
   # State Management & Navigation
   flutter_riverpod: ^2.5.1
   go_router: ^14.2.0
@@ -49,8 +47,8 @@ dependencies:
   json_annotation: ^4.9.0
 
   # Persistence
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
+  hive_ce: ^2.9.0
+  hive_ce_flutter: ^2.2.0
   flutter_secure_storage: ^9.2.2
   flutter_dotenv: ^5.1.0
   pretty_dio_logger: ^1.3.1
@@ -67,11 +65,9 @@ dev_dependencies:
   flutter_native_splash: ^2.4.0
   flutter_lints: ^4.0.0
   build_runner: ^2.4.10
-  riverpod_generator: ^2.4.0
-  riverpod_annotation: ^2.3.5
   freezed: ^2.5.2
   json_serializable: ^6.8.0
-  hive_generator: ^2.0.1
+  hive_ce_generator: 1.4.0
   mocktail: ^1.0.4
 
 # Configuration for flutter_launcher_icons
@@ -112,7 +108,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - config/env/.env
     - assets/icon/
     - assets/splash/
 

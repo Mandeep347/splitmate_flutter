@@ -19,12 +19,37 @@ import 'package:splito_flutter/features/groups/domain/usecases/get_my_groups_use
 import 'package:splito_flutter/features/groups/domain/usecases/remove_member_usecase.dart';
 import 'package:splito_flutter/features/groups/domain/usecases/update_group_usecase.dart';
 import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
+import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
+import 'package:splito_flutter/features/expenses/presentation/providers/expense_providers.dart';
+import 'package:splito_flutter/core/events/app_events.dart';
 import 'package:splito_flutter/core/utils/provider_ttl.dart';
 
 /// Provider exposing [GetMyGroupsUseCase].
 final getMyGroupsUseCaseProvider = Provider<GetMyGroupsUseCase>((ref) {
   final repository = ref.watch(groupRepositoryProvider);
   return GetMyGroupsUseCase(repository: repository);
+});
+
+/// Provider exposing a set of settled group IDs for efficient UI updates.
+final settledGroupIdsProvider = Provider<Set<String>>((ref) {
+  final groups = ref.watch(myGroupsProvider).valueOrNull ?? [];
+  final activeGroups = groups.where((g) => g.isActive).toList();
+  final settledIds = <String>{};
+
+  for (final group in activeGroups) {
+    final balancesState = ref.watch(groupBalancesProvider(group.id));
+    final balances = balancesState.hasValue ? balancesState.requireValue : null;
+
+    if (balances != null && balances.isAllSettled) {
+      final expensesState = ref.watch(groupExpensesProvider(group.id));
+      final expenses = expensesState.hasValue ? expensesState.requireValue : null;
+
+      if (expenses != null && expenses.totalItems > 0) {
+        settledIds.add(group.id);
+      }
+    }
+  }
+  return settledIds;
 });
 
 /// Provider exposing [GetGroupByIdUseCase].
@@ -73,6 +98,7 @@ class MyGroupsNotifier extends AsyncNotifier<List<Group>> {
   @override
   FutureOr<List<Group>> build() async {
     final isAuthenticated = ref.watch(authStateProvider);
+    ref.watch(syncCompletedProvider);
     if (!isAuthenticated) {
       return [];
     }

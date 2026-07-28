@@ -2,11 +2,8 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:splito_flutter/core/network/connectivity_service.dart';
 import 'package:splito_flutter/core/offline/data/services/sync_service_impl.dart';
-import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
-import 'package:splito_flutter/features/balances/presentation/providers/balance_providers.dart';
+import 'package:splito_flutter/core/events/app_events.dart';
 import 'package:splito_flutter/core/offline/presentation/providers/offline_queue_providers.dart';
-import 'package:splito_flutter/features/activity/presentation/providers/activity_providers.dart';
-import 'package:splito_flutter/features/analytics/presentation/providers/analytics_providers.dart';
 
 /// Notifier managing real-time internet connectivity status.
 class ConnectivityNotifier extends AsyncNotifier<bool> {
@@ -43,10 +40,7 @@ class ConnectivityNotifier extends AsyncNotifier<bool> {
       final result = await ref.read(syncServiceProvider).sync();
       ref.invalidate(pendingCountProvider);
       if (result.succeeded > 0) {
-        ref.invalidate(myGroupsProvider);
-        ref.invalidate(myOverallBalancesProvider);
-        ref.invalidate(globalActivityProvider);
-        ref.invalidate(userAnalyticsProvider);
+        ref.read(syncCompletedProvider.notifier).state++;
       }
     }
   }

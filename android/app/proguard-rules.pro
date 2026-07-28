@@ -12,11 +12,14 @@
 -keep interface okhttp3.** { *; }
 
 # Riverpod
--keep class dev.rverpod.** { *; }
+-keep class dev.riverpod.** { *; }
 
 # flutter_secure_storage
 -keep class com.it_nomads.fluttersecurestorage.** { *; }
 
 # Keep model classes
--keep class com.splito.splito_flutter.** { *; }
--keep class com.example.splito_flutter.** { *; }
+-keep class com.astera.splitmate.** { *; }
+
+# Ignore missing Play Core classes used by Flutter deferred components
+-dontwarn com.google.android.play.core.**
+-dontwarn io.flutter.embedding.engine.deferredcomponents.**

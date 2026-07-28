@@ -1,5 +1,0 @@
-{
-  "ENV": "staging",
-  "APP_NAME": "Splitmate (Staging)",
-  "API_BASE_URL": "https://staging-api.splito.app/api/v1"
-}
