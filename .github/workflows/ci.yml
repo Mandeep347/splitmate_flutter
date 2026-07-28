@@ -140,7 +140,7 @@ jobs:
         run: |
           flutter build web \
             --release \
-            --base-href "/${{ github.event.repository.name }}/"
+            --base-href "/"
 
       - name: Enable SPA routing
         run: cp build/web/index.html build/web/404.html

@@ -99,7 +99,7 @@ jobs:
           echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" \
             > config/env/.env
 
-      - run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+      - run: flutter build web --release --base-href "/"
 
       - run: cp build/web/index.html build/web/404.html
 

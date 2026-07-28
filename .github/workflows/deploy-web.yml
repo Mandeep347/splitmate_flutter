@@ -36,7 +36,7 @@ jobs:
             > config/env/.env
 
       - name: Build Web
-        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+        run: flutter build web --release --base-href "/"
 
       - name: SPA Routing
         run: cp build/web/index.html build/web/404.html
