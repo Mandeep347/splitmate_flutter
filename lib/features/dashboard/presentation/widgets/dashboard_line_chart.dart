@@ -90,9 +90,13 @@ class DashboardLineChart extends StatelessWidget {
             lineTouchData: LineTouchData(
               handleBuiltInTouches: true,
               touchTooltipData: LineTouchTooltipData(
-                getTooltipColor: (_) => theme.colorScheme.surfaceContainerHighest,
+                getTooltipColor: (_) =>
+                    theme.colorScheme.surfaceContainerHighest,
                 tooltipRoundedRadius: 10,
-                tooltipPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                tooltipPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 getTooltipItems: (touchedSpots) {
                   return touchedSpots.map((spot) {
                     final index = spot.x.toInt();
@@ -100,7 +104,8 @@ class DashboardLineChart extends StatelessWidget {
                     final item = monthlyData[index];
                     final symbol = _currencySymbol(currency);
                     final formatter = NumberFormat('#,##0.00');
-                    final formattedAmount = '$symbol${formatter.format(spot.y)}';
+                    final formattedAmount =
+                        '$symbol${formatter.format(spot.y)}';
                     return LineTooltipItem(
                       '${item.periodLabel}\n$formattedAmount',
                       theme.textTheme.bodyMedium?.copyWith(
@@ -119,7 +124,9 @@ class DashboardLineChart extends StatelessWidget {
               horizontalInterval: maxY > 0 ? (maxY / 3) : 1,
               getDrawingHorizontalLine: (value) {
                 return FlLine(
-                  color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
+                  color: theme.colorScheme.outlineVariant.withValues(
+                    alpha: 0.3,
+                  ),
                   strokeWidth: 1,
                   dashArray: [4, 4],
                 );
@@ -127,15 +134,20 @@ class DashboardLineChart extends StatelessWidget {
             ),
             titlesData: FlTitlesData(
               show: true,
-              rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
                   reservedSize: 42,
                   interval: maxY > 0 ? (maxY / 3) : 1,
                   getTitlesWidget: (value, meta) {
-                    if (value == 0 || value >= meta.max * 0.95) return const SizedBox.shrink();
+                    if (value == 0 || value >= meta.max * 0.95)
+                      return const SizedBox.shrink();
                     final symbol = _currencySymbol(currency);
                     final String label = value >= 1000
                         ? '$symbol${(value / 1000).toStringAsFixed(value % 1000 == 0 ? 0 : 1)}k'
@@ -165,7 +177,8 @@ class DashboardLineChart extends StatelessWidget {
                       return const SizedBox.shrink();
                     }
                     // Only show title if it falls on interval step or is the last element
-                    if (index % intervalStep != 0 && index != monthlyData.length - 1) {
+                    if (index % intervalStep != 0 &&
+                        index != monthlyData.length - 1) {
                       return const SizedBox.shrink();
                     }
 

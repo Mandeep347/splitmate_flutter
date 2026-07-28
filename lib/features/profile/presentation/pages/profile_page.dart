@@ -38,11 +38,7 @@ class ProfilePage extends ConsumerWidget {
 
     // Bug 4 fix: show spinner while user is loading — never return empty body.
     if (user == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -67,40 +63,40 @@ class ProfilePage extends ConsumerWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 800),
           child: ListView(
-        padding: const EdgeInsets.all(24.0),
-        children: [
-          // Section 1: Avatar + Name Header
-          _buildAvatarHeader(context, ref, user, theme),
-          const SizedBox(height: 24),
+            padding: const EdgeInsets.all(24.0),
+            children: [
+              // Section 1: Avatar + Name Header
+              _buildAvatarHeader(context, ref, user, theme),
+              const SizedBox(height: 24),
 
-          // Section 2: Account Info Card
-          _buildAccountInfoCard(theme, ext, user),
-          const SizedBox(height: 24),
+              // Section 2: Account Info Card
+              _buildAccountInfoCard(theme, ext, user),
+              const SizedBox(height: 24),
 
-          // Section 3: App Settings Card
-          Text(
-            'Preferences',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+              // Section 3: App Settings Card
+              Text(
+                'Preferences',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              _buildSettingsCard(ref, theme, ext, settingsState),
+              const SizedBox(height: 24),
+
+              // Section 4: Danger Zone
+              Text(
+                'Danger Zone',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: theme.colorScheme.error,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              _buildDangerZoneCard(context, ref, theme),
+            ],
           ),
-          const SizedBox(height: 8),
-          _buildSettingsCard(ref, theme, ext, settingsState),
-          const SizedBox(height: 24),
-
-          // Section 4: Danger Zone
-          Text(
-            'Danger Zone',
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.error,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          _buildDangerZoneCard(context, ref, theme),
-          ],
         ),
-      ),
       ),
     );
   }
@@ -115,7 +111,12 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildAvatarHeader(BuildContext context, WidgetRef ref, LoggedInUser user, ThemeData theme) {
+  Widget _buildAvatarHeader(
+    BuildContext context,
+    WidgetRef ref,
+    LoggedInUser user,
+    ThemeData theme,
+  ) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -155,15 +156,17 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildAccountInfoCard(ThemeData theme, AppThemeExtension ext, LoggedInUser user) {
+  Widget _buildAccountInfoCard(
+    ThemeData theme,
+    AppThemeExtension ext,
+    LoggedInUser user,
+  ) {
     return Card(
       elevation: 0,
       color: theme.colorScheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
-        side: BorderSide(
-          color: theme.colorScheme.outlineVariant,
-        ),
+        side: BorderSide(color: theme.colorScheme.outlineVariant),
       ),
       child: Padding(
         padding: EdgeInsets.all(ext.spaceMD),
@@ -188,15 +191,18 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildSettingsCard(WidgetRef ref, ThemeData theme, AppThemeExtension ext, AsyncValue<AppSettings> settingsState) {
+  Widget _buildSettingsCard(
+    WidgetRef ref,
+    ThemeData theme,
+    AppThemeExtension ext,
+    AsyncValue<AppSettings> settingsState,
+  ) {
     return Card(
       elevation: 0,
       color: theme.colorScheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
-        side: BorderSide(
-          color: theme.colorScheme.outlineVariant,
-        ),
+        side: BorderSide(color: theme.colorScheme.outlineVariant),
       ),
       child: Padding(
         padding: EdgeInsets.all(ext.spaceMD),
@@ -248,7 +254,9 @@ class ProfilePage extends ConsumerWidget {
                       ],
                       selected: {settings.themeMode},
                       onSelectionChanged: (selected) {
-                        ref.read(settingsProvider.notifier).updateThemeMode(selected.first);
+                        ref
+                            .read(settingsProvider.notifier)
+                            .updateThemeMode(selected.first);
                       },
                     ),
                   ),
@@ -277,14 +285,13 @@ class ProfilePage extends ConsumerWidget {
                   value: settings.defaultCurrency,
                   underline: const SizedBox.shrink(),
                   items: _currencies.map((c) {
-                    return DropdownMenuItem(
-                      value: c,
-                      child: Text(c),
-                    );
+                    return DropdownMenuItem(value: c, child: Text(c));
                   }).toList(),
                   onChanged: (v) {
                     if (v != null) {
-                      ref.read(settingsProvider.notifier).updateDefaultCurrency(v);
+                      ref
+                          .read(settingsProvider.notifier)
+                          .updateDefaultCurrency(v);
                     }
                   },
                 ),
@@ -311,15 +318,17 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildDangerZoneCard(BuildContext context, WidgetRef ref, ThemeData theme) {
+  Widget _buildDangerZoneCard(
+    BuildContext context,
+    WidgetRef ref,
+    ThemeData theme,
+  ) {
     return Card(
       elevation: 0,
       color: theme.colorScheme.errorContainer.withValues(alpha: 0.05),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
-        side: BorderSide(
-          color: theme.colorScheme.error.withValues(alpha: 0.3),
-        ),
+        side: BorderSide(color: theme.colorScheme.error.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -349,7 +358,10 @@ class ProfilePage extends ConsumerWidget {
               }
             },
           ),
-          Divider(height: 1, color: theme.colorScheme.error.withValues(alpha: 0.1)),
+          Divider(
+            height: 1,
+            color: theme.colorScheme.error.withValues(alpha: 0.1),
+          ),
           ListTile(
             title: Text(
               'Sign Out',
@@ -362,7 +374,8 @@ class ProfilePage extends ConsumerWidget {
               final confirmed = await ConfirmationDialog.show(
                 context,
                 title: 'Sign Out',
-                message: 'You will need to sign in again to access your groups.',
+                message:
+                    'You will need to sign in again to access your groups.',
                 confirmLabel: 'Sign Out',
                 isDestructive: true,
               );

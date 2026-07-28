@@ -12,7 +12,8 @@ part of 'group_analytics_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 GroupAnalyticsModel _$GroupAnalyticsModelFromJson(Map<String, dynamic> json) {
   return _GroupAnalyticsModel.fromJson(json);
@@ -56,24 +57,26 @@ mixin _$GroupAnalyticsModel {
 /// @nodoc
 abstract class $GroupAnalyticsModelCopyWith<$Res> {
   factory $GroupAnalyticsModelCopyWith(
-          GroupAnalyticsModel value, $Res Function(GroupAnalyticsModel) then) =
-      _$GroupAnalyticsModelCopyWithImpl<$Res, GroupAnalyticsModel>;
+    GroupAnalyticsModel value,
+    $Res Function(GroupAnalyticsModel) then,
+  ) = _$GroupAnalyticsModelCopyWithImpl<$Res, GroupAnalyticsModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'group_id') String groupId,
-      @JsonKey(name: 'group_name') String groupName,
-      String currency,
-      @JsonKey(name: 'total_expenses_amount') String totalExpensesAmount,
-      @JsonKey(name: 'total_expense_count') int totalExpenseCount,
-      @JsonKey(name: 'total_settlements_amount') String totalSettlementsAmount,
-      @JsonKey(name: 'settlement_rate') String settlementRate,
-      @JsonKey(name: 'average_expense_amount') String averageExpenseAmount,
-      @JsonKey(name: 'largest_expense_amount') String largestExpenseAmount,
-      @JsonKey(name: 'largest_expense_title') String? largestExpenseTitle,
-      @JsonKey(name: 'top_spender_name') String? topSpenderName,
-      List<MemberContributionModel> members,
-      @JsonKey(name: 'monthly_spending')
-      List<MonthlySpendingModel> monthlySpending});
+  $Res call({
+    @JsonKey(name: 'group_id') String groupId,
+    @JsonKey(name: 'group_name') String groupName,
+    String currency,
+    @JsonKey(name: 'total_expenses_amount') String totalExpensesAmount,
+    @JsonKey(name: 'total_expense_count') int totalExpenseCount,
+    @JsonKey(name: 'total_settlements_amount') String totalSettlementsAmount,
+    @JsonKey(name: 'settlement_rate') String settlementRate,
+    @JsonKey(name: 'average_expense_amount') String averageExpenseAmount,
+    @JsonKey(name: 'largest_expense_amount') String largestExpenseAmount,
+    @JsonKey(name: 'largest_expense_title') String? largestExpenseTitle,
+    @JsonKey(name: 'top_spender_name') String? topSpenderName,
+    List<MemberContributionModel> members,
+    @JsonKey(name: 'monthly_spending')
+    List<MonthlySpendingModel> monthlySpending,
+  });
 }
 
 /// @nodoc
@@ -103,95 +106,101 @@ class _$GroupAnalyticsModelCopyWithImpl<$Res, $Val extends GroupAnalyticsModel>
     Object? members = null,
     Object? monthlySpending = null,
   }) {
-    return _then(_value.copyWith(
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      groupName: null == groupName
-          ? _value.groupName
-          : groupName // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalExpensesAmount: null == totalExpensesAmount
-          ? _value.totalExpensesAmount
-          : totalExpensesAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalExpenseCount: null == totalExpenseCount
-          ? _value.totalExpenseCount
-          : totalExpenseCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalSettlementsAmount: null == totalSettlementsAmount
-          ? _value.totalSettlementsAmount
-          : totalSettlementsAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      settlementRate: null == settlementRate
-          ? _value.settlementRate
-          : settlementRate // ignore: cast_nullable_to_non_nullable
-              as String,
-      averageExpenseAmount: null == averageExpenseAmount
-          ? _value.averageExpenseAmount
-          : averageExpenseAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      largestExpenseAmount: null == largestExpenseAmount
-          ? _value.largestExpenseAmount
-          : largestExpenseAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      largestExpenseTitle: freezed == largestExpenseTitle
-          ? _value.largestExpenseTitle
-          : largestExpenseTitle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      topSpenderName: freezed == topSpenderName
-          ? _value.topSpenderName
-          : topSpenderName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      members: null == members
-          ? _value.members
-          : members // ignore: cast_nullable_to_non_nullable
-              as List<MemberContributionModel>,
-      monthlySpending: null == monthlySpending
-          ? _value.monthlySpending
-          : monthlySpending // ignore: cast_nullable_to_non_nullable
-              as List<MonthlySpendingModel>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            groupId: null == groupId
+                ? _value.groupId
+                : groupId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            groupName: null == groupName
+                ? _value.groupName
+                : groupName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            currency: null == currency
+                ? _value.currency
+                : currency // ignore: cast_nullable_to_non_nullable
+                      as String,
+            totalExpensesAmount: null == totalExpensesAmount
+                ? _value.totalExpensesAmount
+                : totalExpensesAmount // ignore: cast_nullable_to_non_nullable
+                      as String,
+            totalExpenseCount: null == totalExpenseCount
+                ? _value.totalExpenseCount
+                : totalExpenseCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            totalSettlementsAmount: null == totalSettlementsAmount
+                ? _value.totalSettlementsAmount
+                : totalSettlementsAmount // ignore: cast_nullable_to_non_nullable
+                      as String,
+            settlementRate: null == settlementRate
+                ? _value.settlementRate
+                : settlementRate // ignore: cast_nullable_to_non_nullable
+                      as String,
+            averageExpenseAmount: null == averageExpenseAmount
+                ? _value.averageExpenseAmount
+                : averageExpenseAmount // ignore: cast_nullable_to_non_nullable
+                      as String,
+            largestExpenseAmount: null == largestExpenseAmount
+                ? _value.largestExpenseAmount
+                : largestExpenseAmount // ignore: cast_nullable_to_non_nullable
+                      as String,
+            largestExpenseTitle: freezed == largestExpenseTitle
+                ? _value.largestExpenseTitle
+                : largestExpenseTitle // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            topSpenderName: freezed == topSpenderName
+                ? _value.topSpenderName
+                : topSpenderName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            members: null == members
+                ? _value.members
+                : members // ignore: cast_nullable_to_non_nullable
+                      as List<MemberContributionModel>,
+            monthlySpending: null == monthlySpending
+                ? _value.monthlySpending
+                : monthlySpending // ignore: cast_nullable_to_non_nullable
+                      as List<MonthlySpendingModel>,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$GroupAnalyticsModelImplCopyWith<$Res>
     implements $GroupAnalyticsModelCopyWith<$Res> {
-  factory _$$GroupAnalyticsModelImplCopyWith(_$GroupAnalyticsModelImpl value,
-          $Res Function(_$GroupAnalyticsModelImpl) then) =
-      __$$GroupAnalyticsModelImplCopyWithImpl<$Res>;
+  factory _$$GroupAnalyticsModelImplCopyWith(
+    _$GroupAnalyticsModelImpl value,
+    $Res Function(_$GroupAnalyticsModelImpl) then,
+  ) = __$$GroupAnalyticsModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'group_id') String groupId,
-      @JsonKey(name: 'group_name') String groupName,
-      String currency,
-      @JsonKey(name: 'total_expenses_amount') String totalExpensesAmount,
-      @JsonKey(name: 'total_expense_count') int totalExpenseCount,
-      @JsonKey(name: 'total_settlements_amount') String totalSettlementsAmount,
-      @JsonKey(name: 'settlement_rate') String settlementRate,
-      @JsonKey(name: 'average_expense_amount') String averageExpenseAmount,
-      @JsonKey(name: 'largest_expense_amount') String largestExpenseAmount,
-      @JsonKey(name: 'largest_expense_title') String? largestExpenseTitle,
-      @JsonKey(name: 'top_spender_name') String? topSpenderName,
-      List<MemberContributionModel> members,
-      @JsonKey(name: 'monthly_spending')
-      List<MonthlySpendingModel> monthlySpending});
+  $Res call({
+    @JsonKey(name: 'group_id') String groupId,
+    @JsonKey(name: 'group_name') String groupName,
+    String currency,
+    @JsonKey(name: 'total_expenses_amount') String totalExpensesAmount,
+    @JsonKey(name: 'total_expense_count') int totalExpenseCount,
+    @JsonKey(name: 'total_settlements_amount') String totalSettlementsAmount,
+    @JsonKey(name: 'settlement_rate') String settlementRate,
+    @JsonKey(name: 'average_expense_amount') String averageExpenseAmount,
+    @JsonKey(name: 'largest_expense_amount') String largestExpenseAmount,
+    @JsonKey(name: 'largest_expense_title') String? largestExpenseTitle,
+    @JsonKey(name: 'top_spender_name') String? topSpenderName,
+    List<MemberContributionModel> members,
+    @JsonKey(name: 'monthly_spending')
+    List<MonthlySpendingModel> monthlySpending,
+  });
 }
 
 /// @nodoc
 class __$$GroupAnalyticsModelImplCopyWithImpl<$Res>
     extends _$GroupAnalyticsModelCopyWithImpl<$Res, _$GroupAnalyticsModelImpl>
     implements _$$GroupAnalyticsModelImplCopyWith<$Res> {
-  __$$GroupAnalyticsModelImplCopyWithImpl(_$GroupAnalyticsModelImpl _value,
-      $Res Function(_$GroupAnalyticsModelImpl) _then)
-      : super(_value, _then);
+  __$$GroupAnalyticsModelImplCopyWithImpl(
+    _$GroupAnalyticsModelImpl _value,
+    $Res Function(_$GroupAnalyticsModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -210,87 +219,87 @@ class __$$GroupAnalyticsModelImplCopyWithImpl<$Res>
     Object? members = null,
     Object? monthlySpending = null,
   }) {
-    return _then(_$GroupAnalyticsModelImpl(
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      groupName: null == groupName
-          ? _value.groupName
-          : groupName // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalExpensesAmount: null == totalExpensesAmount
-          ? _value.totalExpensesAmount
-          : totalExpensesAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalExpenseCount: null == totalExpenseCount
-          ? _value.totalExpenseCount
-          : totalExpenseCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalSettlementsAmount: null == totalSettlementsAmount
-          ? _value.totalSettlementsAmount
-          : totalSettlementsAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      settlementRate: null == settlementRate
-          ? _value.settlementRate
-          : settlementRate // ignore: cast_nullable_to_non_nullable
-              as String,
-      averageExpenseAmount: null == averageExpenseAmount
-          ? _value.averageExpenseAmount
-          : averageExpenseAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      largestExpenseAmount: null == largestExpenseAmount
-          ? _value.largestExpenseAmount
-          : largestExpenseAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      largestExpenseTitle: freezed == largestExpenseTitle
-          ? _value.largestExpenseTitle
-          : largestExpenseTitle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      topSpenderName: freezed == topSpenderName
-          ? _value.topSpenderName
-          : topSpenderName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      members: null == members
-          ? _value._members
-          : members // ignore: cast_nullable_to_non_nullable
-              as List<MemberContributionModel>,
-      monthlySpending: null == monthlySpending
-          ? _value._monthlySpending
-          : monthlySpending // ignore: cast_nullable_to_non_nullable
-              as List<MonthlySpendingModel>,
-    ));
+    return _then(
+      _$GroupAnalyticsModelImpl(
+        groupId: null == groupId
+            ? _value.groupId
+            : groupId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        groupName: null == groupName
+            ? _value.groupName
+            : groupName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        currency: null == currency
+            ? _value.currency
+            : currency // ignore: cast_nullable_to_non_nullable
+                  as String,
+        totalExpensesAmount: null == totalExpensesAmount
+            ? _value.totalExpensesAmount
+            : totalExpensesAmount // ignore: cast_nullable_to_non_nullable
+                  as String,
+        totalExpenseCount: null == totalExpenseCount
+            ? _value.totalExpenseCount
+            : totalExpenseCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        totalSettlementsAmount: null == totalSettlementsAmount
+            ? _value.totalSettlementsAmount
+            : totalSettlementsAmount // ignore: cast_nullable_to_non_nullable
+                  as String,
+        settlementRate: null == settlementRate
+            ? _value.settlementRate
+            : settlementRate // ignore: cast_nullable_to_non_nullable
+                  as String,
+        averageExpenseAmount: null == averageExpenseAmount
+            ? _value.averageExpenseAmount
+            : averageExpenseAmount // ignore: cast_nullable_to_non_nullable
+                  as String,
+        largestExpenseAmount: null == largestExpenseAmount
+            ? _value.largestExpenseAmount
+            : largestExpenseAmount // ignore: cast_nullable_to_non_nullable
+                  as String,
+        largestExpenseTitle: freezed == largestExpenseTitle
+            ? _value.largestExpenseTitle
+            : largestExpenseTitle // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        topSpenderName: freezed == topSpenderName
+            ? _value.topSpenderName
+            : topSpenderName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        members: null == members
+            ? _value._members
+            : members // ignore: cast_nullable_to_non_nullable
+                  as List<MemberContributionModel>,
+        monthlySpending: null == monthlySpending
+            ? _value._monthlySpending
+            : monthlySpending // ignore: cast_nullable_to_non_nullable
+                  as List<MonthlySpendingModel>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$GroupAnalyticsModelImpl extends _GroupAnalyticsModel {
-  const _$GroupAnalyticsModelImpl(
-      {@JsonKey(name: 'group_id') required this.groupId,
-      @JsonKey(name: 'group_name') required this.groupName,
-      required this.currency,
-      @JsonKey(name: 'total_expenses_amount') required this.totalExpensesAmount,
-      @JsonKey(name: 'total_expense_count') required this.totalExpenseCount,
-      @JsonKey(name: 'total_settlements_amount')
-      required this.totalSettlementsAmount,
-      @JsonKey(name: 'settlement_rate') required this.settlementRate,
-      @JsonKey(name: 'average_expense_amount')
-      required this.averageExpenseAmount,
-      @JsonKey(name: 'largest_expense_amount')
-      required this.largestExpenseAmount,
-      @JsonKey(name: 'largest_expense_title') this.largestExpenseTitle,
-      @JsonKey(name: 'top_spender_name') this.topSpenderName,
-      required final List<MemberContributionModel> members,
-      @JsonKey(name: 'monthly_spending')
-      required final List<MonthlySpendingModel> monthlySpending})
-      : _members = members,
-        _monthlySpending = monthlySpending,
-        super._();
+  const _$GroupAnalyticsModelImpl({
+    @JsonKey(name: 'group_id') required this.groupId,
+    @JsonKey(name: 'group_name') required this.groupName,
+    required this.currency,
+    @JsonKey(name: 'total_expenses_amount') required this.totalExpensesAmount,
+    @JsonKey(name: 'total_expense_count') required this.totalExpenseCount,
+    @JsonKey(name: 'total_settlements_amount')
+    required this.totalSettlementsAmount,
+    @JsonKey(name: 'settlement_rate') required this.settlementRate,
+    @JsonKey(name: 'average_expense_amount') required this.averageExpenseAmount,
+    @JsonKey(name: 'largest_expense_amount') required this.largestExpenseAmount,
+    @JsonKey(name: 'largest_expense_title') this.largestExpenseTitle,
+    @JsonKey(name: 'top_spender_name') this.topSpenderName,
+    required final List<MemberContributionModel> members,
+    @JsonKey(name: 'monthly_spending')
+    required final List<MonthlySpendingModel> monthlySpending,
+  }) : _members = members,
+       _monthlySpending = monthlySpending,
+       super._();
 
   factory _$GroupAnalyticsModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$GroupAnalyticsModelImplFromJson(json);
@@ -376,65 +385,67 @@ class _$GroupAnalyticsModelImpl extends _GroupAnalyticsModel {
             (identical(other.topSpenderName, topSpenderName) ||
                 other.topSpenderName == topSpenderName) &&
             const DeepCollectionEquality().equals(other._members, _members) &&
-            const DeepCollectionEquality()
-                .equals(other._monthlySpending, _monthlySpending));
+            const DeepCollectionEquality().equals(
+              other._monthlySpending,
+              _monthlySpending,
+            ));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      groupId,
-      groupName,
-      currency,
-      totalExpensesAmount,
-      totalExpenseCount,
-      totalSettlementsAmount,
-      settlementRate,
-      averageExpenseAmount,
-      largestExpenseAmount,
-      largestExpenseTitle,
-      topSpenderName,
-      const DeepCollectionEquality().hash(_members),
-      const DeepCollectionEquality().hash(_monthlySpending));
+    runtimeType,
+    groupId,
+    groupName,
+    currency,
+    totalExpensesAmount,
+    totalExpenseCount,
+    totalSettlementsAmount,
+    settlementRate,
+    averageExpenseAmount,
+    largestExpenseAmount,
+    largestExpenseTitle,
+    topSpenderName,
+    const DeepCollectionEquality().hash(_members),
+    const DeepCollectionEquality().hash(_monthlySpending),
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$GroupAnalyticsModelImplCopyWith<_$GroupAnalyticsModelImpl> get copyWith =>
       __$$GroupAnalyticsModelImplCopyWithImpl<_$GroupAnalyticsModelImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GroupAnalyticsModelImplToJson(
-      this,
-    );
+    return _$$GroupAnalyticsModelImplToJson(this);
   }
 }
 
 abstract class _GroupAnalyticsModel extends GroupAnalyticsModel {
-  const factory _GroupAnalyticsModel(
-      {@JsonKey(name: 'group_id') required final String groupId,
-      @JsonKey(name: 'group_name') required final String groupName,
-      required final String currency,
-      @JsonKey(name: 'total_expenses_amount')
-      required final String totalExpensesAmount,
-      @JsonKey(name: 'total_expense_count')
-      required final int totalExpenseCount,
-      @JsonKey(name: 'total_settlements_amount')
-      required final String totalSettlementsAmount,
-      @JsonKey(name: 'settlement_rate') required final String settlementRate,
-      @JsonKey(name: 'average_expense_amount')
-      required final String averageExpenseAmount,
-      @JsonKey(name: 'largest_expense_amount')
-      required final String largestExpenseAmount,
-      @JsonKey(name: 'largest_expense_title') final String? largestExpenseTitle,
-      @JsonKey(name: 'top_spender_name') final String? topSpenderName,
-      required final List<MemberContributionModel> members,
-      @JsonKey(name: 'monthly_spending')
-      required final List<MonthlySpendingModel>
-          monthlySpending}) = _$GroupAnalyticsModelImpl;
+  const factory _GroupAnalyticsModel({
+    @JsonKey(name: 'group_id') required final String groupId,
+    @JsonKey(name: 'group_name') required final String groupName,
+    required final String currency,
+    @JsonKey(name: 'total_expenses_amount')
+    required final String totalExpensesAmount,
+    @JsonKey(name: 'total_expense_count') required final int totalExpenseCount,
+    @JsonKey(name: 'total_settlements_amount')
+    required final String totalSettlementsAmount,
+    @JsonKey(name: 'settlement_rate') required final String settlementRate,
+    @JsonKey(name: 'average_expense_amount')
+    required final String averageExpenseAmount,
+    @JsonKey(name: 'largest_expense_amount')
+    required final String largestExpenseAmount,
+    @JsonKey(name: 'largest_expense_title') final String? largestExpenseTitle,
+    @JsonKey(name: 'top_spender_name') final String? topSpenderName,
+    required final List<MemberContributionModel> members,
+    @JsonKey(name: 'monthly_spending')
+    required final List<MonthlySpendingModel> monthlySpending,
+  }) = _$GroupAnalyticsModelImpl;
   const _GroupAnalyticsModel._() : super._();
 
   factory _GroupAnalyticsModel.fromJson(Map<String, dynamic> json) =

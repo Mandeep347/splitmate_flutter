@@ -53,10 +53,7 @@ class SettleUpButton extends StatelessWidget {
                 )
               : const Text(
                   'Settle Up',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
         ),
       ),

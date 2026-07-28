@@ -2,21 +2,14 @@ import 'package:flutter/material.dart';
 import '../utils/design_tokens.dart';
 
 /// Supported sizing presets for App buttons.
-enum ButtonSize {
-  small,
-  medium,
-  large,
-}
+enum ButtonSize { small, medium, large }
 
 /// Helper to render unified loading states (CircularProgressIndicator) inside buttons.
 class _ButtonLoadingIndicator extends StatelessWidget {
   final Color color;
   final ButtonSize size;
 
-  const _ButtonLoadingIndicator({
-    required this.color,
-    required this.size,
-  });
+  const _ButtonLoadingIndicator({required this.color, required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +43,7 @@ class _ButtonLayout extends StatelessWidget {
     if (size == ButtonSize.small) height = AppDesignTokens.buttonHeightSM;
     if (size == ButtonSize.large) height = AppDesignTokens.buttonHeightLG;
 
-    Widget buttonWidget = SizedBox(
-      height: height,
-      child: child,
-    );
+    Widget buttonWidget = SizedBox(height: height, child: child);
 
     if (fullWidth) {
       buttonWidget = SizedBox(
@@ -67,7 +57,10 @@ class _ButtonLayout extends StatelessWidget {
     if (height < AppDesignTokens.minimumTouchTarget) {
       return Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: (AppDesignTokens.minimumTouchTarget - AppDesignTokens.buttonHeightSM) / 2,
+          vertical:
+              (AppDesignTokens.minimumTouchTarget -
+                  AppDesignTokens.buttonHeightSM) /
+              2,
         ),
         child: buttonWidget,
       );

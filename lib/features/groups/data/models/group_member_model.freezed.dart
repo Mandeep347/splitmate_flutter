@@ -12,7 +12,8 @@ part of 'group_member_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 GroupMemberModel _$GroupMemberModelFromJson(Map<String, dynamic> json) {
   return _GroupMemberModel.fromJson(json);
@@ -38,16 +39,18 @@ mixin _$GroupMemberModel {
 /// @nodoc
 abstract class $GroupMemberModelCopyWith<$Res> {
   factory $GroupMemberModelCopyWith(
-          GroupMemberModel value, $Res Function(GroupMemberModel) then) =
-      _$GroupMemberModelCopyWithImpl<$Res, GroupMemberModel>;
+    GroupMemberModel value,
+    $Res Function(GroupMemberModel) then,
+  ) = _$GroupMemberModelCopyWithImpl<$Res, GroupMemberModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'user_id') String userId,
-      String name,
-      String email,
-      String role,
-      String status,
-      @JsonKey(name: 'joined_at') String joinedAt});
+  $Res call({
+    @JsonKey(name: 'user_id') String userId,
+    String name,
+    String email,
+    String role,
+    String status,
+    @JsonKey(name: 'joined_at') String joinedAt,
+  });
 }
 
 /// @nodoc
@@ -70,59 +73,65 @@ class _$GroupMemberModelCopyWithImpl<$Res, $Val extends GroupMemberModel>
     Object? status = null,
     Object? joinedAt = null,
   }) {
-    return _then(_value.copyWith(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      role: null == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      joinedAt: null == joinedAt
-          ? _value.joinedAt
-          : joinedAt // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            userId: null == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            email: null == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                      as String,
+            role: null == role
+                ? _value.role
+                : role // ignore: cast_nullable_to_non_nullable
+                      as String,
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as String,
+            joinedAt: null == joinedAt
+                ? _value.joinedAt
+                : joinedAt // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$GroupMemberModelImplCopyWith<$Res>
     implements $GroupMemberModelCopyWith<$Res> {
-  factory _$$GroupMemberModelImplCopyWith(_$GroupMemberModelImpl value,
-          $Res Function(_$GroupMemberModelImpl) then) =
-      __$$GroupMemberModelImplCopyWithImpl<$Res>;
+  factory _$$GroupMemberModelImplCopyWith(
+    _$GroupMemberModelImpl value,
+    $Res Function(_$GroupMemberModelImpl) then,
+  ) = __$$GroupMemberModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'user_id') String userId,
-      String name,
-      String email,
-      String role,
-      String status,
-      @JsonKey(name: 'joined_at') String joinedAt});
+  $Res call({
+    @JsonKey(name: 'user_id') String userId,
+    String name,
+    String email,
+    String role,
+    String status,
+    @JsonKey(name: 'joined_at') String joinedAt,
+  });
 }
 
 /// @nodoc
 class __$$GroupMemberModelImplCopyWithImpl<$Res>
     extends _$GroupMemberModelCopyWithImpl<$Res, _$GroupMemberModelImpl>
     implements _$$GroupMemberModelImplCopyWith<$Res> {
-  __$$GroupMemberModelImplCopyWithImpl(_$GroupMemberModelImpl _value,
-      $Res Function(_$GroupMemberModelImpl) _then)
-      : super(_value, _then);
+  __$$GroupMemberModelImplCopyWithImpl(
+    _$GroupMemberModelImpl _value,
+    $Res Function(_$GroupMemberModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -134,46 +143,48 @@ class __$$GroupMemberModelImplCopyWithImpl<$Res>
     Object? status = null,
     Object? joinedAt = null,
   }) {
-    return _then(_$GroupMemberModelImpl(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      role: null == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      joinedAt: null == joinedAt
-          ? _value.joinedAt
-          : joinedAt // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$GroupMemberModelImpl(
+        userId: null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        email: null == email
+            ? _value.email
+            : email // ignore: cast_nullable_to_non_nullable
+                  as String,
+        role: null == role
+            ? _value.role
+            : role // ignore: cast_nullable_to_non_nullable
+                  as String,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as String,
+        joinedAt: null == joinedAt
+            ? _value.joinedAt
+            : joinedAt // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$GroupMemberModelImpl extends _GroupMemberModel {
-  const _$GroupMemberModelImpl(
-      {@JsonKey(name: 'user_id') required this.userId,
-      required this.name,
-      required this.email,
-      required this.role,
-      required this.status,
-      @JsonKey(name: 'joined_at') required this.joinedAt})
-      : super._();
+  const _$GroupMemberModelImpl({
+    @JsonKey(name: 'user_id') required this.userId,
+    required this.name,
+    required this.email,
+    required this.role,
+    required this.status,
+    @JsonKey(name: 'joined_at') required this.joinedAt,
+  }) : super._();
 
   factory _$GroupMemberModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$GroupMemberModelImplFromJson(json);
@@ -222,25 +233,25 @@ class _$GroupMemberModelImpl extends _GroupMemberModel {
   @pragma('vm:prefer-inline')
   _$$GroupMemberModelImplCopyWith<_$GroupMemberModelImpl> get copyWith =>
       __$$GroupMemberModelImplCopyWithImpl<_$GroupMemberModelImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GroupMemberModelImplToJson(
-      this,
-    );
+    return _$$GroupMemberModelImplToJson(this);
   }
 }
 
 abstract class _GroupMemberModel extends GroupMemberModel {
-  const factory _GroupMemberModel(
-          {@JsonKey(name: 'user_id') required final String userId,
-          required final String name,
-          required final String email,
-          required final String role,
-          required final String status,
-          @JsonKey(name: 'joined_at') required final String joinedAt}) =
-      _$GroupMemberModelImpl;
+  const factory _GroupMemberModel({
+    @JsonKey(name: 'user_id') required final String userId,
+    required final String name,
+    required final String email,
+    required final String role,
+    required final String status,
+    @JsonKey(name: 'joined_at') required final String joinedAt,
+  }) = _$GroupMemberModelImpl;
   const _GroupMemberModel._() : super._();
 
   factory _GroupMemberModel.fromJson(Map<String, dynamic> json) =

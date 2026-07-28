@@ -73,8 +73,11 @@ class MemberContributionChart extends StatelessWidget {
                     const SizedBox(height: 4),
                     LinearProgressIndicator(
                       value: (c.percentageOfTotal / 100.0).clamp(0.0, 1.0),
-                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                      valueColor: AlwaysStoppedAnimation(theme.colorScheme.primary),
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
+                      valueColor: AlwaysStoppedAnimation(
+                        theme.colorScheme.primary,
+                      ),
                       borderRadius: BorderRadius.circular(4),
                       minHeight: 6,
                     ),

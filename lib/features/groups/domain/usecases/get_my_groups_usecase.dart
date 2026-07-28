@@ -9,9 +9,7 @@ class GetMyGroupsUseCase {
   final IGroupRepository repository;
 
   /// Creates a new [GetMyGroupsUseCase] instance.
-  const GetMyGroupsUseCase({
-    required this.repository,
-  });
+  const GetMyGroupsUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws a [Failure] on error.

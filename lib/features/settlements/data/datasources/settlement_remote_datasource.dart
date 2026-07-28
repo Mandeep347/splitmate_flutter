@@ -7,9 +7,7 @@ import '../models/settlement_model.dart';
 /// Abstract contract for settlements remote operations.
 abstract interface class ISettlementRemoteDatasource {
   /// Fetches group settlements history list.
-  Future<List<SettlementModel>> getGroupSettlements({
-    required String groupId,
-  });
+  Future<List<SettlementModel>> getGroupSettlements({required String groupId});
 
   /// Creates and posts a new settlement.
   Future<SettlementModel> createSettlement({
@@ -29,9 +27,7 @@ class SettlementRemoteDatasource implements ISettlementRemoteDatasource {
   final DioClient client;
 
   /// Creates a new [SettlementRemoteDatasource] instance.
-  const SettlementRemoteDatasource({
-    required this.client,
-  });
+  const SettlementRemoteDatasource({required this.client});
 
   @override
   Future<List<SettlementModel>> getGroupSettlements({
@@ -75,7 +71,8 @@ class SettlementRemoteDatasource implements ISettlementRemoteDatasource {
 }
 
 /// Provider exposing [ISettlementRemoteDatasource].
-final settlementRemoteDatasourceProvider = Provider<ISettlementRemoteDatasource>((ref) {
-  final client = ref.watch(dioClientProvider);
-  return SettlementRemoteDatasource(client: client);
-});
+final settlementRemoteDatasourceProvider =
+    Provider<ISettlementRemoteDatasource>((ref) {
+      final client = ref.watch(dioClientProvider);
+      return SettlementRemoteDatasource(client: client);
+    });

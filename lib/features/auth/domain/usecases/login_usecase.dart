@@ -9,9 +9,7 @@ class LoginUseCase {
   final IAuthRepository repository;
 
   /// Creates a new [LoginUseCase] instance.
-  const LoginUseCase({
-    required this.repository,
-  });
+  const LoginUseCase({required this.repository});
 
   /// Executes the login operation with email and password.
   /// Throws a [Failure] on error.

@@ -9,16 +9,11 @@ class CreateGroupUseCase {
   final IGroupRepository repository;
 
   /// Creates a new [CreateGroupUseCase] instance.
-  const CreateGroupUseCase({
-    required this.repository,
-  });
+  const CreateGroupUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws a [Failure] on error.
-  Future<Group> call({
-    required String name,
-    required String currency,
-  }) async {
+  Future<Group> call({required String name, required String currency}) async {
     try {
       return await repository.createGroup(name: name, currency: currency);
     } on Failure {

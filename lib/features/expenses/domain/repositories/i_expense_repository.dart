@@ -12,9 +12,7 @@ abstract interface class IExpenseRepository {
   });
 
   /// Fetches a single expense record by its unique ID.
-  Future<Expense> getExpenseById({
-    required String expenseId,
-  });
+  Future<Expense> getExpenseById({required String expenseId});
 
   /// Creates a new expense record in a group.
   Future<Expense> createExpense({
@@ -36,7 +34,5 @@ abstract interface class IExpenseRepository {
   });
 
   /// Reverses/cancels an existing active expense.
-  Future<Expense> reverseExpense({
-    required String expenseId,
-  });
+  Future<Expense> reverseExpense({required String expenseId});
 }

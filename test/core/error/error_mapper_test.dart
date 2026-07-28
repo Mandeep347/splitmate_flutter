@@ -29,7 +29,7 @@ void main() {
           requestOptions: RequestOptions(path: '/test'),
           statusCode: 404,
           data: {
-            'detail': ['First group not found.', 'Second detail.']
+            'detail': ['First group not found.', 'Second detail.'],
           },
         ),
       );
@@ -39,29 +39,32 @@ void main() {
       expect(failure.message, 'First group not found.');
     });
 
-    test('maps List of Map detail response (FastAPI validation format) correctly', () {
-      final dioError = DioException(
-        requestOptions: RequestOptions(path: '/test'),
-        type: DioExceptionType.badResponse,
-        response: Response(
+    test(
+      'maps List of Map detail response (FastAPI validation format) correctly',
+      () {
+        final dioError = DioException(
           requestOptions: RequestOptions(path: '/test'),
-          statusCode: 422,
-          data: {
-            'detail': [
-              {
-                'loc': ['body', 'title'],
-                'msg': 'Field title is required.',
-                'type': 'value_error.missing'
-              }
-            ]
-          },
-        ),
-      );
+          type: DioExceptionType.badResponse,
+          response: Response(
+            requestOptions: RequestOptions(path: '/test'),
+            statusCode: 422,
+            data: {
+              'detail': [
+                {
+                  'loc': ['body', 'title'],
+                  'msg': 'Field title is required.',
+                  'type': 'value_error.missing',
+                },
+              ],
+            },
+          ),
+        );
 
-      final failure = ErrorMapper.mapToFailure(dioError);
-      expect(failure, isA<ServerFailure>());
-      expect(failure.message, 'Field title is required.');
-    });
+        final failure = ErrorMapper.mapToFailure(dioError);
+        expect(failure, isA<ServerFailure>());
+        expect(failure.message, 'Field title is required.');
+      },
+    );
 
     test('maps fallback message when detail is missing or null', () {
       final dioError = DioException(
@@ -76,7 +79,10 @@ void main() {
 
       final failure = ErrorMapper.mapToFailure(dioError);
       expect(failure, isA<ServerFailure>());
-      expect(failure.message, 'A server error occurred. Please try again later.');
+      expect(
+        failure.message,
+        'A server error occurred. Please try again later.',
+      );
     });
   });
 }

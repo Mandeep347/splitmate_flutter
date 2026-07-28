@@ -73,9 +73,15 @@ void main() {
     });
 
     test('fromJson round-trips correctly for all 3 types', () {
-      final expenseFromJson = OfflineAction.fromJson(tCreateExpenseAction.toJson());
-      final settlementFromJson = OfflineAction.fromJson(tSettlementAction.toJson());
-      final addMemberFromJson = OfflineAction.fromJson(tAddMemberAction.toJson());
+      final expenseFromJson = OfflineAction.fromJson(
+        tCreateExpenseAction.toJson(),
+      );
+      final settlementFromJson = OfflineAction.fromJson(
+        tSettlementAction.toJson(),
+      );
+      final addMemberFromJson = OfflineAction.fromJson(
+        tAddMemberAction.toJson(),
+      );
 
       expect(expenseFromJson, isA<CreateExpenseAction>());
       expect(settlementFromJson, isA<CreateSettlementAction>());
@@ -97,7 +103,10 @@ void main() {
       expect(result.currency, equals('INR'));
       expect(result.paidByUserId, equals('user-1'));
       expect(result.splitType, equals('EQUAL'));
-      expect(result.participantsJson, equals('[{"user_id":"user-1"},{"user_id":"user-2"}]'));
+      expect(
+        result.participantsJson,
+        equals('[{"user_id":"user-1"},{"user_id":"user-2"}]'),
+      );
       expect(result.idempotencyKey, equals('idem-1'));
     });
   });

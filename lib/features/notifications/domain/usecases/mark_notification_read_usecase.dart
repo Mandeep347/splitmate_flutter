@@ -9,9 +9,7 @@ class MarkNotificationReadUseCase {
   final INotificationRepository repository;
 
   /// Creates a new [MarkNotificationReadUseCase] instance.
-  const MarkNotificationReadUseCase({
-    required this.repository,
-  });
+  const MarkNotificationReadUseCase({required this.repository});
 
   /// Executes the usecase.
   Future<AppNotification> call({required String notificationId}) async {
@@ -20,7 +18,10 @@ class MarkNotificationReadUseCase {
     } on Failure {
       rethrow;
     } on NotFoundException {
-      throw const ServerFailure('Notification not found.', 'NOTIFICATION_NOT_FOUND');
+      throw const ServerFailure(
+        'Notification not found.',
+        'NOTIFICATION_NOT_FOUND',
+      );
     } on NetworkException catch (e) {
       throw NetworkFailure(e.message);
     } on NetworkClientException catch (e) {
@@ -35,7 +36,8 @@ extension on NetworkClientException {
   String? get errorCode {
     if (this is BusinessRuleException) {
       final br = this as BusinessRuleException;
-      return br.errors?['code'] as String? ?? br.errors?['errorCode'] as String?;
+      return br.errors?['code'] as String? ??
+          br.errors?['errorCode'] as String?;
     }
     return null;
   }

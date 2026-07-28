@@ -28,10 +28,7 @@ import 'package:splito_flutter/shared/widgets/amount_display.dart';
 class GroupDetailsPage extends ConsumerWidget {
   final String groupId;
 
-  const GroupDetailsPage({
-    super.key,
-    required this.groupId,
-  });
+  const GroupDetailsPage({super.key, required this.groupId});
 
   Widget _buildActionItem(
     BuildContext context, {
@@ -47,7 +44,10 @@ class GroupDetailsPage extends ConsumerWidget {
     return SizedBox(
       width: width,
       child: Card(
-        margin: EdgeInsets.symmetric(horizontal: ext.spaceXS, vertical: ext.spaceXS),
+        margin: EdgeInsets.symmetric(
+          horizontal: ext.spaceXS,
+          vertical: ext.spaceXS,
+        ),
         elevation: 0,
         color: isDisabled
             ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.1)
@@ -55,7 +55,9 @@ class GroupDetailsPage extends ConsumerWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ext.radiusMD),
           side: BorderSide(
-            color: theme.colorScheme.outlineVariant.withValues(alpha: isDisabled ? 0.1 : 0.3),
+            color: theme.colorScheme.outlineVariant.withValues(
+              alpha: isDisabled ? 0.1 : 0.3,
+            ),
           ),
         ),
         clipBehavior: Clip.antiAlias,
@@ -69,7 +71,9 @@ class GroupDetailsPage extends ConsumerWidget {
                 Icon(
                   icon,
                   color: isDisabled
-                      ? theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3)
+                      ? theme.colorScheme.onSurfaceVariant.withValues(
+                          alpha: 0.3,
+                        )
                       : theme.colorScheme.primary,
                   size: 20,
                 ),
@@ -79,7 +83,9 @@ class GroupDetailsPage extends ConsumerWidget {
                   style: theme.textTheme.labelMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: isDisabled
-                        ? theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3)
+                        ? theme.colorScheme.onSurfaceVariant.withValues(
+                            alpha: 0.3,
+                          )
                         : null,
                   ),
                   textAlign: TextAlign.center,
@@ -99,24 +105,27 @@ class GroupDetailsPage extends ConsumerWidget {
     final detailAsync = ref.watch(groupDetailProvider(groupId));
     final group = detailAsync.valueOrNull;
     final balancesAsync = ref.watch(groupBalancesProvider(groupId));
-    final isSettled = balancesAsync.hasValue && (balancesAsync.value?.isAllSettled ?? false);
+    final isSettled =
+        balancesAsync.hasValue && (balancesAsync.value?.isAllSettled ?? false);
     final currentUser = ref.watch(currentUserProvider);
     final isDesktop = ResponsiveLayout.isDesktop(context);
 
-    final isAdmin = group != null &&
+    final isAdmin =
+        group != null &&
         (group.createdBy == currentUser?.id ||
             group.members.any((m) => m.userId == currentUser?.id && m.isAdmin));
 
     // Listen to delete group mutation
     ref.listen<AsyncValue<void>>(archiveGroupProvider, (previous, next) {
       if (next is AsyncData<void> && previous is AsyncLoading<void>) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Group deleted!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Group deleted!')));
         context.pop();
       } else if (next is AsyncError<void> && previous is AsyncLoading<void>) {
-        final errorMessage =
-            next.error is Failure ? (next.error as Failure).message : 'Failed to delete group.';
+        final errorMessage = next.error is Failure
+            ? (next.error as Failure).message
+            : 'Failed to delete group.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
@@ -147,7 +156,8 @@ class GroupDetailsPage extends ConsumerWidget {
                     ),
                   ),
                   TextButton(
-                    onPressed: () async => await AddMemberSheet.show(context, groupId),
+                    onPressed: () async =>
+                        await AddMemberSheet.show(context, groupId),
                     child: const Text('+ Add Member'),
                   ),
                 ],
@@ -166,7 +176,9 @@ class GroupDetailsPage extends ConsumerWidget {
                   runSpacing: ext.spaceSM,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    ...shownMembers.map((m) => MemberAvatar(name: m.name, radius: 18)),
+                    ...shownMembers.map(
+                      (m) => MemberAvatar(name: m.name, radius: 18),
+                    ),
                     if (extraCount > 0)
                       Padding(
                         padding: EdgeInsets.only(left: ext.spaceXS),
@@ -191,15 +203,22 @@ class GroupDetailsPage extends ConsumerWidget {
                   const SizedBox(width: 6),
                   Builder(
                     builder: (context) {
-                      final totalSpent = ref.watch(groupTotalSpentProvider(groupId));
+                      final totalSpent = ref.watch(
+                        groupTotalSpentProvider(groupId),
+                      );
                       final symbol = group.defaultCurrency == 'INR'
                           ? '₹'
-                          : (group.defaultCurrency == 'USD' ? '\$' : '${group.defaultCurrency} ');
+                          : (group.defaultCurrency == 'USD'
+                                ? '\$'
+                                : '${group.defaultCurrency} ');
                       final formatter = NumberFormat('#,##0.00');
-                      final formattedTotal = '$symbol${formatter.format(totalSpent)}';
+                      final formattedTotal =
+                          '$symbol${formatter.format(totalSpent)}';
 
                       return Text(
-                        totalSpent > 0 ? 'Total spent: $formattedTotal' : 'No expenses yet',
+                        totalSpent > 0
+                            ? 'Total spent: $formattedTotal'
+                            : 'No expenses yet',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
@@ -268,10 +287,9 @@ class GroupDetailsPage extends ConsumerWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...shown.map((b) => BalanceRow(
-                            balance: b,
-                            showSettleButton: false,
-                          )),
+                      ...shown.map(
+                        (b) => BalanceRow(balance: b, showSettleButton: false),
+                      ),
                       if (balances.length > 3)
                         Align(
                           alignment: Alignment.centerRight,
@@ -342,7 +360,9 @@ class GroupDetailsPage extends ConsumerWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...recent.map((activity) => ActivityListTile(activity: activity)),
+                      ...recent.map(
+                        (activity) => ActivityListTile(activity: activity),
+                      ),
                       if (feed.totalItems > 3)
                         Align(
                           alignment: Alignment.centerRight,
@@ -351,9 +371,7 @@ class GroupDetailsPage extends ConsumerWidget {
                               context.goNamed(
                                 AppRoutes.activityFeedName,
                                 pathParameters: {'groupId': groupId},
-                                extra: {
-                                  'groupName': group.name,
-                                },
+                                extra: {'groupName': group.name},
                               );
                             },
                             child: const Text('View all'),
@@ -370,7 +388,9 @@ class GroupDetailsPage extends ConsumerWidget {
     }
 
     Widget analyticsTeaserCard(Group group) {
-      return ref.watch(groupAnalyticsProvider(group.id)).when(
+      return ref
+          .watch(groupAnalyticsProvider(group.id))
+          .when(
             loading: () => const SizedBox.shrink(),
             error: (_, __) => const SizedBox.shrink(),
             data: (a) => a.hasData
@@ -498,9 +518,7 @@ class GroupDetailsPage extends ConsumerWidget {
               context.goNamed(
                 AppRoutes.activityFeedName,
                 pathParameters: {'groupId': group.id},
-                extra: {
-                  'groupName': group.name,
-                },
+                extra: {'groupName': group.name},
               );
             },
           ),
@@ -555,7 +573,9 @@ class GroupDetailsPage extends ConsumerWidget {
                 icon: Icons.info_outline_rounded,
                 label: 'Status',
                 value: group.status,
-                valueColor: group.isActive ? theme.colorScheme.primary : theme.colorScheme.error,
+                valueColor: group.isActive
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.error,
               ),
             ],
           ),
@@ -588,7 +608,9 @@ class GroupDetailsPage extends ConsumerWidget {
                       height: 4,
                       margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                        color: theme.colorScheme.onSurfaceVariant.withValues(
+                          alpha: 0.3,
+                        ),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -634,20 +656,25 @@ class GroupDetailsPage extends ConsumerWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                               side: BorderSide(
-                                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                                color: theme.colorScheme.outlineVariant
+                                    .withValues(alpha: 0.5),
                               ),
                             ),
                             child: ListTile(
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
                               leading: MemberAvatar(name: m.name, radius: 22),
                               title: Row(
                                 children: [
                                   Expanded(
                                     child: Text(
                                       m.name,
-                                      style: theme.textTheme.bodyMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -655,25 +682,34 @@ class GroupDetailsPage extends ConsumerWidget {
                                   if (m.isAdmin || isCreator) ...[
                                     const SizedBox(width: 6),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
                                       decoration: BoxDecoration(
-                                        color: theme.colorScheme.primaryContainer,
+                                        color:
+                                            theme.colorScheme.primaryContainer,
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Text(
                                         isCreator ? 'Owner' : 'Admin',
-                                        style: theme.textTheme.labelSmall?.copyWith(
-                                          color: theme.colorScheme.onPrimaryContainer,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 10,
-                                        ),
+                                        style: theme.textTheme.labelSmall
+                                            ?.copyWith(
+                                              color: theme
+                                                  .colorScheme
+                                                  .onPrimaryContainer,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 10,
+                                            ),
                                       ),
                                     ),
                                   ],
                                 ],
                               ),
                               subtitle: Text(
-                                m.email.isNotEmpty ? m.email : 'No email address',
+                                m.email.isNotEmpty
+                                    ? m.email
+                                    : 'No email address',
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
@@ -724,7 +760,11 @@ class GroupDetailsPage extends ConsumerWidget {
               value: 'delete',
               child: Row(
                 children: [
-                  Icon(Icons.delete_outline_rounded, size: 20, color: Colors.red),
+                  Icon(
+                    Icons.delete_outline_rounded,
+                    size: 20,
+                    color: Colors.red,
+                  ),
                   SizedBox(width: 10),
                   Text('Delete Group', style: TextStyle(color: Colors.red)),
                 ],
@@ -746,7 +786,9 @@ class GroupDetailsPage extends ConsumerWidget {
             isDestructive: true,
           );
           if (confirm == true) {
-            await ref.read(archiveGroupProvider.notifier).archive(groupId: groupId);
+            await ref
+                .read(archiveGroupProvider.notifier)
+                .archive(groupId: groupId);
           }
         }
       }
@@ -760,7 +802,8 @@ class GroupDetailsPage extends ConsumerWidget {
       for (final b in balances) {
         if (b.toUserId == currentUser.id || b.toUserName == currentUser.name) {
           userWillGet += b.amount;
-        } else if (b.fromUserId == currentUser.id || b.fromUserName == currentUser.name) {
+        } else if (b.fromUserId == currentUser.id ||
+            b.fromUserName == currentUser.name) {
           userNeedToPay += b.amount;
         }
       }
@@ -778,11 +821,19 @@ class GroupDetailsPage extends ConsumerWidget {
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.check_circle_outline_rounded, color: Colors.tealAccent, size: 14),
+              Icon(
+                Icons.check_circle_outline_rounded,
+                color: Colors.tealAccent,
+                size: 14,
+              ),
               SizedBox(width: 4),
               Text(
                 'Settled in this group',
-                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -799,20 +850,30 @@ class GroupDetailsPage extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFF10B981).withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.6)),
+                border: Border.all(
+                  color: const Color(0xFF10B981).withValues(alpha: 0.6),
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
                     'You will get ',
-                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   Flexible(
                     child: AmountDisplay(
                       amount: userWillGet,
                       currency: currency,
-                      style: const TextStyle(color: Color(0xFF6EE7B7), fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        color: Color(0xFF6EE7B7),
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -824,20 +885,30 @@ class GroupDetailsPage extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFFEF4444).withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFFEF4444).withValues(alpha: 0.6)),
+                border: Border.all(
+                  color: const Color(0xFFEF4444).withValues(alpha: 0.6),
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
                     'You need to pay ',
-                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   Flexible(
                     child: AmountDisplay(
                       amount: userNeedToPay,
                       currency: currency,
-                      style: const TextStyle(color: Color(0xFFFCA5A5), fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        color: Color(0xFFFCA5A5),
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -862,7 +933,10 @@ class GroupDetailsPage extends ConsumerWidget {
                     onTap: () => showMembersBottomSheet(group),
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.primaryContainer,
                         borderRadius: BorderRadius.circular(20),
@@ -870,7 +944,11 @@ class GroupDetailsPage extends ConsumerWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.people_alt_rounded, size: 12, color: theme.colorScheme.onPrimaryContainer),
+                          Icon(
+                            Icons.people_alt_rounded,
+                            size: 12,
+                            color: theme.colorScheme.onPrimaryContainer,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             '${group.membersCount} members',
@@ -959,7 +1037,11 @@ class GroupDetailsPage extends ConsumerWidget {
                 pinned: true,
                 expandedHeight: 175,
                 flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: const EdgeInsets.only(left: 16, bottom: 12, right: 16),
+                  titlePadding: const EdgeInsets.only(
+                    left: 16,
+                    bottom: 12,
+                    right: 16,
+                  ),
                   title: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -983,16 +1065,25 @@ class GroupDetailsPage extends ConsumerWidget {
                             onTap: () => showMembersBottomSheet(group),
                             borderRadius: BorderRadius.circular(20),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.18),
                                 borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.3),
+                                ),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.people_alt_rounded, color: Colors.white, size: 14),
+                                  const Icon(
+                                    Icons.people_alt_rounded,
+                                    color: Colors.white,
+                                    size: 14,
+                                  ),
                                   const SizedBox(width: 4),
                                   Text(
                                     '${group.membersCount} members',
@@ -1038,7 +1129,9 @@ class GroupDetailsPage extends ConsumerWidget {
                           height: 140,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.25),
+                            color: const Color(
+                              0xFF6366F1,
+                            ).withValues(alpha: 0.25),
                           ),
                         ),
                       ),
@@ -1050,7 +1143,9 @@ class GroupDetailsPage extends ConsumerWidget {
                           height: 120,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFF10B981).withValues(alpha: 0.2),
+                            color: const Color(
+                              0xFF10B981,
+                            ).withValues(alpha: 0.2),
                           ),
                         ),
                       ),
@@ -1059,7 +1154,10 @@ class GroupDetailsPage extends ConsumerWidget {
                 ),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.more_vert_rounded, color: Colors.white),
+                    icon: const Icon(
+                      Icons.more_vert_rounded,
+                      color: Colors.white,
+                    ),
                     onPressed: () => showEditOptions(group),
                   ),
                 ],

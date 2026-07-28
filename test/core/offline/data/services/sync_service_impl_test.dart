@@ -14,9 +14,13 @@ import 'package:splito_flutter/features/settlements/domain/repositories/i_settle
 
 import 'package:splito_flutter/core/offline/domain/services/sync_service.dart';
 
-class MockIOfflineQueueRepository extends Mock implements IOfflineQueueRepository {}
+class MockIOfflineQueueRepository extends Mock
+    implements IOfflineQueueRepository {}
+
 class MockIExpenseRepository extends Mock implements IExpenseRepository {}
+
 class MockISettlementRepository extends Mock implements ISettlementRepository {}
+
 class MockIGroupRepository extends Mock implements IGroupRepository {}
 
 void main() {
@@ -127,32 +131,43 @@ void main() {
 
       await syncService.sync();
 
-      verifyNever(() => mockExpenseRepo.createExpense(
-            groupId: any(named: 'groupId'),
-            title: any(named: 'title'),
-            totalAmount: any(named: 'totalAmount'),
-            currency: any(named: 'currency'),
-            paidByUserId: any(named: 'paidByUserId'),
-            splitInput: any(named: 'splitInput'),
-          ));
-      verifyNever(() => mockSettlementRepo.createSettlement(
-            groupId: any(named: 'groupId'),
-            fromUserId: any(named: 'fromUserId'),
-            toUserId: any(named: 'toUserId'),
-            amount: any(named: 'amount'),
-            currency: any(named: 'currency'),
-          ));
-      verifyNever(() => mockGroupRepo.addMember(
-            groupId: any(named: 'groupId'),
-            email: any(named: 'email'),
-          ));
+      verifyNever(
+        () => mockExpenseRepo.createExpense(
+          groupId: any(named: 'groupId'),
+          title: any(named: 'title'),
+          totalAmount: any(named: 'totalAmount'),
+          currency: any(named: 'currency'),
+          paidByUserId: any(named: 'paidByUserId'),
+          splitInput: any(named: 'splitInput'),
+        ),
+      );
+      verifyNever(
+        () => mockSettlementRepo.createSettlement(
+          groupId: any(named: 'groupId'),
+          fromUserId: any(named: 'fromUserId'),
+          toUserId: any(named: 'toUserId'),
+          amount: any(named: 'amount'),
+          currency: any(named: 'currency'),
+        ),
+      );
+      verifyNever(
+        () => mockGroupRepo.addMember(
+          groupId: any(named: 'groupId'),
+          email: any(named: 'email'),
+        ),
+      );
     });
   });
 
   group('sync — successful processing', () {
-    test('calls expenseRepository.createExpense for CreateExpenseAction with correct idempotencyKey', () async {
-      when(() => mockQueue.getPending()).thenAnswer((_) async => [tCreateExpenseAction]);
-      when(() => mockExpenseRepo.createExpense(
+    test(
+      'calls expenseRepository.createExpense for CreateExpenseAction with correct idempotencyKey',
+      () async {
+        when(
+          () => mockQueue.getPending(),
+        ).thenAnswer((_) async => [tCreateExpenseAction]);
+        when(
+          () => mockExpenseRepo.createExpense(
             groupId: 'group-1',
             title: 'Dinner',
             description: null,
@@ -161,13 +176,17 @@ void main() {
             paidByUserId: 'user-1',
             splitInput: any(named: 'splitInput'),
             idempotencyKey: 'idem-1',
-          )).thenAnswer((_) async => tExpense);
-      when(() => mockQueue.markCompleted('action-1')).thenAnswer((_) async {});
+          ),
+        ).thenAnswer((_) async => tExpense);
+        when(
+          () => mockQueue.markCompleted('action-1'),
+        ).thenAnswer((_) async {});
 
-      final result = await syncService.sync();
+        final result = await syncService.sync();
 
-      expect(result.succeeded, equals(1));
-      verify(() => mockExpenseRepo.createExpense(
+        expect(result.succeeded, equals(1));
+        verify(
+          () => mockExpenseRepo.createExpense(
             groupId: 'group-1',
             title: 'Dinner',
             description: null,
@@ -176,20 +195,26 @@ void main() {
             paidByUserId: 'user-1',
             splitInput: any(named: 'splitInput'),
             idempotencyKey: 'idem-1',
-          )).called(1);
-    });
+          ),
+        ).called(1);
+      },
+    );
 
     test('calls queue.markCompleted after success', () async {
-      when(() => mockQueue.getPending()).thenAnswer((_) async => [tCreateExpenseAction]);
-      when(() => mockExpenseRepo.createExpense(
-            groupId: any(named: 'groupId'),
-            title: any(named: 'title'),
-            totalAmount: any(named: 'totalAmount'),
-            currency: any(named: 'currency'),
-            paidByUserId: any(named: 'paidByUserId'),
-            splitInput: any(named: 'splitInput'),
-            idempotencyKey: any(named: 'idempotencyKey'),
-          )).thenAnswer((_) async => tExpense);
+      when(
+        () => mockQueue.getPending(),
+      ).thenAnswer((_) async => [tCreateExpenseAction]);
+      when(
+        () => mockExpenseRepo.createExpense(
+          groupId: any(named: 'groupId'),
+          title: any(named: 'title'),
+          totalAmount: any(named: 'totalAmount'),
+          currency: any(named: 'currency'),
+          paidByUserId: any(named: 'paidByUserId'),
+          splitInput: any(named: 'splitInput'),
+          idempotencyKey: any(named: 'idempotencyKey'),
+        ),
+      ).thenAnswer((_) async => tExpense);
       when(() => mockQueue.markCompleted('action-1')).thenAnswer((_) async {});
 
       await syncService.sync();
@@ -198,16 +223,20 @@ void main() {
     });
 
     test('returns succeeded: 1 for one successful action', () async {
-      when(() => mockQueue.getPending()).thenAnswer((_) async => [tCreateExpenseAction]);
-      when(() => mockExpenseRepo.createExpense(
-            groupId: any(named: 'groupId'),
-            title: any(named: 'title'),
-            totalAmount: any(named: 'totalAmount'),
-            currency: any(named: 'currency'),
-            paidByUserId: any(named: 'paidByUserId'),
-            splitInput: any(named: 'splitInput'),
-            idempotencyKey: any(named: 'idempotencyKey'),
-          )).thenAnswer((_) async => tExpense);
+      when(
+        () => mockQueue.getPending(),
+      ).thenAnswer((_) async => [tCreateExpenseAction]);
+      when(
+        () => mockExpenseRepo.createExpense(
+          groupId: any(named: 'groupId'),
+          title: any(named: 'title'),
+          totalAmount: any(named: 'totalAmount'),
+          currency: any(named: 'currency'),
+          paidByUserId: any(named: 'paidByUserId'),
+          splitInput: any(named: 'splitInput'),
+          idempotencyKey: any(named: 'idempotencyKey'),
+        ),
+      ).thenAnswer((_) async => tExpense);
       when(() => mockQueue.markCompleted('action-1')).thenAnswer((_) async {});
 
       final result = await syncService.sync();
@@ -220,16 +249,20 @@ void main() {
 
   group('sync — failure handling', () {
     test('increments retry on NetworkException', () async {
-      when(() => mockQueue.getPending()).thenAnswer((_) async => [tCreateExpenseAction]);
-      when(() => mockExpenseRepo.createExpense(
-            groupId: any(named: 'groupId'),
-            title: any(named: 'title'),
-            totalAmount: any(named: 'totalAmount'),
-            currency: any(named: 'currency'),
-            paidByUserId: any(named: 'paidByUserId'),
-            splitInput: any(named: 'splitInput'),
-            idempotencyKey: any(named: 'idempotencyKey'),
-          )).thenThrow(const NetworkException('Network timeout'));
+      when(
+        () => mockQueue.getPending(),
+      ).thenAnswer((_) async => [tCreateExpenseAction]);
+      when(
+        () => mockExpenseRepo.createExpense(
+          groupId: any(named: 'groupId'),
+          title: any(named: 'title'),
+          totalAmount: any(named: 'totalAmount'),
+          currency: any(named: 'currency'),
+          paidByUserId: any(named: 'paidByUserId'),
+          splitInput: any(named: 'splitInput'),
+          idempotencyKey: any(named: 'idempotencyKey'),
+        ),
+      ).thenThrow(const NetworkException('Network timeout'));
       when(() => mockQueue.incrementRetry('action-1')).thenAnswer((_) async {});
 
       final result = await syncService.sync();
@@ -239,31 +272,36 @@ void main() {
     });
 
     test('continues processing remaining actions after failure', () async {
-      when(() => mockQueue.getPending())
-          .thenAnswer((_) async => [tCreateExpenseAction, tSettlementAction]);
+      when(
+        () => mockQueue.getPending(),
+      ).thenAnswer((_) async => [tCreateExpenseAction, tSettlementAction]);
 
       // Action 1 fails with NetworkException
-      when(() => mockExpenseRepo.createExpense(
-            groupId: any(named: 'groupId'),
-            title: any(named: 'title'),
-            totalAmount: any(named: 'totalAmount'),
-            currency: any(named: 'currency'),
-            paidByUserId: any(named: 'paidByUserId'),
-            splitInput: any(named: 'splitInput'),
-            idempotencyKey: any(named: 'idempotencyKey'),
-          )).thenThrow(const NetworkException('Server down'));
+      when(
+        () => mockExpenseRepo.createExpense(
+          groupId: any(named: 'groupId'),
+          title: any(named: 'title'),
+          totalAmount: any(named: 'totalAmount'),
+          currency: any(named: 'currency'),
+          paidByUserId: any(named: 'paidByUserId'),
+          splitInput: any(named: 'splitInput'),
+          idempotencyKey: any(named: 'idempotencyKey'),
+        ),
+      ).thenThrow(const NetworkException('Server down'));
       when(() => mockQueue.incrementRetry('action-1')).thenAnswer((_) async {});
 
       // Action 2 succeeds
-      when(() => mockSettlementRepo.createSettlement(
-            groupId: 'group-1',
-            fromUserId: 'user-1',
-            toUserId: 'user-2',
-            amount: 500.0,
-            currency: 'INR',
-            note: null,
-            idempotencyKey: 'idem-2',
-          )).thenAnswer((_) async => tSettlement);
+      when(
+        () => mockSettlementRepo.createSettlement(
+          groupId: 'group-1',
+          fromUserId: 'user-1',
+          toUserId: 'user-2',
+          amount: 500.0,
+          currency: 'INR',
+          note: null,
+          idempotencyKey: 'idem-2',
+        ),
+      ).thenAnswer((_) async => tSettlement);
       when(() => mockQueue.markCompleted('action-2')).thenAnswer((_) async {});
 
       final result = await syncService.sync();
@@ -274,11 +312,15 @@ void main() {
     });
 
     test('treats 409 ConflictException on AddMember as success', () async {
-      when(() => mockQueue.getPending()).thenAnswer((_) async => [tAddMemberAction]);
-      when(() => mockGroupRepo.addMember(
-            groupId: 'group-1',
-            email: 'newuser@example.com',
-          )).thenThrow(const ConflictException('Member already in group'));
+      when(
+        () => mockQueue.getPending(),
+      ).thenAnswer((_) async => [tAddMemberAction]);
+      when(
+        () => mockGroupRepo.addMember(
+          groupId: 'group-1',
+          email: 'newuser@example.com',
+        ),
+      ).thenThrow(const ConflictException('Member already in group'));
       when(() => mockQueue.markCompleted('action-3')).thenAnswer((_) async {});
 
       final result = await syncService.sync();
@@ -293,16 +335,20 @@ void main() {
   group('sync — exhausted actions', () {
     test('exhausted count incremented when action hits max retries', () async {
       final nearExhaustedAction = tCreateExpenseAction.copyWith(retryCount: 2);
-      when(() => mockQueue.getPending()).thenAnswer((_) async => [nearExhaustedAction]);
-      when(() => mockExpenseRepo.createExpense(
-            groupId: any(named: 'groupId'),
-            title: any(named: 'title'),
-            totalAmount: any(named: 'totalAmount'),
-            currency: any(named: 'currency'),
-            paidByUserId: any(named: 'paidByUserId'),
-            splitInput: any(named: 'splitInput'),
-            idempotencyKey: any(named: 'idempotencyKey'),
-          )).thenThrow(const NetworkException('Connection reset'));
+      when(
+        () => mockQueue.getPending(),
+      ).thenAnswer((_) async => [nearExhaustedAction]);
+      when(
+        () => mockExpenseRepo.createExpense(
+          groupId: any(named: 'groupId'),
+          title: any(named: 'title'),
+          totalAmount: any(named: 'totalAmount'),
+          currency: any(named: 'currency'),
+          paidByUserId: any(named: 'paidByUserId'),
+          splitInput: any(named: 'splitInput'),
+          idempotencyKey: any(named: 'idempotencyKey'),
+        ),
+      ).thenThrow(const NetworkException('Connection reset'));
       when(() => mockQueue.incrementRetry('action-1')).thenAnswer((_) async {});
 
       final result = await syncService.sync();

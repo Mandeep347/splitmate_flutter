@@ -9,16 +9,11 @@ class UpdateGroupUseCase {
   final IGroupRepository repository;
 
   /// Creates a new [UpdateGroupUseCase] instance.
-  const UpdateGroupUseCase({
-    required this.repository,
-  });
+  const UpdateGroupUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws a [Failure] on error.
-  Future<Group> call({
-    required String groupId,
-    required String name,
-  }) async {
+  Future<Group> call({required String groupId, required String name}) async {
     try {
       return await repository.updateGroup(groupId: groupId, name: name);
     } on Failure {

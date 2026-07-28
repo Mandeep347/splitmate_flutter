@@ -8,9 +8,7 @@ class LogoutUseCase {
   final IAuthRepository repository;
 
   /// Creates a new [LogoutUseCase] instance.
-  const LogoutUseCase({
-    required this.repository,
-  });
+  const LogoutUseCase({required this.repository});
 
   /// Executes logout, purging local credentials and remote sessions.
   /// Throws a [Failure] on error.

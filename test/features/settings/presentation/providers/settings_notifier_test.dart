@@ -27,9 +27,7 @@ void main() {
   setUp(() {
     mockRepo = MockISettingsRepository();
     container = ProviderContainer(
-      overrides: [
-        settingsRepositoryProvider.overrideWithValue(mockRepo),
-      ],
+      overrides: [settingsRepositoryProvider.overrideWithValue(mockRepo)],
     );
   });
 
@@ -49,16 +47,21 @@ void main() {
     });
 
     test('updateThemeMode updates state optimistically', () async {
-      when(() => mockRepo.getSettings()).thenAnswer((_) async => tDefaultSettings);
-      when(() => mockRepo.saveSettings(settings: any(named: 'settings')))
-          .thenAnswer((_) async {});
+      when(
+        () => mockRepo.getSettings(),
+      ).thenAnswer((_) async => tDefaultSettings);
+      when(
+        () => mockRepo.saveSettings(settings: any(named: 'settings')),
+      ).thenAnswer((_) async {});
 
       // Build initial state
       await container.read(settingsProvider.future);
       expect(container.read(settingsProvider).valueOrNull?.themeMode, 'system');
 
       // Trigger update without awaiting immediately to verify optimistic update
-      final future = container.read(settingsProvider.notifier).updateThemeMode('dark');
+      final future = container
+          .read(settingsProvider.notifier)
+          .updateThemeMode('dark');
 
       final immediate = container.read(settingsProvider).valueOrNull;
       expect(immediate?.themeMode, 'dark'); // State updated immediately
@@ -75,7 +78,9 @@ void main() {
       expect(initial.themeMode, 'dark');
 
       // Setup repository state change
-      when(() => mockRepo.getSettings()).thenAnswer((_) async => tDefaultSettings);
+      when(
+        () => mockRepo.getSettings(),
+      ).thenAnswer((_) async => tDefaultSettings);
 
       await container.read(settingsProvider.notifier).resetToDefaults();
 

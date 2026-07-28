@@ -9,9 +9,7 @@ class GetMeUseCase {
   final IAuthRepository repository;
 
   /// Creates a new [GetMeUseCase] instance.
-  const GetMeUseCase({
-    required this.repository,
-  });
+  const GetMeUseCase({required this.repository});
 
   /// Retrieves user profile details.
   /// Throws a [Failure] on error.

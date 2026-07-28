@@ -12,10 +12,12 @@ part of 'member_contribution_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 MemberContributionModel _$MemberContributionModelFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _MemberContributionModel.fromJson(json);
 }
 
@@ -43,23 +45,27 @@ mixin _$MemberContributionModel {
 
 /// @nodoc
 abstract class $MemberContributionModelCopyWith<$Res> {
-  factory $MemberContributionModelCopyWith(MemberContributionModel value,
-          $Res Function(MemberContributionModel) then) =
-      _$MemberContributionModelCopyWithImpl<$Res, MemberContributionModel>;
+  factory $MemberContributionModelCopyWith(
+    MemberContributionModel value,
+    $Res Function(MemberContributionModel) then,
+  ) = _$MemberContributionModelCopyWithImpl<$Res, MemberContributionModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'user_id') String userId,
-      String name,
-      @JsonKey(name: 'total_paid') String totalPaid,
-      @JsonKey(name: 'total_owed') String totalOwed,
-      @JsonKey(name: 'net_balance') String netBalance,
-      @JsonKey(name: 'expense_count') int expenseCount,
-      @JsonKey(name: 'percentage_of_total') String percentageOfTotal});
+  $Res call({
+    @JsonKey(name: 'user_id') String userId,
+    String name,
+    @JsonKey(name: 'total_paid') String totalPaid,
+    @JsonKey(name: 'total_owed') String totalOwed,
+    @JsonKey(name: 'net_balance') String netBalance,
+    @JsonKey(name: 'expense_count') int expenseCount,
+    @JsonKey(name: 'percentage_of_total') String percentageOfTotal,
+  });
 }
 
 /// @nodoc
-class _$MemberContributionModelCopyWithImpl<$Res,
-        $Val extends MemberContributionModel>
+class _$MemberContributionModelCopyWithImpl<
+  $Res,
+  $Val extends MemberContributionModel
+>
     implements $MemberContributionModelCopyWith<$Res> {
   _$MemberContributionModelCopyWithImpl(this._value, this._then);
 
@@ -79,36 +85,39 @@ class _$MemberContributionModelCopyWithImpl<$Res,
     Object? expenseCount = null,
     Object? percentageOfTotal = null,
   }) {
-    return _then(_value.copyWith(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalPaid: null == totalPaid
-          ? _value.totalPaid
-          : totalPaid // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalOwed: null == totalOwed
-          ? _value.totalOwed
-          : totalOwed // ignore: cast_nullable_to_non_nullable
-              as String,
-      netBalance: null == netBalance
-          ? _value.netBalance
-          : netBalance // ignore: cast_nullable_to_non_nullable
-              as String,
-      expenseCount: null == expenseCount
-          ? _value.expenseCount
-          : expenseCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      percentageOfTotal: null == percentageOfTotal
-          ? _value.percentageOfTotal
-          : percentageOfTotal // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            userId: null == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            totalPaid: null == totalPaid
+                ? _value.totalPaid
+                : totalPaid // ignore: cast_nullable_to_non_nullable
+                      as String,
+            totalOwed: null == totalOwed
+                ? _value.totalOwed
+                : totalOwed // ignore: cast_nullable_to_non_nullable
+                      as String,
+            netBalance: null == netBalance
+                ? _value.netBalance
+                : netBalance // ignore: cast_nullable_to_non_nullable
+                      as String,
+            expenseCount: null == expenseCount
+                ? _value.expenseCount
+                : expenseCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            percentageOfTotal: null == percentageOfTotal
+                ? _value.percentageOfTotal
+                : percentageOfTotal // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -116,30 +125,34 @@ class _$MemberContributionModelCopyWithImpl<$Res,
 abstract class _$$MemberContributionModelImplCopyWith<$Res>
     implements $MemberContributionModelCopyWith<$Res> {
   factory _$$MemberContributionModelImplCopyWith(
-          _$MemberContributionModelImpl value,
-          $Res Function(_$MemberContributionModelImpl) then) =
-      __$$MemberContributionModelImplCopyWithImpl<$Res>;
+    _$MemberContributionModelImpl value,
+    $Res Function(_$MemberContributionModelImpl) then,
+  ) = __$$MemberContributionModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'user_id') String userId,
-      String name,
-      @JsonKey(name: 'total_paid') String totalPaid,
-      @JsonKey(name: 'total_owed') String totalOwed,
-      @JsonKey(name: 'net_balance') String netBalance,
-      @JsonKey(name: 'expense_count') int expenseCount,
-      @JsonKey(name: 'percentage_of_total') String percentageOfTotal});
+  $Res call({
+    @JsonKey(name: 'user_id') String userId,
+    String name,
+    @JsonKey(name: 'total_paid') String totalPaid,
+    @JsonKey(name: 'total_owed') String totalOwed,
+    @JsonKey(name: 'net_balance') String netBalance,
+    @JsonKey(name: 'expense_count') int expenseCount,
+    @JsonKey(name: 'percentage_of_total') String percentageOfTotal,
+  });
 }
 
 /// @nodoc
 class __$$MemberContributionModelImplCopyWithImpl<$Res>
-    extends _$MemberContributionModelCopyWithImpl<$Res,
-        _$MemberContributionModelImpl>
+    extends
+        _$MemberContributionModelCopyWithImpl<
+          $Res,
+          _$MemberContributionModelImpl
+        >
     implements _$$MemberContributionModelImplCopyWith<$Res> {
   __$$MemberContributionModelImplCopyWithImpl(
-      _$MemberContributionModelImpl _value,
-      $Res Function(_$MemberContributionModelImpl) _then)
-      : super(_value, _then);
+    _$MemberContributionModelImpl _value,
+    $Res Function(_$MemberContributionModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -152,51 +165,53 @@ class __$$MemberContributionModelImplCopyWithImpl<$Res>
     Object? expenseCount = null,
     Object? percentageOfTotal = null,
   }) {
-    return _then(_$MemberContributionModelImpl(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalPaid: null == totalPaid
-          ? _value.totalPaid
-          : totalPaid // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalOwed: null == totalOwed
-          ? _value.totalOwed
-          : totalOwed // ignore: cast_nullable_to_non_nullable
-              as String,
-      netBalance: null == netBalance
-          ? _value.netBalance
-          : netBalance // ignore: cast_nullable_to_non_nullable
-              as String,
-      expenseCount: null == expenseCount
-          ? _value.expenseCount
-          : expenseCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      percentageOfTotal: null == percentageOfTotal
-          ? _value.percentageOfTotal
-          : percentageOfTotal // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$MemberContributionModelImpl(
+        userId: null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        totalPaid: null == totalPaid
+            ? _value.totalPaid
+            : totalPaid // ignore: cast_nullable_to_non_nullable
+                  as String,
+        totalOwed: null == totalOwed
+            ? _value.totalOwed
+            : totalOwed // ignore: cast_nullable_to_non_nullable
+                  as String,
+        netBalance: null == netBalance
+            ? _value.netBalance
+            : netBalance // ignore: cast_nullable_to_non_nullable
+                  as String,
+        expenseCount: null == expenseCount
+            ? _value.expenseCount
+            : expenseCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        percentageOfTotal: null == percentageOfTotal
+            ? _value.percentageOfTotal
+            : percentageOfTotal // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$MemberContributionModelImpl extends _MemberContributionModel {
-  const _$MemberContributionModelImpl(
-      {@JsonKey(name: 'user_id') required this.userId,
-      required this.name,
-      @JsonKey(name: 'total_paid') required this.totalPaid,
-      @JsonKey(name: 'total_owed') required this.totalOwed,
-      @JsonKey(name: 'net_balance') required this.netBalance,
-      @JsonKey(name: 'expense_count') required this.expenseCount,
-      @JsonKey(name: 'percentage_of_total') required this.percentageOfTotal})
-      : super._();
+  const _$MemberContributionModelImpl({
+    @JsonKey(name: 'user_id') required this.userId,
+    required this.name,
+    @JsonKey(name: 'total_paid') required this.totalPaid,
+    @JsonKey(name: 'total_owed') required this.totalOwed,
+    @JsonKey(name: 'net_balance') required this.netBalance,
+    @JsonKey(name: 'expense_count') required this.expenseCount,
+    @JsonKey(name: 'percentage_of_total') required this.percentageOfTotal,
+  }) : super._();
 
   factory _$MemberContributionModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MemberContributionModelImplFromJson(json);
@@ -248,34 +263,43 @@ class _$MemberContributionModelImpl extends _MemberContributionModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, userId, name, totalPaid,
-      totalOwed, netBalance, expenseCount, percentageOfTotal);
+  int get hashCode => Object.hash(
+    runtimeType,
+    userId,
+    name,
+    totalPaid,
+    totalOwed,
+    netBalance,
+    expenseCount,
+    percentageOfTotal,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$MemberContributionModelImplCopyWith<_$MemberContributionModelImpl>
-      get copyWith => __$$MemberContributionModelImplCopyWithImpl<
-          _$MemberContributionModelImpl>(this, _$identity);
+  get copyWith =>
+      __$$MemberContributionModelImplCopyWithImpl<
+        _$MemberContributionModelImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MemberContributionModelImplToJson(
-      this,
-    );
+    return _$$MemberContributionModelImplToJson(this);
   }
 }
 
 abstract class _MemberContributionModel extends MemberContributionModel {
-  const factory _MemberContributionModel(
-      {@JsonKey(name: 'user_id') required final String userId,
-      required final String name,
-      @JsonKey(name: 'total_paid') required final String totalPaid,
-      @JsonKey(name: 'total_owed') required final String totalOwed,
-      @JsonKey(name: 'net_balance') required final String netBalance,
-      @JsonKey(name: 'expense_count') required final int expenseCount,
-      @JsonKey(name: 'percentage_of_total')
-      required final String percentageOfTotal}) = _$MemberContributionModelImpl;
+  const factory _MemberContributionModel({
+    @JsonKey(name: 'user_id') required final String userId,
+    required final String name,
+    @JsonKey(name: 'total_paid') required final String totalPaid,
+    @JsonKey(name: 'total_owed') required final String totalOwed,
+    @JsonKey(name: 'net_balance') required final String netBalance,
+    @JsonKey(name: 'expense_count') required final int expenseCount,
+    @JsonKey(name: 'percentage_of_total')
+    required final String percentageOfTotal,
+  }) = _$MemberContributionModelImpl;
   const _MemberContributionModel._() : super._();
 
   factory _MemberContributionModel.fromJson(Map<String, dynamic> json) =
@@ -304,5 +328,5 @@ abstract class _MemberContributionModel extends MemberContributionModel {
   @override
   @JsonKey(ignore: true)
   _$$MemberContributionModelImplCopyWith<_$MemberContributionModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

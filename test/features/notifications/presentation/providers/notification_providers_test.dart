@@ -7,7 +7,8 @@ import 'package:splito_flutter/features/notifications/domain/entities/app_notifi
 import 'package:splito_flutter/features/notifications/domain/usecases/get_notifications_usecase.dart';
 import 'package:splito_flutter/features/notifications/presentation/providers/notification_providers.dart';
 
-class MockGetNotificationsUseCase extends Mock implements GetNotificationsUseCase {}
+class MockGetNotificationsUseCase extends Mock
+    implements GetNotificationsUseCase {}
 
 class MockUnreadCountNotifier extends UnreadCountNotifier {
   final FutureOr<int> Function() _build;
@@ -44,7 +45,9 @@ void main() {
     test('true when unreadCount > 0', () {
       container = ProviderContainer(
         overrides: [
-          unreadCountProvider.overrideWith(() => MockUnreadCountNotifier(() => 3)),
+          unreadCountProvider.overrideWith(
+            () => MockUnreadCountNotifier(() => 3),
+          ),
         ],
       );
 
@@ -55,7 +58,9 @@ void main() {
     test('false when unreadCount == 0', () {
       container = ProviderContainer(
         overrides: [
-          unreadCountProvider.overrideWith(() => MockUnreadCountNotifier(() => 0)),
+          unreadCountProvider.overrideWith(
+            () => MockUnreadCountNotifier(() => 0),
+          ),
         ],
       );
 
@@ -66,7 +71,9 @@ void main() {
     test('false when loading', () {
       container = ProviderContainer(
         overrides: [
-          unreadCountProvider.overrideWith(() => MockUnreadCountNotifier(() => Completer<int>().future)),
+          unreadCountProvider.overrideWith(
+            () => MockUnreadCountNotifier(() => Completer<int>().future),
+          ),
         ],
       );
 
@@ -80,7 +87,9 @@ void main() {
       container = ProviderContainer(
         overrides: [
           authStateProvider.overrideWithValue(false),
-          getNotificationsUseCaseProvider.overrideWithValue(mockGetNotificationsUseCase),
+          getNotificationsUseCaseProvider.overrideWithValue(
+            mockGetNotificationsUseCase,
+          ),
         ],
       );
 
@@ -91,12 +100,16 @@ void main() {
     });
 
     test('returns notifications when authenticated', () async {
-      when(() => mockGetNotificationsUseCase()).thenAnswer((_) async => [tNotification]);
+      when(
+        () => mockGetNotificationsUseCase(),
+      ).thenAnswer((_) async => [tNotification]);
 
       container = ProviderContainer(
         overrides: [
           authStateProvider.overrideWithValue(true),
-          getNotificationsUseCaseProvider.overrideWithValue(mockGetNotificationsUseCase),
+          getNotificationsUseCaseProvider.overrideWithValue(
+            mockGetNotificationsUseCase,
+          ),
         ],
       );
 

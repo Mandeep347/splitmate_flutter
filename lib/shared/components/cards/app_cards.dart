@@ -158,7 +158,8 @@ class ClickableCard extends StatelessWidget {
           width: 1,
         ),
       ),
-      clipBehavior: Clip.antiAlias, // Critical for keeping Inkwell ripple within borders
+      clipBehavior:
+          Clip.antiAlias, // Critical for keeping Inkwell ripple within borders
       child: InkWell(
         onTap: onTap,
         child: Padding(

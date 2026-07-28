@@ -7,9 +7,7 @@ class TermsOfServicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Terms of Service'),
-      ),
+      appBar: AppBar(title: const Text('Terms of Service')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(

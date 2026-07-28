@@ -38,10 +38,14 @@ class BalanceRow extends ConsumerWidget {
     final theme = Theme.of(context);
     final currentUser = ref.watch(currentUserProvider);
 
-    final isOtherPayingMe = currentUser != null &&
-        (balance.toUserId == currentUser.id || balance.toUserName == currentUser.name);
-    final isMePayingOther = currentUser != null &&
-        (balance.fromUserId == currentUser.id || balance.fromUserName == currentUser.name);
+    final isOtherPayingMe =
+        currentUser != null &&
+        (balance.toUserId == currentUser.id ||
+            balance.toUserName == currentUser.name);
+    final isMePayingOther =
+        currentUser != null &&
+        (balance.fromUserId == currentUser.id ||
+            balance.fromUserName == currentUser.name);
 
     final String avatarName;
     final String nameLabel;
@@ -60,8 +64,16 @@ class BalanceRow extends ConsumerWidget {
       amountColor = theme.colorScheme.oweColor;
     } else {
       avatarName = balance.fromUserName;
-      final fromLabel = _displayName(balance.fromUserId, balance.fromUserName, currentUser);
-      final toLabel = _displayName(balance.toUserId, balance.toUserName, currentUser);
+      final fromLabel = _displayName(
+        balance.fromUserId,
+        balance.fromUserName,
+        currentUser,
+      );
+      final toLabel = _displayName(
+        balance.toUserId,
+        balance.toUserName,
+        currentUser,
+      );
       nameLabel = '$fromLabel → $toLabel';
       statusText = 'Owes';
       amountColor = theme.colorScheme.onSurfaceVariant;

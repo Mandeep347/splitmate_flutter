@@ -9,11 +9,7 @@ class ErrorBanner extends StatelessWidget {
   final VoidCallback? onDismiss;
 
   /// Creates an [ErrorBanner].
-  const ErrorBanner({
-    super.key,
-    required this.message,
-    this.onDismiss,
-  });
+  const ErrorBanner({super.key, required this.message, this.onDismiss});
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +23,7 @@ class ErrorBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.error_outline,
-            color: theme.colorScheme.onErrorContainer,
-          ),
+          Icon(Icons.error_outline, color: theme.colorScheme.onErrorContainer),
           const SizedBox(width: 12),
           Expanded(
             child: Text(

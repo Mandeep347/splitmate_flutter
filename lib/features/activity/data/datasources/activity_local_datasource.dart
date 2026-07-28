@@ -25,9 +25,7 @@ class ActivityLocalDatasource implements IActivityLocalDatasource {
   final IHiveStorageService storage;
 
   /// Creates a new [ActivityLocalDatasource] instance.
-  const ActivityLocalDatasource({
-    required this.storage,
-  });
+  const ActivityLocalDatasource({required this.storage});
 
   static const String _boxName = StorageKeys.activityCacheBox;
 
@@ -47,7 +45,9 @@ class ActivityLocalDatasource implements IActivityLocalDatasource {
       if (jsonString == null) return null;
       final list = jsonDecode(jsonString) as List<dynamic>;
       return list
-          .map((item) => ActivityItemModel.fromJson(item as Map<String, dynamic>))
+          .map(
+            (item) => ActivityItemModel.fromJson(item as Map<String, dynamic>),
+          )
           .toList();
     } catch (_) {
       return null;
@@ -61,7 +61,9 @@ class ActivityLocalDatasource implements IActivityLocalDatasource {
 }
 
 /// Provider exposing [IActivityLocalDatasource] implementation.
-final activityLocalDatasourceProvider = Provider<IActivityLocalDatasource>((ref) {
+final activityLocalDatasourceProvider = Provider<IActivityLocalDatasource>((
+  ref,
+) {
   final storageService = ref.watch(hiveStorageServiceProvider);
   return ActivityLocalDatasource(storage: storageService);
 });

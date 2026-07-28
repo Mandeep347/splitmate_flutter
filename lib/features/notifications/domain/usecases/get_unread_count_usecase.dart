@@ -8,9 +8,7 @@ class GetUnreadCountUseCase {
   final INotificationRepository repository;
 
   /// Creates a new [GetUnreadCountUseCase] instance.
-  const GetUnreadCountUseCase({
-    required this.repository,
-  });
+  const GetUnreadCountUseCase({required this.repository});
 
   /// Executes the usecase.
   Future<int> call() async {
@@ -35,7 +33,8 @@ extension on NetworkClientException {
   String? get errorCode {
     if (this is BusinessRuleException) {
       final br = this as BusinessRuleException;
-      return br.errors?['code'] as String? ?? br.errors?['errorCode'] as String?;
+      return br.errors?['code'] as String? ??
+          br.errors?['errorCode'] as String?;
     }
     return null;
   }

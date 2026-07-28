@@ -15,5 +15,6 @@ typedef SessionExpiredCallback = void Function();
 /// The network interceptor reads and invokes it on session expiry.
 /// Using a plain Riverpod [StateProvider] keeps this decoupled
 /// from both layers — neither imports the other directly.
-final sessionExpiredCallbackProvider =
-    StateProvider<SessionExpiredCallback?>((ref) => null);
+final sessionExpiredCallbackProvider = StateProvider<SessionExpiredCallback?>(
+  (ref) => null,
+);

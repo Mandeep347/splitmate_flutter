@@ -8,9 +8,7 @@ import '../models/user_overall_balance_model.dart';
 /// Abstract contract for retrieving group and overall user balances from API endpoints.
 abstract interface class IBalanceRemoteDatasource {
   /// Fetches pairwise group balances.
-  Future<GroupBalancesModel> getGroupBalances({
-    required String groupId,
-  });
+  Future<GroupBalancesModel> getGroupBalances({required String groupId});
 
   /// Fetches optimized simplified group balances.
   Future<SimplifiedBalancesModel> getSimplifiedBalances({
@@ -27,14 +25,10 @@ class BalanceRemoteDatasource implements IBalanceRemoteDatasource {
   final DioClient client;
 
   /// Creates a new [BalanceRemoteDatasource] instance.
-  const BalanceRemoteDatasource({
-    required this.client,
-  });
+  const BalanceRemoteDatasource({required this.client});
 
   @override
-  Future<GroupBalancesModel> getGroupBalances({
-    required String groupId,
-  }) async {
+  Future<GroupBalancesModel> getGroupBalances({required String groupId}) async {
     final response = await client.get<Map<String, dynamic>>(
       ApiEndpoints.groupBalances(groupId),
     );
@@ -53,17 +47,20 @@ class BalanceRemoteDatasource implements IBalanceRemoteDatasource {
 
   @override
   Future<List<UserOverallBalanceModel>> getMyOverallBalances() async {
-    final response = await client.get<List<dynamic>>(
-      ApiEndpoints.myBalances,
-    );
+    final response = await client.get<List<dynamic>>(ApiEndpoints.myBalances);
     return response.data!
-        .map((item) => UserOverallBalanceModel.fromJson(item as Map<String, dynamic>))
+        .map(
+          (item) =>
+              UserOverallBalanceModel.fromJson(item as Map<String, dynamic>),
+        )
         .toList();
   }
 }
 
 /// Provider exposing [IBalanceRemoteDatasource].
-final balanceRemoteDatasourceProvider = Provider<IBalanceRemoteDatasource>((ref) {
+final balanceRemoteDatasourceProvider = Provider<IBalanceRemoteDatasource>((
+  ref,
+) {
   final client = ref.watch(dioClientProvider);
   return BalanceRemoteDatasource(client: client);
 });

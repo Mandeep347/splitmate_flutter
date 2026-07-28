@@ -7,23 +7,23 @@ part of 'pairwise_balance_model.dart';
 // **************************************************************************
 
 _$PairwiseBalanceModelImpl _$$PairwiseBalanceModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$PairwiseBalanceModelImpl(
-      fromUserId: json['from_user_id'] as String,
-      fromUserName: json['from_user_name'] as String,
-      toUserId: json['to_user_id'] as String,
-      toUserName: json['to_user_name'] as String,
-      amount: json['amount'] as String,
-      currency: json['currency'] as String,
-    );
+  Map<String, dynamic> json,
+) => _$PairwiseBalanceModelImpl(
+  fromUserId: json['from_user_id'] as String,
+  fromUserName: json['from_user_name'] as String,
+  toUserId: json['to_user_id'] as String,
+  toUserName: json['to_user_name'] as String,
+  amount: json['amount'] as String,
+  currency: json['currency'] as String,
+);
 
 Map<String, dynamic> _$$PairwiseBalanceModelImplToJson(
-        _$PairwiseBalanceModelImpl instance) =>
-    <String, dynamic>{
-      'from_user_id': instance.fromUserId,
-      'from_user_name': instance.fromUserName,
-      'to_user_id': instance.toUserId,
-      'to_user_name': instance.toUserName,
-      'amount': instance.amount,
-      'currency': instance.currency,
-    };
+  _$PairwiseBalanceModelImpl instance,
+) => <String, dynamic>{
+  'from_user_id': instance.fromUserId,
+  'from_user_name': instance.fromUserName,
+  'to_user_id': instance.toUserId,
+  'to_user_name': instance.toUserName,
+  'amount': instance.amount,
+  'currency': instance.currency,
+};

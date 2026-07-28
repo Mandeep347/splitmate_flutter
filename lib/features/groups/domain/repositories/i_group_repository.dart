@@ -10,16 +10,10 @@ abstract interface class IGroupRepository {
   Future<Group> getGroupById({required String groupId});
 
   /// Creates a new group with a given name and default currency.
-  Future<Group> createGroup({
-    required String name,
-    required String currency,
-  });
+  Future<Group> createGroup({required String name, required String currency});
 
   /// Updates details of an existing group.
-  Future<Group> updateGroup({
-    required String groupId,
-    required String name,
-  });
+  Future<Group> updateGroup({required String groupId, required String name});
 
   /// Archives a specific group by its ID.
   Future<Group> archiveGroup({required String groupId});
@@ -34,8 +28,5 @@ abstract interface class IGroupRepository {
   });
 
   /// Removes an existing member from a group.
-  Future<void> removeMember({
-    required String groupId,
-    required String userId,
-  });
+  Future<void> removeMember({required String groupId, required String userId});
 }

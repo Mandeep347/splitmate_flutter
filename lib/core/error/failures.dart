@@ -12,10 +12,7 @@ abstract class Failure {
 class ServerFailure extends Failure {
   final int? statusCode;
 
-  const ServerFailure(
-    super.message, {
-    this.statusCode,
-  });
+  const ServerFailure(super.message, {this.statusCode});
 }
 
 /// Represents failures caused by network issues (no internet connection).
@@ -32,8 +29,5 @@ class CacheFailure extends Failure {
 class ValidationFailure extends Failure {
   final Map<String, List<String>> errors;
 
-  const ValidationFailure(
-    super.message, {
-    required this.errors,
-  });
+  const ValidationFailure(super.message, {required this.errors});
 }

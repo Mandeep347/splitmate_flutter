@@ -38,14 +38,9 @@ class OverallBalanceCard extends ConsumerWidget {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF0F172A),
-              Color(0xFF1E1B4B),
-            ],
+            colors: [Color(0xFF0F172A), Color(0xFF1E1B4B)],
           ),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.15),
-          ),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.2),
@@ -98,9 +93,7 @@ class OverallBalanceCard extends ConsumerWidget {
             Color(0xFF0E131F), // Dark Navy
           ],
         ),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.15),
-        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.25),
@@ -152,10 +145,14 @@ class OverallBalanceCard extends ConsumerWidget {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFEF4444).withValues(alpha: 0.2),
+                              color: const Color(
+                                0xFFEF4444,
+                              ).withValues(alpha: 0.2),
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: const Color(0xFFEF4444).withValues(alpha: 0.4),
+                                color: const Color(
+                                  0xFFEF4444,
+                                ).withValues(alpha: 0.4),
                               ),
                             ),
                             child: const Icon(
@@ -184,10 +181,11 @@ class OverallBalanceCard extends ConsumerWidget {
                                   child: AmountDisplay(
                                     amount: totalOwed,
                                     currency: currency,
-                                    style: theme.textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFFFCA5A5),
-                                    ),
+                                    style: theme.textTheme.titleMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFFFCA5A5),
+                                        ),
                                     color: const Color(0xFFFCA5A5),
                                   ),
                                 ),
@@ -212,10 +210,14 @@ class OverallBalanceCard extends ConsumerWidget {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF10B981).withValues(alpha: 0.2),
+                              color: const Color(
+                                0xFF10B981,
+                              ).withValues(alpha: 0.2),
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: const Color(0xFF10B981).withValues(alpha: 0.4),
+                                color: const Color(
+                                  0xFF10B981,
+                                ).withValues(alpha: 0.4),
                               ),
                             ),
                             child: const Icon(
@@ -244,10 +246,11 @@ class OverallBalanceCard extends ConsumerWidget {
                                   child: AmountDisplay(
                                     amount: totalOwedToMe,
                                     currency: currency,
-                                    style: theme.textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF6EE7B7),
-                                    ),
+                                    style: theme.textTheme.titleMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF6EE7B7),
+                                        ),
                                     color: const Color(0xFF6EE7B7),
                                   ),
                                 ),

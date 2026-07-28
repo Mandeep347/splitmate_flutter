@@ -12,7 +12,9 @@ import 'package:splito_flutter/features/groups/domain/repositories/i_group_repos
 import 'package:splito_flutter/features/groups/presentation/providers/group_providers.dart';
 
 class MockIGroupRepository extends Mock implements IGroupRepository {}
+
 class MockIGroupLocalDatasource extends Mock implements IGroupLocalDatasource {}
+
 class MockILogger extends Mock implements ILogger {}
 
 void main() {
@@ -47,7 +49,9 @@ void main() {
     mockLogger = MockILogger();
 
     // Stub local datasource groups cache get to prevent type errors on null fallback triggers
-    when(() => mockLocalDatasource.getCachedGroups()).thenAnswer((_) async => null);
+    when(
+      () => mockLocalDatasource.getCachedGroups(),
+    ).thenAnswer((_) async => null);
 
     container = ProviderContainer(
       overrides: [
@@ -67,7 +71,9 @@ void main() {
 
   group('MyGroupsNotifier', () {
     test('emits AsyncData with groups list on successful build', () async {
-      when(() => mockRepository.getMyGroups()).thenAnswer((_) async => [tGroup]);
+      when(
+        () => mockRepository.getMyGroups(),
+      ).thenAnswer((_) async => [tGroup]);
 
       final result = await container.read(myGroupsProvider.future);
 
@@ -76,7 +82,9 @@ void main() {
     });
 
     test('emits AsyncError when usecase throws Failure', () async {
-      when(() => mockRepository.getMyGroups()).thenThrow(const NetworkFailure('No Internet'));
+      when(
+        () => mockRepository.getMyGroups(),
+      ).thenThrow(const NetworkFailure('No Internet'));
 
       expect(
         () => container.read(myGroupsProvider.future),
@@ -85,13 +93,12 @@ void main() {
     });
 
     test('refresh() rebuilds provider', () async {
-      when(() => mockRepository.getMyGroups()).thenAnswer((_) async => [tGroup]);
+      when(
+        () => mockRepository.getMyGroups(),
+      ).thenAnswer((_) async => [tGroup]);
 
       // Listen to the provider to keep it active and rebuild immediately upon invalidation
-      container.listen(
-        myGroupsProvider,
-        (_, __) {},
-      );
+      container.listen(myGroupsProvider, (_, __) {});
 
       // Initial load
       await container.read(myGroupsProvider.future);

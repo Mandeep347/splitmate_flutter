@@ -9,11 +9,7 @@ class ActivityIcon extends StatelessWidget {
   final double size;
 
   /// Creates a new [ActivityIcon] instance.
-  const ActivityIcon({
-    required this.iconKey,
-    this.size = 20,
-    super.key,
-  });
+  const ActivityIcon({required this.iconKey, this.size = 20, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +32,6 @@ class ActivityIcon extends StatelessWidget {
       iconData = Icons.history_outlined;
     }
 
-    return Icon(
-      iconData,
-      size: size,
-      color: theme.colorScheme.primary,
-    );
+    return Icon(iconData, size: size, color: theme.colorScheme.primary);
   }
 }

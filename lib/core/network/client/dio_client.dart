@@ -50,10 +50,7 @@ final dioProvider = Provider<Dio>((ref) {
   final refreshDio = ref.watch(refreshDioProvider);
 
   dioClient.interceptors.addAll([
-    AuthInterceptor(
-      secureStorage: secureStorage,
-      refreshDio: refreshDio,
-    ),
+    AuthInterceptor(secureStorage: secureStorage, refreshDio: refreshDio),
     const LoggingInterceptor(),
     RetryInterceptor(dio: dioClient),
   ]);

@@ -39,11 +39,14 @@ class AppErrorHandler {
         return 'User already registered';
       }
       if (code == 'UNAUTHORIZED') {
-        return error.message.isNotEmpty && error.message != 'An HTTP error occurred'
+        return error.message.isNotEmpty &&
+                error.message != 'An HTTP error occurred'
             ? error.message
             : 'Incorrect email or password.';
       }
-      return error.message.isNotEmpty ? error.message : 'Authentication failed.';
+      return error.message.isNotEmpty
+          ? error.message
+          : 'Authentication failed.';
     }
     if (error is NetworkFailure) {
       return 'No internet connection. Please try again.';
@@ -56,7 +59,8 @@ class AppErrorHandler {
       if (code == 'VALIDATION_ERROR') {
         return error.message;
       }
-      return error.message.isNotEmpty && error.message != 'An HTTP error occurred'
+      return error.message.isNotEmpty &&
+              error.message != 'An HTTP error occurred'
           ? error.message
           : 'Something went wrong. Please try again.';
     }
@@ -64,7 +68,9 @@ class AppErrorHandler {
       return 'An unexpected error occurred.';
     }
     if (error is Failure) {
-      return error.message.isNotEmpty ? error.message : 'An unexpected error occurred.';
+      return error.message.isNotEmpty
+          ? error.message
+          : 'An unexpected error occurred.';
     }
     return 'An unexpected error occurred.';
   }

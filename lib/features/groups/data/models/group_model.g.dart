@@ -15,7 +15,8 @@ _$GroupModelImpl _$$GroupModelImplFromJson(Map<String, dynamic> json) =>
       createdBy: json['created_by'] as String,
       createdAt: json['created_at'] as String,
       membersCount: (json['members_count'] as num).toInt(),
-      members: (json['members'] as List<dynamic>?)
+      members:
+          (json['members'] as List<dynamic>?)
               ?.map((e) => GroupMemberModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],

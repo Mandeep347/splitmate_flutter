@@ -39,7 +39,11 @@ class ActivityRepositoryImpl implements IActivityRepository {
     // Fetch group details, expenses (first 1000 items), and settlements in parallel
     final futures = await Future.wait([
       groupRepository.getGroupById(groupId: groupId),
-      expenseRepository.getGroupExpenses(groupId: groupId, page: 1, limit: 1000),
+      expenseRepository.getGroupExpenses(
+        groupId: groupId,
+        page: 1,
+        limit: 1000,
+      ),
       settlementRepository.getGroupSettlements(groupId: groupId),
     ]);
 
@@ -51,59 +55,68 @@ class ActivityRepositoryImpl implements IActivityRepository {
 
     // 1. MEMBER_ADDED activities (for each member in the group)
     for (final member in group.members) {
-      allActivities.add(ActivityItem(
-        id: 'member-joined-${member.userId}',
-        groupId: groupId,
-        type: 'MEMBER_ADDED',
-        actorName: member.name,
-        actorUserId: member.userId,
-        description: '${member.name} joined the group',
-        createdAt: member.joinedAt,
-      ));
+      allActivities.add(
+        ActivityItem(
+          id: 'member-joined-${member.userId}',
+          groupId: groupId,
+          type: 'MEMBER_ADDED',
+          actorName: member.name,
+          actorUserId: member.userId,
+          description: '${member.name} joined the group',
+          createdAt: member.joinedAt,
+        ),
+      );
     }
 
     // 2. EXPENSE_CREATED (and potentially EXPENSE_REVERSED) activities
     for (final expense in paginatedExpenses.items) {
-      allActivities.add(ActivityItem(
-        id: 'expense-created-${expense.id}',
-        groupId: groupId,
-        type: 'EXPENSE_CREATED',
-        actorName: expense.paidByName,
-        actorUserId: expense.paidByUserId,
-        description: '${expense.paidByName} added "${expense.title}"',
-        entityId: expense.id,
-        entityType: 'expense',
-        createdAt: expense.createdAt,
-      ));
-
-      if (expense.status == 'REVERSED') {
-        allActivities.add(ActivityItem(
-          id: 'expense-reversed-${expense.id}',
+      allActivities.add(
+        ActivityItem(
+          id: 'expense-created-${expense.id}',
           groupId: groupId,
-          type: 'EXPENSE_REVERSED',
+          type: 'EXPENSE_CREATED',
           actorName: expense.paidByName,
           actorUserId: expense.paidByUserId,
-          description: '"${expense.title}" was reversed',
+          description: '${expense.paidByName} added "${expense.title}"',
           entityId: expense.id,
           entityType: 'expense',
-          createdAt: expense.createdAt.add(const Duration(seconds: 1)),
-        ));
+          createdAt: expense.createdAt,
+        ),
+      );
+
+      if (expense.status == 'REVERSED') {
+        allActivities.add(
+          ActivityItem(
+            id: 'expense-reversed-${expense.id}',
+            groupId: groupId,
+            type: 'EXPENSE_REVERSED',
+            actorName: expense.paidByName,
+            actorUserId: expense.paidByUserId,
+            description: '"${expense.title}" was reversed',
+            entityId: expense.id,
+            entityType: 'expense',
+            createdAt: expense.createdAt.add(const Duration(seconds: 1)),
+          ),
+        );
       }
     }
 
     // 3. SETTLEMENT_RECORDED activities
     for (final settlement in settlements) {
-      allActivities.add(ActivityItem(
-        id: 'settlement-recorded-${settlement.id}',
-        groupId: groupId,
-        type: 'SETTLEMENT_RECORDED',
-        actorName: settlement.fromUserName,
-        actorUserId: settlement.fromUserId,
-        description: '${settlement.fromUserName} paid ${settlement.toUserName}',
-        entityId: settlement.id,
-        entityType: 'settlement',
-        createdAt: settlement.createdAt,
-      ));
+      allActivities.add(
+        ActivityItem(
+          id: 'settlement-recorded-${settlement.id}',
+          groupId: groupId,
+          type: 'SETTLEMENT_RECORDED',
+          actorName: settlement.fromUserName,
+          actorUserId: settlement.fromUserId,
+          description:
+              '${settlement.fromUserName} paid ${settlement.toUserName}',
+          entityId: settlement.id,
+          entityType: 'settlement',
+          createdAt: settlement.createdAt,
+        ),
+      );
     }
 
     // Sort by createdAt descending

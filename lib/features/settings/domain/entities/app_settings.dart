@@ -41,10 +41,10 @@ class AppSettings {
 
 class _DefaultAppSettings extends AppSettings {
   const _DefaultAppSettings()
-      : super(
-          themeMode: 'system',
-          notificationsEnabled: true,
-          defaultCurrency: 'INR',
-          compactExpenseList: false,
-        );
+    : super(
+        themeMode: 'system',
+        notificationsEnabled: true,
+        defaultCurrency: 'INR',
+        compactExpenseList: false,
+      );
 }

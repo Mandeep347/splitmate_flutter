@@ -20,8 +20,8 @@ sealed class OfflineAction {
     DateTime? createdAt,
     this.retryCount = 0,
     this.maxRetries = 3,
-  })  : id = id ?? const Uuid().v4(),
-        createdAt = createdAt ?? DateTime.now();
+  }) : id = id ?? const Uuid().v4(),
+       createdAt = createdAt ?? DateTime.now();
 
   /// Whether this action can be retried.
   bool get canRetry => retryCount < maxRetries;

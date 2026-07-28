@@ -6,9 +6,7 @@ class EqualParticipantInput {
   final String userId;
 
   /// Creates a new [EqualParticipantInput] instance.
-  const EqualParticipantInput({
-    required this.userId,
-  });
+  const EqualParticipantInput({required this.userId});
 }
 
 /// Input details of a participant for an exact split.
@@ -20,10 +18,7 @@ class ExactParticipantInput {
   final double owedAmount;
 
   /// Creates a new [ExactParticipantInput] instance.
-  const ExactParticipantInput({
-    required this.userId,
-    required this.owedAmount,
-  });
+  const ExactParticipantInput({required this.userId, required this.owedAmount});
 }
 
 /// Input details of a participant for a percentage split.
@@ -50,10 +45,7 @@ class ShareParticipantInput {
   final int shares;
 
   /// Creates a new [ShareParticipantInput] instance.
-  const ShareParticipantInput({
-    required this.userId,
-    required this.shares,
-  });
+  const ShareParticipantInput({required this.userId, required this.shares});
 }
 
 /// Sealed base class representing input shapes for splitting an expense.
@@ -71,9 +63,7 @@ final class EqualSplitInput extends ExpenseSplitInput {
   final List<EqualParticipantInput> participants;
 
   /// Creates a new [EqualSplitInput] instance.
-  const EqualSplitInput({
-    required this.participants,
-  });
+  const EqualSplitInput({required this.participants});
 
   @override
   SplitType get splitType => SplitType.equal;
@@ -85,9 +75,7 @@ final class ExactSplitInput extends ExpenseSplitInput {
   final List<ExactParticipantInput> participants;
 
   /// Creates a new [ExactSplitInput] instance.
-  const ExactSplitInput({
-    required this.participants,
-  });
+  const ExactSplitInput({required this.participants});
 
   @override
   SplitType get splitType => SplitType.exact;
@@ -99,9 +87,7 @@ final class PercentageSplitInput extends ExpenseSplitInput {
   final List<PercentageParticipantInput> participants;
 
   /// Creates a new [PercentageSplitInput] instance.
-  const PercentageSplitInput({
-    required this.participants,
-  });
+  const PercentageSplitInput({required this.participants});
 
   @override
   SplitType get splitType => SplitType.percentage;
@@ -113,9 +99,7 @@ final class ShareSplitInput extends ExpenseSplitInput {
   final List<ShareParticipantInput> participants;
 
   /// Creates a new [ShareSplitInput] instance.
-  const ShareSplitInput({
-    required this.participants,
-  });
+  const ShareSplitInput({required this.participants});
 
   @override
   SplitType get splitType => SplitType.share;

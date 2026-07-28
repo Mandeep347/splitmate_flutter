@@ -8,16 +8,11 @@ class RemoveMemberUseCase {
   final IGroupRepository repository;
 
   /// Creates a new [RemoveMemberUseCase] instance.
-  const RemoveMemberUseCase({
-    required this.repository,
-  });
+  const RemoveMemberUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws a [Failure] on error.
-  Future<void> call({
-    required String groupId,
-    required String userId,
-  }) async {
+  Future<void> call({required String groupId, required String userId}) async {
     try {
       await repository.removeMember(groupId: groupId, userId: userId);
     } on Failure {
@@ -25,11 +20,7 @@ class RemoveMemberUseCase {
     } on NetworkException catch (e) {
       throw NetworkFailure(e.message);
     } on BusinessRuleException catch (e) {
-      throw BusinessRuleFailure(
-        e.message,
-        null,
-        e.errors,
-      );
+      throw BusinessRuleFailure(e.message, null, e.errors);
     } on ForbiddenException catch (e) {
       throw ServerFailure(e.message, 'FORBIDDEN');
     } on NotFoundException catch (e) {

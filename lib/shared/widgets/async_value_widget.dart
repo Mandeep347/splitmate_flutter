@@ -38,11 +38,10 @@ class AsyncValueWidget<T> extends StatelessWidget {
       skipLoadingOnRefresh: true,
       skipLoadingOnReload: true,
       data: data,
-      loading: loading ??
-          () => const Center(
-                child: CircularProgressIndicator(),
-              ),
-      error: error ??
+      loading:
+          loading ?? () => const Center(child: CircularProgressIndicator()),
+      error:
+          error ??
           (err, stack) {
             return Center(
               child: Padding(

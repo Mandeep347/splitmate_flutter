@@ -75,7 +75,8 @@ class _GlobalExpensesPageState extends ConsumerState<GlobalExpensesPage> {
                 final filtered = expenses.where((e) {
                   if (_searchQuery.isEmpty) return true;
                   return e.title.toLowerCase().contains(_searchQuery) ||
-                      (e.description?.toLowerCase().contains(_searchQuery) ?? false);
+                      (e.description?.toLowerCase().contains(_searchQuery) ??
+                          false);
                 }).toList();
 
                 if (filtered.isEmpty) {

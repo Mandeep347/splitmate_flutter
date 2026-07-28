@@ -31,9 +31,7 @@ class ExpenseLocalDatasource implements IExpenseLocalDatasource {
   final IHiveStorageService storage;
 
   /// Creates a new [ExpenseLocalDatasource] instance.
-  const ExpenseLocalDatasource({
-    required this.storage,
-  });
+  const ExpenseLocalDatasource({required this.storage});
 
   static const String _boxName = StorageKeys.expensesCacheBox;
 
@@ -43,13 +41,20 @@ class ExpenseLocalDatasource implements IExpenseLocalDatasource {
     required List<ExpenseModel> expenses,
   }) async {
     final jsonString = jsonEncode(expenses.map((e) => e.toJson()).toList());
-    await storage.write<String>(_boxName, 'group_expenses_$groupId', jsonString);
+    await storage.write<String>(
+      _boxName,
+      'group_expenses_$groupId',
+      jsonString,
+    );
   }
 
   @override
   Future<List<ExpenseModel>?> getCachedGroupExpenses(String groupId) async {
     try {
-      final jsonString = storage.read<String>(_boxName, 'group_expenses_$groupId');
+      final jsonString = storage.read<String>(
+        _boxName,
+        'group_expenses_$groupId',
+      );
       if (jsonString == null) return null;
       final list = jsonDecode(jsonString) as List<dynamic>;
       return list

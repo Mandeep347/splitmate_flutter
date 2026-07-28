@@ -16,22 +16,26 @@ import 'package:splito_flutter/core/utils/provider_ttl.dart';
 // ============================================================================
 
 /// Provider exposing [GetGroupBalancesUseCase].
-final getGroupBalancesUseCaseProvider = Provider<GetGroupBalancesUseCase>((ref) {
+final getGroupBalancesUseCaseProvider = Provider<GetGroupBalancesUseCase>((
+  ref,
+) {
   final repository = ref.watch(balanceRepositoryProvider);
   return GetGroupBalancesUseCase(repository: repository);
 });
 
 /// Provider exposing [GetSimplifiedBalancesUseCase].
-final getSimplifiedBalancesUseCaseProvider = Provider<GetSimplifiedBalancesUseCase>((ref) {
-  final repository = ref.watch(balanceRepositoryProvider);
-  return GetSimplifiedBalancesUseCase(repository: repository);
-});
+final getSimplifiedBalancesUseCaseProvider =
+    Provider<GetSimplifiedBalancesUseCase>((ref) {
+      final repository = ref.watch(balanceRepositoryProvider);
+      return GetSimplifiedBalancesUseCase(repository: repository);
+    });
 
 /// Provider exposing [GetMyOverallBalancesUseCase].
-final getMyOverallBalancesUseCaseProvider = Provider<GetMyOverallBalancesUseCase>((ref) {
-  final repository = ref.watch(balanceRepositoryProvider);
-  return GetMyOverallBalancesUseCase(repository: repository);
-});
+final getMyOverallBalancesUseCaseProvider =
+    Provider<GetMyOverallBalancesUseCase>((ref) {
+      final repository = ref.watch(balanceRepositoryProvider);
+      return GetMyOverallBalancesUseCase(repository: repository);
+    });
 
 // ============================================================================
 // SECTION B — Group Balances (raw pairwise)
@@ -62,16 +66,19 @@ class GroupBalancesNotifier extends FamilyAsyncNotifier<GroupBalances, String> {
 
 /// Family provider exposing the non-simplified pairwise balances of a group.
 final groupBalancesProvider =
-    AsyncNotifierProvider.family<GroupBalancesNotifier, GroupBalances, String>(() {
-  return GroupBalancesNotifier();
-});
+    AsyncNotifierProvider.family<GroupBalancesNotifier, GroupBalances, String>(
+      () {
+        return GroupBalancesNotifier();
+      },
+    );
 
 // ============================================================================
 // SECTION C — Simplified Balances (debt minimisation)
 // ============================================================================
 
 /// Notifier that manages retrieving and listing simplified optimized group balances.
-class SimplifiedBalancesNotifier extends FamilyAsyncNotifier<SimplifiedBalances, String> {
+class SimplifiedBalancesNotifier
+    extends FamilyAsyncNotifier<SimplifiedBalances, String> {
   @override
   FutureOr<SimplifiedBalances> build(String groupId) {
     final isAuthenticated = ref.watch(authStateProvider);
@@ -95,16 +102,21 @@ class SimplifiedBalancesNotifier extends FamilyAsyncNotifier<SimplifiedBalances,
 
 /// Family provider exposing the simplified group balances.
 final simplifiedBalancesProvider =
-    AsyncNotifierProvider.family<SimplifiedBalancesNotifier, SimplifiedBalances, String>(() {
-  return SimplifiedBalancesNotifier();
-});
+    AsyncNotifierProvider.family<
+      SimplifiedBalancesNotifier,
+      SimplifiedBalances,
+      String
+    >(() {
+      return SimplifiedBalancesNotifier();
+    });
 
 // ============================================================================
 // SECTION D — User Overall Balances (cross-group dashboard)
 // ============================================================================
 
 /// Notifier that manages retrieving the current user's net overall balances across all groups.
-class MyOverallBalancesNotifier extends AsyncNotifier<List<UserOverallBalance>> {
+class MyOverallBalancesNotifier
+    extends AsyncNotifier<List<UserOverallBalance>> {
   @override
   FutureOr<List<UserOverallBalance>> build() {
     final isAuthenticated = ref.watch(authStateProvider);
@@ -127,9 +139,11 @@ class MyOverallBalancesNotifier extends AsyncNotifier<List<UserOverallBalance>> 
 
 /// Provider exposing the net balances of the current user across all groups.
 final myOverallBalancesProvider =
-    AsyncNotifierProvider<MyOverallBalancesNotifier, List<UserOverallBalance>>(() {
-  return MyOverallBalancesNotifier();
-});
+    AsyncNotifierProvider<MyOverallBalancesNotifier, List<UserOverallBalance>>(
+      () {
+        return MyOverallBalancesNotifier();
+      },
+    );
 
 // ============================================================================
 // SECTION E — Derived providers for the dashboard
@@ -138,7 +152,9 @@ final myOverallBalancesProvider =
 /// Total amount the current user owes across all groups.
 final totalOwedProvider = Provider<double>((ref) {
   final balancesAsync = ref.watch(myOverallBalancesProvider);
-  final balances = balancesAsync.hasValue ? balancesAsync.requireValue : <UserOverallBalance>[];
+  final balances = balancesAsync.hasValue
+      ? balancesAsync.requireValue
+      : <UserOverallBalance>[];
   return balances
       .where((b) => b.youOwe)
       .fold(0.0, (double sum, b) => sum + b.absAmount);
@@ -147,7 +163,9 @@ final totalOwedProvider = Provider<double>((ref) {
 /// Total amount owed TO the current user across all groups.
 final totalOwedToMeProvider = Provider<double>((ref) {
   final balancesAsync = ref.watch(myOverallBalancesProvider);
-  final balances = balancesAsync.hasValue ? balancesAsync.requireValue : <UserOverallBalance>[];
+  final balances = balancesAsync.hasValue
+      ? balancesAsync.requireValue
+      : <UserOverallBalance>[];
   return balances
       .where((b) => b.theyOwe)
       .fold(0.0, (double sum, b) => sum + b.absAmount);

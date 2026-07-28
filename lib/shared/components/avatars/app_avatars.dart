@@ -23,7 +23,8 @@ class AppAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final fallbackBgColor = backgroundColor ?? theme.colorScheme.primaryContainer;
+    final fallbackBgColor =
+        backgroundColor ?? theme.colorScheme.primaryContainer;
     final fallbackTextColor = textColor ?? theme.colorScheme.onPrimaryContainer;
 
     Widget avatarContent = Icon(
@@ -68,7 +69,7 @@ class AppAvatar extends StatelessWidget {
                     strokeWidth: 2,
                     value: loadingProgress.expectedTotalBytes != null
                         ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
+                              loadingProgress.expectedTotalBytes!
                         : null,
                   ),
                 ),
@@ -93,12 +94,7 @@ class UserAvatar extends StatelessWidget {
   final String? name;
   final double size;
 
-  const UserAvatar({
-    super.key,
-    this.imageUrl,
-    this.name,
-    this.size = 40.0,
-  });
+  const UserAvatar({super.key, this.imageUrl, this.name, this.size = 40.0});
 
   /// Parse initials (e.g. "John Doe" -> "JD").
   String? get _initials {
@@ -171,7 +167,9 @@ class AvatarStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final visibleCount = avatars.length > maxVisible ? maxVisible : avatars.length;
+    final visibleCount = avatars.length > maxVisible
+        ? maxVisible
+        : avatars.length;
     final extraCount = avatars.length - visibleCount;
 
     return Row(
@@ -180,7 +178,10 @@ class AvatarStack extends StatelessWidget {
         SizedBox(
           height: size,
           // Calculate overall stack width based on overlapping offsets
-          width: visibleCount * (size - overlapOffset) + overlapOffset + (extraCount > 0 ? 32 : 0),
+          width:
+              visibleCount * (size - overlapOffset) +
+              overlapOffset +
+              (extraCount > 0 ? 32 : 0),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -205,7 +206,9 @@ class AvatarStack extends StatelessWidget {
                     width: size,
                     height: size,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: Theme.of(context).scaffoldBackgroundColor,

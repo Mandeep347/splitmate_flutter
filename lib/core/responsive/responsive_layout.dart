@@ -27,7 +27,8 @@ class ResponsiveLayout extends StatelessWidget {
   /// Returns true if the screen width is between mobile and desktop breakpoints.
   static bool isTablet(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    return width >= ResponsiveBreakpoints.mobileMax && width < ResponsiveBreakpoints.tabletMax;
+    return width >= ResponsiveBreakpoints.mobileMax &&
+        width < ResponsiveBreakpoints.tabletMax;
   }
 
   /// Returns true if the screen width is greater than or equal to the desktop breakpoint.

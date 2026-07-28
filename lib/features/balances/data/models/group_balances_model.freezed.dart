@@ -12,7 +12,8 @@ part of 'group_balances_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 GroupBalancesModel _$GroupBalancesModelFromJson(Map<String, dynamic> json) {
   return _GroupBalancesModel.fromJson(json);
@@ -34,13 +35,15 @@ mixin _$GroupBalancesModel {
 /// @nodoc
 abstract class $GroupBalancesModelCopyWith<$Res> {
   factory $GroupBalancesModelCopyWith(
-          GroupBalancesModel value, $Res Function(GroupBalancesModel) then) =
-      _$GroupBalancesModelCopyWithImpl<$Res, GroupBalancesModel>;
+    GroupBalancesModel value,
+    $Res Function(GroupBalancesModel) then,
+  ) = _$GroupBalancesModelCopyWithImpl<$Res, GroupBalancesModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'group_id') String groupId,
-      String currency,
-      List<PairwiseBalanceModel> balances});
+  $Res call({
+    @JsonKey(name: 'group_id') String groupId,
+    String currency,
+    List<PairwiseBalanceModel> balances,
+  });
 }
 
 /// @nodoc
@@ -60,44 +63,50 @@ class _$GroupBalancesModelCopyWithImpl<$Res, $Val extends GroupBalancesModel>
     Object? currency = null,
     Object? balances = null,
   }) {
-    return _then(_value.copyWith(
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-      balances: null == balances
-          ? _value.balances
-          : balances // ignore: cast_nullable_to_non_nullable
-              as List<PairwiseBalanceModel>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            groupId: null == groupId
+                ? _value.groupId
+                : groupId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            currency: null == currency
+                ? _value.currency
+                : currency // ignore: cast_nullable_to_non_nullable
+                      as String,
+            balances: null == balances
+                ? _value.balances
+                : balances // ignore: cast_nullable_to_non_nullable
+                      as List<PairwiseBalanceModel>,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$GroupBalancesModelImplCopyWith<$Res>
     implements $GroupBalancesModelCopyWith<$Res> {
-  factory _$$GroupBalancesModelImplCopyWith(_$GroupBalancesModelImpl value,
-          $Res Function(_$GroupBalancesModelImpl) then) =
-      __$$GroupBalancesModelImplCopyWithImpl<$Res>;
+  factory _$$GroupBalancesModelImplCopyWith(
+    _$GroupBalancesModelImpl value,
+    $Res Function(_$GroupBalancesModelImpl) then,
+  ) = __$$GroupBalancesModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'group_id') String groupId,
-      String currency,
-      List<PairwiseBalanceModel> balances});
+  $Res call({
+    @JsonKey(name: 'group_id') String groupId,
+    String currency,
+    List<PairwiseBalanceModel> balances,
+  });
 }
 
 /// @nodoc
 class __$$GroupBalancesModelImplCopyWithImpl<$Res>
     extends _$GroupBalancesModelCopyWithImpl<$Res, _$GroupBalancesModelImpl>
     implements _$$GroupBalancesModelImplCopyWith<$Res> {
-  __$$GroupBalancesModelImplCopyWithImpl(_$GroupBalancesModelImpl _value,
-      $Res Function(_$GroupBalancesModelImpl) _then)
-      : super(_value, _then);
+  __$$GroupBalancesModelImplCopyWithImpl(
+    _$GroupBalancesModelImpl _value,
+    $Res Function(_$GroupBalancesModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -106,32 +115,34 @@ class __$$GroupBalancesModelImplCopyWithImpl<$Res>
     Object? currency = null,
     Object? balances = null,
   }) {
-    return _then(_$GroupBalancesModelImpl(
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-      balances: null == balances
-          ? _value._balances
-          : balances // ignore: cast_nullable_to_non_nullable
-              as List<PairwiseBalanceModel>,
-    ));
+    return _then(
+      _$GroupBalancesModelImpl(
+        groupId: null == groupId
+            ? _value.groupId
+            : groupId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        currency: null == currency
+            ? _value.currency
+            : currency // ignore: cast_nullable_to_non_nullable
+                  as String,
+        balances: null == balances
+            ? _value._balances
+            : balances // ignore: cast_nullable_to_non_nullable
+                  as List<PairwiseBalanceModel>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$GroupBalancesModelImpl extends _GroupBalancesModel {
-  const _$GroupBalancesModelImpl(
-      {@JsonKey(name: 'group_id') required this.groupId,
-      required this.currency,
-      required final List<PairwiseBalanceModel> balances})
-      : _balances = balances,
-        super._();
+  const _$GroupBalancesModelImpl({
+    @JsonKey(name: 'group_id') required this.groupId,
+    required this.currency,
+    required final List<PairwiseBalanceModel> balances,
+  }) : _balances = balances,
+       super._();
 
   factory _$GroupBalancesModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$GroupBalancesModelImplFromJson(json);
@@ -167,30 +178,34 @@ class _$GroupBalancesModelImpl extends _GroupBalancesModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, groupId, currency,
-      const DeepCollectionEquality().hash(_balances));
+  int get hashCode => Object.hash(
+    runtimeType,
+    groupId,
+    currency,
+    const DeepCollectionEquality().hash(_balances),
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$GroupBalancesModelImplCopyWith<_$GroupBalancesModelImpl> get copyWith =>
       __$$GroupBalancesModelImplCopyWithImpl<_$GroupBalancesModelImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GroupBalancesModelImplToJson(
-      this,
-    );
+    return _$$GroupBalancesModelImplToJson(this);
   }
 }
 
 abstract class _GroupBalancesModel extends GroupBalancesModel {
-  const factory _GroupBalancesModel(
-          {@JsonKey(name: 'group_id') required final String groupId,
-          required final String currency,
-          required final List<PairwiseBalanceModel> balances}) =
-      _$GroupBalancesModelImpl;
+  const factory _GroupBalancesModel({
+    @JsonKey(name: 'group_id') required final String groupId,
+    required final String currency,
+    required final List<PairwiseBalanceModel> balances,
+  }) = _$GroupBalancesModelImpl;
   const _GroupBalancesModel._() : super._();
 
   factory _GroupBalancesModel.fromJson(Map<String, dynamic> json) =

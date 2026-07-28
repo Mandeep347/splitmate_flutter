@@ -12,7 +12,10 @@ class ResetPasswordUseCase {
 
   /// Executes the password reset operation.
   /// Throws a [Failure] subclass on error.
-  Future<void> call({required String token, required String newPassword}) async {
+  Future<void> call({
+    required String token,
+    required String newPassword,
+  }) async {
     try {
       await repository.resetPassword(token: token, newPassword: newPassword);
     } on NetworkException catch (e) {

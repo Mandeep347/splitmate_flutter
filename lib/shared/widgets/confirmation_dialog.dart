@@ -26,10 +26,7 @@ class ConfirmationDialog {
               fontWeight: FontWeight.bold,
             ),
           ),
-          content: Text(
-            message,
-            style: theme.textTheme.bodyMedium,
-          ),
+          content: Text(message, style: theme.textTheme.bodyMedium),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -45,7 +42,9 @@ class ConfirmationDialog {
               child: Text(
                 confirmLabel,
                 style: theme.textTheme.labelLarge?.copyWith(
-                  color: isDestructive ? theme.colorScheme.error : theme.colorScheme.primary,
+                  color: isDestructive
+                      ? theme.colorScheme.error
+                      : theme.colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),

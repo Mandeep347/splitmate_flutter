@@ -4,10 +4,7 @@ import '../entities/logged_in_user.dart';
 /// Abstract contract defining authentication repository operations.
 abstract interface class IAuthRepository {
   /// Authenticates user credentials and returns JWT credentials.
-  Future<AuthTokens> login({
-    required String email,
-    required String password,
-  });
+  Future<AuthTokens> login({required String email, required String password});
 
   /// Registers a new user account profile.
   Future<LoggedInUser> register({
@@ -17,9 +14,7 @@ abstract interface class IAuthRepository {
   });
 
   /// Renews an expired access token using a refresh token.
-  Future<AuthTokens> refreshTokens({
-    required String refreshToken,
-  });
+  Future<AuthTokens> refreshTokens({required String refreshToken});
 
   /// Fetches details of the currently authenticated user.
   Future<LoggedInUser> getMe();
@@ -31,10 +26,7 @@ abstract interface class IAuthRepository {
   Future<bool> isAuthenticated();
 
   /// Updates details of the currently authenticated user profile.
-  Future<LoggedInUser> updateMe({
-    String? name,
-    String? preferredCurrency,
-  });
+  Future<LoggedInUser> updateMe({String? name, String? preferredCurrency});
 
   /// Verifies user email address.
   Future<void> verifyEmail({required String token});
@@ -46,5 +38,8 @@ abstract interface class IAuthRepository {
   Future<void> forgotPassword({required String email});
 
   /// Resets user password using a token.
-  Future<void> resetPassword({required String token, required String newPassword});
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  });
 }

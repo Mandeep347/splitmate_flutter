@@ -21,8 +21,9 @@ void main() {
         addressLookup: (_) async => [InternetAddress('8.8.8.8')],
       );
 
-      when(() => mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => [ConnectivityResult.none]);
+      when(
+        () => mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.none]);
 
       final result = await service.isOnline();
 
@@ -35,8 +36,9 @@ void main() {
         addressLookup: (_) async => [InternetAddress('8.8.8.8')],
       );
 
-      when(() => mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => [ConnectivityResult.wifi]);
+      when(
+        () => mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.wifi]);
 
       final result = await service.isOnline();
 
@@ -51,8 +53,9 @@ void main() {
         },
       );
 
-      when(() => mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => [ConnectivityResult.wifi]);
+      when(
+        () => mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.wifi]);
 
       final result = await service.isOnline();
 

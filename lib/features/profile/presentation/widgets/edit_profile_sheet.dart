@@ -30,9 +30,7 @@ class EditProfileSheet {
 class _EditProfileForm extends ConsumerStatefulWidget {
   final LoggedInUser user;
 
-  const _EditProfileForm({
-    required this.user,
-  });
+  const _EditProfileForm({required this.user});
 
   @override
   ConsumerState<_EditProfileForm> createState() => _EditProfileFormState();
@@ -69,7 +67,9 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      ref.read(updateProfileNotifierProvider.notifier).updateProfile(
+      ref
+          .read(updateProfileNotifierProvider.notifier)
+          .updateProfile(
             name: _nameController.text.trim(),
             preferredCurrency: _selectedCurrency,
           );
@@ -81,26 +81,26 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
     final theme = Theme.of(context);
     final updateState = ref.watch(updateProfileNotifierProvider);
 
-    ref.listen<AsyncValue<void>>(
-      updateProfileNotifierProvider,
-      (previous, next) {
-        if (next is AsyncData<void>) {
-          Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile updated')),
-          );
-        } else if (next is AsyncError) {
-          final error = next.error;
-          final message = error is Failure ? error.message : error.toString();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(message),
-              backgroundColor: theme.colorScheme.error,
-            ),
-          );
-        }
-      },
-    );
+    ref.listen<AsyncValue<void>>(updateProfileNotifierProvider, (
+      previous,
+      next,
+    ) {
+      if (next is AsyncData<void>) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Profile updated')));
+      } else if (next is AsyncError) {
+        final error = next.error;
+        final message = error is Failure ? error.message : error.toString();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: theme.colorScheme.error,
+          ),
+        );
+      }
+    });
 
     return Padding(
       padding: EdgeInsets.only(

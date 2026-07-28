@@ -3,12 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'crash_reporter.dart';
 
 /// Levels of logging details.
-enum LogLevel {
-  debug,
-  info,
-  warning,
-  error,
-}
+enum LogLevel { debug, info, warning, error }
 
 /// Abstract contract for logging across the application.
 abstract class ILogger {
@@ -95,9 +90,19 @@ class AppLogger implements ILogger {
         ..write('$emoji [$timestamp] [$tag]: $message');
 
       if (context != null && context.isNotEmpty) {
-        final sensitiveKeys = {'password', 'token', 'authorization', 'secret', 'refresh'};
-        final sanitized = context.map((k, v) =>
-            MapEntry(k, sensitiveKeys.any((s) => k.toLowerCase().contains(s)) ? '***' : v));
+        final sensitiveKeys = {
+          'password',
+          'token',
+          'authorization',
+          'secret',
+          'refresh',
+        };
+        final sanitized = context.map(
+          (k, v) => MapEntry(
+            k,
+            sensitiveKeys.any((s) => k.toLowerCase().contains(s)) ? '***' : v,
+          ),
+        );
         buffer.write('\nContext: $sanitized');
       }
       if (error != null) {

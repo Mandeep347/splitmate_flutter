@@ -27,7 +27,9 @@ class GlobalActivityPage extends ConsumerWidget {
     final activityAsync = ref.watch(globalActivityProvider);
     final isOnline = ref.watch(isOnlineProvider);
     final isDesktop = ResponsiveLayout.isDesktop(context);
-    final activities = activityAsync.hasValue ? activityAsync.requireValue : const <ActivityItem>[];
+    final activities = activityAsync.hasValue
+        ? activityAsync.requireValue
+        : const <ActivityItem>[];
 
     return Scaffold(
       appBar: AppBar(
@@ -43,15 +45,16 @@ class GlobalActivityPage extends ConsumerWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 800),
           child: (activityAsync.isLoading && activities.isEmpty)
-          ? ShimmerWrapper(
-              isLoading: true,
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16.0),
-                itemCount: 5,
-                itemBuilder: (context, index) => const ActivityListTileSkeleton(),
-              ),
-            )
-          : (activities.isEmpty)
+              ? ShimmerWrapper(
+                  isLoading: true,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    itemCount: 5,
+                    itemBuilder: (context, index) =>
+                        const ActivityListTileSkeleton(),
+                  ),
+                )
+              : (activities.isEmpty)
               ? const EmptyStateWidget(
                   icon: Icons.history_rounded,
                   title: 'No activity yet',
@@ -61,20 +64,34 @@ class GlobalActivityPage extends ConsumerWidget {
                   onRefresh: () => _handleRefresh(ref),
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16.0),
-                    itemCount: activities.length + ((!isOnline && !isDesktop) ? 1 : 0),
+                    itemCount:
+                        activities.length + ((!isOnline && !isDesktop) ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (!isOnline && !isDesktop && index == 0) {
                         return Container(
                           margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                            color: const Color(
+                              0xFFF59E0B,
+                            ).withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
+                            border: Border.all(
+                              color: const Color(
+                                0xFFF59E0B,
+                              ).withValues(alpha: 0.4),
+                            ),
                           ),
                           child: const Row(
                             children: [
-                              Icon(Icons.wifi_off_rounded, size: 14, color: Color(0xFFD97706)),
+                              Icon(
+                                Icons.wifi_off_rounded,
+                                size: 14,
+                                color: Color(0xFFD97706),
+                              ),
                               SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -91,7 +108,9 @@ class GlobalActivityPage extends ConsumerWidget {
                         );
                       }
 
-                      final activityIndex = (!isOnline && !isDesktop) ? index - 1 : index;
+                      final activityIndex = (!isOnline && !isDesktop)
+                          ? index - 1
+                          : index;
                       final activity = activities[activityIndex];
 
                       return Column(

@@ -31,16 +31,19 @@ class PendingSyncBanner extends ConsumerWidget {
         ? const Color(0xFF60A5FA) // Light Blue Accent
         : const Color(0xFFFDE68A); // Light Amber Accent
 
-    final icon = isSyncing
-        ? Icons.sync_rounded
-        : Icons.cloud_off_rounded;
+    final icon = isSyncing ? Icons.sync_rounded : Icons.cloud_off_rounded;
 
     final text = isSyncing
         ? 'Syncing $count ${count == 1 ? 'action' : 'actions'}...'
         : '$count ${count == 1 ? 'action' : 'actions'} pending sync';
 
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0, right: 16.0),
+      padding: const EdgeInsets.only(
+        top: 8.0,
+        bottom: 8.0,
+        left: 16.0,
+        right: 16.0,
+      ),
       child: Center(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

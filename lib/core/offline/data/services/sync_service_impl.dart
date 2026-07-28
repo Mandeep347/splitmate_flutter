@@ -61,11 +61,13 @@ class SyncServiceImpl implements ISyncService {
         final action = pending[i];
         final actionTypeStr = _getActionTypeString(action);
 
-        _progressController.add(SyncProgress(
-          total: total,
-          completed: i,
-          currentActionType: actionTypeStr,
-        ));
+        _progressController.add(
+          SyncProgress(
+            total: total,
+            completed: i,
+            currentActionType: actionTypeStr,
+          ),
+        );
 
         try {
           await _processAction(action);
@@ -91,11 +93,9 @@ class SyncServiceImpl implements ISyncService {
         }
       }
 
-      _progressController.add(SyncProgress(
-        total: total,
-        completed: total,
-        currentActionType: 'DONE',
-      ));
+      _progressController.add(
+        SyncProgress(total: total, completed: total, currentActionType: 'DONE'),
+      );
 
       ref?.invalidate(pendingCountProvider);
       return SyncResult(succeeded, failed, exhausted);
@@ -132,14 +132,14 @@ class SyncServiceImpl implements ISyncService {
         );
 
       case final AddMemberAction a:
-        await groupRepository.addMember(
-          groupId: a.groupId,
-          email: a.email,
-        );
+        await groupRepository.addMember(groupId: a.groupId, email: a.email);
     }
   }
 
-  ExpenseSplitInput _rebuildSplitInput(String splitType, List<dynamic> participants) {
+  ExpenseSplitInput _rebuildSplitInput(
+    String splitType,
+    List<dynamic> participants,
+  ) {
     final upperType = splitType.toUpperCase();
     switch (upperType) {
       case 'EQUAL':
@@ -157,7 +157,9 @@ class SyncServiceImpl implements ISyncService {
             final map = p as Map<String, dynamic>;
             return ExactParticipantInput(
               userId: (map['user_id'] ?? map['userId']) as String,
-              owedAmount: ((map['owed_amount'] ?? map['owedAmount'] ?? 0) as num).toDouble(),
+              owedAmount:
+                  ((map['owed_amount'] ?? map['owedAmount'] ?? 0) as num)
+                      .toDouble(),
             );
           }).toList(),
         );
@@ -205,12 +207,16 @@ class SyncServiceImpl implements ISyncService {
     if (error is ConflictException) return true;
     if (error is Failure) {
       final msg = error.message.toLowerCase();
-      if (msg.contains('already') || msg.contains('conflict') || msg.contains('registered')) {
+      if (msg.contains('already') ||
+          msg.contains('conflict') ||
+          msg.contains('registered')) {
         return true;
       }
     }
     final errStr = error.toString().toLowerCase();
-    return errStr.contains('409') || errStr.contains('conflict') || errStr.contains('already');
+    return errStr.contains('409') ||
+        errStr.contains('conflict') ||
+        errStr.contains('already');
   }
 }
 

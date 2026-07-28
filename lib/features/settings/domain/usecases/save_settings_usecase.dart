@@ -8,9 +8,7 @@ class SaveSettingsUseCase {
   final ISettingsRepository repository;
 
   /// Creates a new [SaveSettingsUseCase] instance.
-  const SaveSettingsUseCase({
-    required this.repository,
-  });
+  const SaveSettingsUseCase({required this.repository});
 
   /// Validates and saves configurations.
   Future<void> call({required AppSettings settings}) async {

@@ -82,13 +82,17 @@ void main() {
 
   setUp(() {
     mockExpenseRepository = MockIExpenseRepository();
-    useCase = GetExpenseSearchResultsUseCase(expenseRepository: mockExpenseRepository);
+    useCase = GetExpenseSearchResultsUseCase(
+      expenseRepository: mockExpenseRepository,
+    );
 
-    when(() => mockExpenseRepository.getGroupExpenses(
-          groupId: 'group-1',
-          page: 1,
-          limit: 1000,
-        )).thenAnswer(
+    when(
+      () => mockExpenseRepository.getGroupExpenses(
+        groupId: 'group-1',
+        page: 1,
+        limit: 1000,
+      ),
+    ).thenAnswer(
       (_) async => PaginatedExpenses(
         items: [tExpense1, tExpense2, tReversedExpense],
         page: 1,
@@ -106,10 +110,7 @@ void main() {
     });
 
     test('filters by searchQuery case-insensitive', () async {
-      final result = await useCase(
-        groupId: 'group-1',
-        searchQuery: 'dinner',
-      );
+      final result = await useCase(groupId: 'group-1', searchQuery: 'dinner');
       expect(result.length, 1);
       expect(result.first.title, 'Dinner');
     });
@@ -124,10 +125,7 @@ void main() {
     });
 
     test('filters by paidByUserId', () async {
-      final result = await useCase(
-        groupId: 'group-1',
-        paidByUserId: 'user-1',
-      );
+      final result = await useCase(groupId: 'group-1', paidByUserId: 'user-1');
       expect(result.length, 2);
       expect(result.map((e) => e.id), containsAll(['exp-1', 'exp-3']));
       expect(result.map((e) => e.id), isNot(contains('exp-2')));

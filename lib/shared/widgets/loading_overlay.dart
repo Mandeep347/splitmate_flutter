@@ -23,14 +23,10 @@ class LoadingOverlay extends StatelessWidget {
         if (isLoading) ...[
           Positioned.fill(
             child: AbsorbPointer(
-              child: Container(
-                color: Colors.black.withValues(alpha: 0.3),
-              ),
+              child: Container(color: Colors.black.withValues(alpha: 0.3)),
             ),
           ),
-          const Center(
-            child: CircularProgressIndicator(),
-          ),
+          const Center(child: CircularProgressIndicator()),
         ],
       ],
     );

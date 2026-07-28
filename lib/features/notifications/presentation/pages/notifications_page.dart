@@ -56,7 +56,9 @@ class NotificationsPage extends ConsumerWidget {
                           ? null
                           : () {
                               try {
-                                ref.read(markAllReadProvider.notifier).markAll();
+                                ref
+                                    .read(markAllReadProvider.notifier)
+                                    .markAll();
                               } catch (_) {}
                             },
                       child: const Text('Mark all read'),
@@ -67,9 +69,7 @@ class NotificationsPage extends ConsumerWidget {
                       child: SizedBox(
                         width: 16,
                         height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
+                        child: CircularProgressIndicator(strokeWidth: 2),
                       ),
                     ),
                 ],
@@ -83,9 +83,13 @@ class NotificationsPage extends ConsumerWidget {
         loading: () => ShimmerWrapper(
           isLoading: true,
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             itemCount: 5,
-            itemBuilder: (context, index) => const NotificationListTileSkeleton(),
+            itemBuilder: (context, index) =>
+                const NotificationListTileSkeleton(),
           ),
         ),
         data: (notifications) {
@@ -103,7 +107,10 @@ class NotificationsPage extends ConsumerWidget {
               ref.read(notificationsProvider.notifier).refresh();
             },
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
               itemCount: notifications.length,
               itemBuilder: (context, index) {
                 return NotificationListTile(notification: notifications[index]);

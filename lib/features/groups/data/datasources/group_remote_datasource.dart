@@ -37,10 +37,7 @@ abstract interface class IGroupRemoteDatasource {
   });
 
   /// Removes an existing member from a group.
-  Future<void> removeMember({
-    required String groupId,
-    required String userId,
-  });
+  Future<void> removeMember({required String groupId, required String userId});
 }
 
 /// Remote datasource implementation using [DioClient].
@@ -61,7 +58,9 @@ class GroupRemoteDatasource implements IGroupRemoteDatasource {
 
   @override
   Future<GroupModel> getGroupById({required String groupId}) async {
-    final response = await _client.get<dynamic>(ApiEndpoints.groupById(groupId));
+    final response = await _client.get<dynamic>(
+      ApiEndpoints.groupById(groupId),
+    );
     return GroupModel.fromJson(response.data as Map<String, dynamic>);
   }
 
@@ -72,10 +71,7 @@ class GroupRemoteDatasource implements IGroupRemoteDatasource {
   }) async {
     final response = await _client.post<dynamic>(
       ApiEndpoints.groups,
-      data: {
-        'name': name,
-        'default_currency': currency,
-      },
+      data: {'name': name, 'default_currency': currency},
     );
     return GroupModel.fromJson(response.data as Map<String, dynamic>);
   }
@@ -87,22 +83,24 @@ class GroupRemoteDatasource implements IGroupRemoteDatasource {
   }) async {
     final response = await _client.patch<dynamic>(
       ApiEndpoints.groupById(groupId),
-      data: {
-        'name': name,
-      },
+      data: {'name': name},
     );
     return GroupModel.fromJson(response.data as Map<String, dynamic>);
   }
 
   @override
   Future<GroupModel> archiveGroup({required String groupId}) async {
-    final response = await _client.patch<dynamic>(ApiEndpoints.archiveGroup(groupId));
+    final response = await _client.patch<dynamic>(
+      ApiEndpoints.archiveGroup(groupId),
+    );
     return GroupModel.fromJson(response.data as Map<String, dynamic>);
   }
 
   @override
   Future<List<GroupMemberModel>> getMembers({required String groupId}) async {
-    final response = await _client.get<dynamic>(ApiEndpoints.groupMembers(groupId));
+    final response = await _client.get<dynamic>(
+      ApiEndpoints.groupMembers(groupId),
+    );
     final list = response.data as List<dynamic>;
     return list
         .map((item) => GroupMemberModel.fromJson(item as Map<String, dynamic>))
@@ -116,9 +114,7 @@ class GroupRemoteDatasource implements IGroupRemoteDatasource {
   }) async {
     final response = await _client.post<dynamic>(
       ApiEndpoints.groupMembers(groupId),
-      data: {
-        'email': email,
-      },
+      data: {'email': email},
     );
     return GroupMemberModel.fromJson(response.data as Map<String, dynamic>);
   }

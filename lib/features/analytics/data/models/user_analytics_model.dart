@@ -21,7 +21,8 @@ class UserAnalyticsModel with _$UserAnalyticsModel {
     @JsonKey(name: 'total_expense_count') required int totalExpenseCount,
     @JsonKey(name: 'most_expensive_group_name') String? mostExpensiveGroupName,
     required List<UserAnalyticsGroupModel> groups,
-    @JsonKey(name: 'monthly_spending') required List<MonthlySpendingModel> monthlySpending,
+    @JsonKey(name: 'monthly_spending')
+    required List<MonthlySpendingModel> monthlySpending,
   }) = _UserAnalyticsModel;
 
   const UserAnalyticsModel._();

@@ -9,9 +9,7 @@ class GetGroupByIdUseCase {
   final IGroupRepository repository;
 
   /// Creates a new [GetGroupByIdUseCase] instance.
-  const GetGroupByIdUseCase({
-    required this.repository,
-  });
+  const GetGroupByIdUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws a [Failure] on error.

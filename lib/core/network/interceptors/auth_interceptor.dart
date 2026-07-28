@@ -20,7 +20,9 @@ class AuthInterceptor extends Interceptor {
   ) async {
     // If the request already has an Authorization header, don't overwrite it
     if (!options.headers.containsKey('Authorization')) {
-      final accessToken = await secureStorage.read(StorageKeys.secureAccessToken);
+      final accessToken = await secureStorage.read(
+        StorageKeys.secureAccessToken,
+      );
       if (accessToken != null && accessToken.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $accessToken';
       }
@@ -32,7 +34,9 @@ class AuthInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     // Check if error is 401 Unauthorized (invalid/expired access token)
     if (err.response?.statusCode == 401) {
-      final refreshToken = await secureStorage.read(StorageKeys.secureRefreshToken);
+      final refreshToken = await secureStorage.read(
+        StorageKeys.secureRefreshToken,
+      );
 
       if (refreshToken != null && refreshToken.isNotEmpty) {
         try {
@@ -48,8 +52,14 @@ class AuthInterceptor extends Interceptor {
             final newRefreshToken = payload['refresh_token'] as String;
 
             // Cache the fresh tokens
-            await secureStorage.write(StorageKeys.secureAccessToken, newAccessToken);
-            await secureStorage.write(StorageKeys.secureRefreshToken, newRefreshToken);
+            await secureStorage.write(
+              StorageKeys.secureAccessToken,
+              newAccessToken,
+            );
+            await secureStorage.write(
+              StorageKeys.secureRefreshToken,
+              newRefreshToken,
+            );
 
             // Re-attempt original request with the fresh token
             final requestOptions = err.requestOptions;

@@ -28,42 +28,80 @@ void main() {
 
   group('AddMemberUseCase', () {
     test('returns GroupMember on success', () async {
-      when(() => mockRepository.addMember(groupId: 'group-1', email: 'mandeep@test.com'))
-          .thenAnswer((_) async => tGroupMember);
+      when(
+        () => mockRepository.addMember(
+          groupId: 'group-1',
+          email: 'mandeep@test.com',
+        ),
+      ).thenAnswer((_) async => tGroupMember);
 
-      final result = await usecase(groupId: 'group-1', email: 'mandeep@test.com');
+      final result = await usecase(
+        groupId: 'group-1',
+        email: 'mandeep@test.com',
+      );
 
       expect(result, equals(tGroupMember));
-      verify(() => mockRepository.addMember(groupId: 'group-1', email: 'mandeep@test.com')).called(1);
-    });
-
-    test('throws ServerFailure with USER_NOT_FOUND on NotFoundException', () async {
-      when(() => mockRepository.addMember(groupId: 'group-1', email: 'mandeep@test.com'))
-          .thenThrow(const NotFoundException());
-
-      expect(
-        () => usecase(groupId: 'group-1', email: 'mandeep@test.com'),
-        throwsA(
-          isA<ServerFailure>().having((f) => f.code, 'code', 'USER_NOT_FOUND'),
+      verify(
+        () => mockRepository.addMember(
+          groupId: 'group-1',
+          email: 'mandeep@test.com',
         ),
-      );
+      ).called(1);
     });
 
-    test('throws ServerFailure with USER_ALREADY_IN_GROUP on ConflictException', () async {
-      when(() => mockRepository.addMember(groupId: 'group-1', email: 'mandeep@test.com'))
-          .thenThrow(const ConflictException());
+    test(
+      'throws ServerFailure with USER_NOT_FOUND on NotFoundException',
+      () async {
+        when(
+          () => mockRepository.addMember(
+            groupId: 'group-1',
+            email: 'mandeep@test.com',
+          ),
+        ).thenThrow(const NotFoundException());
 
-      expect(
-        () => usecase(groupId: 'group-1', email: 'mandeep@test.com'),
-        throwsA(
-          isA<ServerFailure>().having((f) => f.code, 'code', 'USER_ALREADY_IN_GROUP'),
-        ),
-      );
-    });
+        expect(
+          () => usecase(groupId: 'group-1', email: 'mandeep@test.com'),
+          throwsA(
+            isA<ServerFailure>().having(
+              (f) => f.code,
+              'code',
+              'USER_NOT_FOUND',
+            ),
+          ),
+        );
+      },
+    );
+
+    test(
+      'throws ServerFailure with USER_ALREADY_IN_GROUP on ConflictException',
+      () async {
+        when(
+          () => mockRepository.addMember(
+            groupId: 'group-1',
+            email: 'mandeep@test.com',
+          ),
+        ).thenThrow(const ConflictException());
+
+        expect(
+          () => usecase(groupId: 'group-1', email: 'mandeep@test.com'),
+          throwsA(
+            isA<ServerFailure>().having(
+              (f) => f.code,
+              'code',
+              'USER_ALREADY_IN_GROUP',
+            ),
+          ),
+        );
+      },
+    );
 
     test('throws NetworkFailure on NetworkException', () async {
-      when(() => mockRepository.addMember(groupId: 'group-1', email: 'mandeep@test.com'))
-          .thenThrow(const NetworkException());
+      when(
+        () => mockRepository.addMember(
+          groupId: 'group-1',
+          email: 'mandeep@test.com',
+        ),
+      ).thenThrow(const NetworkException());
 
       expect(
         () => usecase(groupId: 'group-1', email: 'mandeep@test.com'),

@@ -33,264 +33,273 @@ class SettingsPage extends ConsumerWidget {
     final settingsState = ref.watch(settingsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 800),
           child: settingsState.when(
-        loading: () => ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: [
-            _buildSkeletonCard(ext, theme),
-            const SizedBox(height: 16),
-            _buildSkeletonCard(ext, theme),
-            const SizedBox(height: 16),
-            _buildSkeletonCard(ext, theme),
-          ],
-        ),
-        error: (error, _) => Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            loading: () => ListView(
+              padding: const EdgeInsets.all(16.0),
               children: [
-                Icon(
-                  Icons.error_outline_rounded,
-                  color: theme.colorScheme.error,
-                  size: 48,
-                ),
+                _buildSkeletonCard(ext, theme),
                 const SizedBox(height: 16),
-                Text(
-                  error is Failure ? error.message : error.toString(),
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium,
-                ),
+                _buildSkeletonCard(ext, theme),
                 const SizedBox(height: 16),
-                OutlinedButton(
-                  onPressed: () {
-                    ref.read(settingsProvider.notifier).refresh();
-                  },
-                  child: const Text('Retry'),
+                _buildSkeletonCard(ext, theme),
+              ],
+            ),
+            error: (error, _) => Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.error_outline_rounded,
+                      color: theme.colorScheme.error,
+                      size: 48,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      error is Failure ? error.message : error.toString(),
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 16),
+                    OutlinedButton(
+                      onPressed: () {
+                        ref.read(settingsProvider.notifier).refresh();
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            data: (settings) => ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                // Section 1: Appearance
+                _buildSectionHeader(context, 'Appearance'),
+                Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    side: BorderSide(color: theme.colorScheme.outlineVariant),
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: const Text('Theme'),
+                        subtitle: Text(
+                          _getThemeDisplayName(settings.themeMode),
+                        ),
+                        trailing: const Icon(Icons.chevron_right_rounded),
+                        onTap: () => _showThemePicker(context, ref, settings),
+                      ),
+                      const Divider(height: 1),
+                      SwitchListTile(
+                        title: const Text('Compact expense list'),
+                        subtitle: const Text('Show more expenses per screen'),
+                        value: settings.compactExpenseList,
+                        onChanged: (v) {
+                          ref
+                              .read(settingsProvider.notifier)
+                              .updateCompactList(v);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Section 2: Notifications
+                _buildSectionHeader(context, 'Notifications'),
+                Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    side: BorderSide(color: theme.colorScheme.outlineVariant),
+                  ),
+                  child: SwitchListTile(
+                    title: const Text('Push notifications'),
+                    subtitle: const Text('Expense and settlement alerts'),
+                    value: settings.notificationsEnabled,
+                    onChanged: (v) {
+                      ref
+                          .read(settingsProvider.notifier)
+                          .updateNotifications(v);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Section 3: Preferences
+                _buildSectionHeader(context, 'Preferences'),
+                Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    side: BorderSide(color: theme.colorScheme.outlineVariant),
+                  ),
+                  child: ListTile(
+                    title: const Text('Default Currency'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          settings.defaultCurrency,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.chevron_right_rounded),
+                      ],
+                    ),
+                    onTap: () => _showCurrencyPicker(context, ref, settings),
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Section 4: About
+                _buildSectionHeader(context, 'About'),
+                Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    side: BorderSide(color: theme.colorScheme.outlineVariant),
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: const Text('Version'),
+                        trailing: Text(
+                          PackageInfoService.fullVersion.isNotEmpty
+                              ? PackageInfoService.fullVersion
+                              : '1.0.0+1',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        title: const Text('Privacy Policy'),
+                        trailing: const Icon(
+                          Icons.open_in_new_outlined,
+                          size: 16,
+                        ),
+                        onTap: () {
+                          context.push(AppRoutes.privacyPolicyPath);
+                        },
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        title: const Text('Terms of Service'),
+                        trailing: const Icon(
+                          Icons.open_in_new_outlined,
+                          size: 16,
+                        ),
+                        onTap: () {
+                          context.push(AppRoutes.termsOfServicePath);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Section 5: Account
+                _buildSectionHeader(context, 'Account'),
+                Card(
+                  elevation: 0,
+                  color: theme.colorScheme.errorContainer.withValues(
+                    alpha: 0.05,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    side: BorderSide(
+                      color: theme.colorScheme.error.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Icon(
+                          Icons.refresh_outlined,
+                          color: theme.colorScheme.error,
+                        ),
+                        title: Text(
+                          'Reset App Settings',
+                          style: TextStyle(
+                            color: theme.colorScheme.error,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onTap: () async {
+                          final confirm = await ConfirmationDialog.show(
+                            context,
+                            title: 'Reset Settings',
+                            message:
+                                'This will reset all preferences to defaults. Your account and data are not affected.',
+                            confirmLabel: 'Reset',
+                            isDestructive: true,
+                          );
+                          if (confirm == true && context.mounted) {
+                            final messenger = ScaffoldMessenger.of(context);
+                            await ref
+                                .read(settingsProvider.notifier)
+                                .resetToDefaults();
+                            messenger.showSnackBar(
+                              const SnackBar(content: Text('Settings reset')),
+                            );
+                          }
+                        },
+                      ),
+                      Divider(
+                        height: 1,
+                        color: theme.colorScheme.error.withValues(alpha: 0.1),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.logout_outlined,
+                          color: theme.colorScheme.error,
+                        ),
+                        title: Text(
+                          'Sign Out',
+                          style: TextStyle(
+                            color: theme.colorScheme.error,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        // Bug 5 fix: guard against null dialog result; router
+                        // redirect handles navigation automatically after logout.
+                        onTap: () async {
+                          final confirmed = await ConfirmationDialog.show(
+                            context,
+                            title: 'Sign Out',
+                            message:
+                                'You will need to sign in again to access your groups.',
+                            confirmLabel: 'Sign Out',
+                            isDestructive: true,
+                          );
+                          if (confirmed != true) return;
+                          try {
+                            await ref
+                                .read(authNotifierProvider.notifier)
+                                .logout();
+                          } catch (_) {}
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
         ),
-        data: (settings) => ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: [
-            // Section 1: Appearance
-            _buildSectionHeader(context, 'Appearance'),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(
-                  color: theme.colorScheme.outlineVariant,
-                ),
-              ),
-              child: Column(
-                children: [
-                  ListTile(
-                    title: const Text('Theme'),
-                    subtitle: Text(_getThemeDisplayName(settings.themeMode)),
-                    trailing: const Icon(Icons.chevron_right_rounded),
-                    onTap: () => _showThemePicker(context, ref, settings),
-                  ),
-                  const Divider(height: 1),
-                  SwitchListTile(
-                    title: const Text('Compact expense list'),
-                    subtitle: const Text('Show more expenses per screen'),
-                    value: settings.compactExpenseList,
-                    onChanged: (v) {
-                      ref.read(settingsProvider.notifier).updateCompactList(v);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Section 2: Notifications
-            _buildSectionHeader(context, 'Notifications'),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(
-                  color: theme.colorScheme.outlineVariant,
-                ),
-              ),
-              child: SwitchListTile(
-                title: const Text('Push notifications'),
-                subtitle: const Text('Expense and settlement alerts'),
-                value: settings.notificationsEnabled,
-                onChanged: (v) {
-                  ref.read(settingsProvider.notifier).updateNotifications(v);
-                },
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Section 3: Preferences
-            _buildSectionHeader(context, 'Preferences'),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(
-                  color: theme.colorScheme.outlineVariant,
-                ),
-              ),
-              child: ListTile(
-                title: const Text('Default Currency'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      settings.defaultCurrency,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    const Icon(Icons.chevron_right_rounded),
-                  ],
-                ),
-                onTap: () => _showCurrencyPicker(context, ref, settings),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Section 4: About
-            _buildSectionHeader(context, 'About'),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(
-                  color: theme.colorScheme.outlineVariant,
-                ),
-              ),
-              child: Column(
-                children: [
-                  ListTile(
-                    title: const Text('Version'),
-                    trailing: Text(
-                      PackageInfoService.fullVersion.isNotEmpty
-                          ? PackageInfoService.fullVersion
-                          : '1.0.0+1',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    title: const Text('Privacy Policy'),
-                    trailing: const Icon(Icons.open_in_new_outlined, size: 16),
-                    onTap: () {
-                      context.push(AppRoutes.privacyPolicyPath);
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    title: const Text('Terms of Service'),
-                    trailing: const Icon(Icons.open_in_new_outlined, size: 16),
-                    onTap: () {
-                      context.push(AppRoutes.termsOfServicePath);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Section 5: Account
-            _buildSectionHeader(context, 'Account'),
-            Card(
-              elevation: 0,
-              color: theme.colorScheme.errorContainer.withValues(alpha: 0.05),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(
-                  color: theme.colorScheme.error.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      Icons.refresh_outlined,
-                      color: theme.colorScheme.error,
-                    ),
-                    title: Text(
-                      'Reset App Settings',
-                      style: TextStyle(
-                        color: theme.colorScheme.error,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onTap: () async {
-                      final confirm = await ConfirmationDialog.show(
-                        context,
-                        title: 'Reset Settings',
-                        message:
-                            'This will reset all preferences to defaults. Your account and data are not affected.',
-                        confirmLabel: 'Reset',
-                        isDestructive: true,
-                      );
-                      if (confirm == true && context.mounted) {
-                        final messenger = ScaffoldMessenger.of(context);
-                        await ref.read(settingsProvider.notifier).resetToDefaults();
-                        messenger.showSnackBar(
-                          const SnackBar(content: Text('Settings reset')),
-                        );
-                      }
-                    },
-                  ),
-                  Divider(
-                    height: 1,
-                    color: theme.colorScheme.error.withValues(alpha: 0.1),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.logout_outlined,
-                      color: theme.colorScheme.error,
-                    ),
-                    title: Text(
-                      'Sign Out',
-                      style: TextStyle(
-                        color: theme.colorScheme.error,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    // Bug 5 fix: guard against null dialog result; router
-                    // redirect handles navigation automatically after logout.
-                    onTap: () async {
-                      final confirmed = await ConfirmationDialog.show(
-                        context,
-                        title: 'Sign Out',
-                        message: 'You will need to sign in again to access your groups.',
-                        confirmLabel: 'Sign Out',
-                        isDestructive: true,
-                      );
-                      if (confirmed != true) return;
-                      try {
-                        await ref.read(authNotifierProvider.notifier).logout();
-                      } catch (_) {}
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      ),
       ),
     );
   }
@@ -427,10 +436,15 @@ class SettingsPage extends ConsumerWidget {
                       return ListTile(
                         title: Text(currency),
                         trailing: isSelected
-                            ? Icon(Icons.check_rounded, color: theme.colorScheme.primary)
+                            ? Icon(
+                                Icons.check_rounded,
+                                color: theme.colorScheme.primary,
+                              )
                             : null,
                         onTap: () {
-                          ref.read(settingsProvider.notifier).updateDefaultCurrency(currency);
+                          ref
+                              .read(settingsProvider.notifier)
+                              .updateDefaultCurrency(currency);
                           Navigator.pop(context);
                         },
                       );

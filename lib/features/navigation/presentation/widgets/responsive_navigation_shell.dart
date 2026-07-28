@@ -18,10 +18,7 @@ import 'package:splito_flutter/shared/widgets/pending_sync_banner.dart';
 class ResponsiveNavigationShell extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
-  const ResponsiveNavigationShell({
-    super.key,
-    required this.navigationShell,
-  });
+  const ResponsiveNavigationShell({super.key, required this.navigationShell});
 
   // Map bottom navigation index to StatefulNavigationShell branch index
   int _bottomNavIndexToBranch(int index) {
@@ -99,10 +96,7 @@ class ResponsiveNavigationShell extends ConsumerWidget {
     }
 
     final shellBody = isDesktop
-        ? _DesktopShell(
-            navigationShell: navigationShell,
-            user: user,
-          )
+        ? _DesktopShell(navigationShell: navigationShell, user: user)
         : _MobileShell(
             navigationShell: navigationShell,
             currentIndex: _branchToBottomNavIndex(navigationShell.currentIndex),
@@ -112,7 +106,9 @@ class ResponsiveNavigationShell extends ConsumerWidget {
               } else {
                 navigationShell.goBranch(
                   _bottomNavIndexToBranch(index),
-                  initialLocation: _bottomNavIndexToBranch(index) == navigationShell.currentIndex,
+                  initialLocation:
+                      _bottomNavIndexToBranch(index) ==
+                      navigationShell.currentIndex,
                 );
               }
             },
@@ -173,7 +169,8 @@ class ResponsiveNavigationShell extends ConsumerWidget {
               SizedBox(height: ext.spaceMD),
               groupsAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, _) => const Center(child: Text('Error loading groups')),
+                error: (err, _) =>
+                    const Center(child: Text('Error loading groups')),
                 data: (groups) {
                   final activeGroups = groups.where((g) => g.isActive).toList();
                   if (activeGroups.isEmpty) {
@@ -198,12 +195,17 @@ class ResponsiveNavigationShell extends ConsumerWidget {
                             backgroundColor: theme.colorScheme.primaryContainer,
                             child: Text(
                               g.name.isNotEmpty ? g.name[0].toUpperCase() : 'G',
-                              style: TextStyle(color: theme.colorScheme.onPrimaryContainer),
+                              style: TextStyle(
+                                color: theme.colorScheme.onPrimaryContainer,
+                              ),
                             ),
                           ),
                           title: Text(g.name),
                           subtitle: Text('${g.membersCount} members'),
-                          trailing: Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurfaceVariant),
+                          trailing: Icon(
+                            Icons.chevron_right_rounded,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
                           onTap: () {
                             Navigator.pop(context);
                             context.goNamed(
@@ -294,10 +296,7 @@ class _DesktopShell extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
   final LoggedInUser user;
 
-  const _DesktopShell({
-    required this.navigationShell,
-    required this.user,
-  });
+  const _DesktopShell({required this.navigationShell, required this.user});
 
   String _getBranchTitle(int index) {
     switch (index) {
@@ -334,7 +333,10 @@ class _DesktopShell extends ConsumerWidget {
               children: [
                 // Header / Logo
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: ext.spaceXL, vertical: ext.spaceXL),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ext.spaceXL,
+                    vertical: ext.spaceXL,
+                  ),
                   child: Row(
                     children: [
                       Container(
@@ -427,7 +429,9 @@ class _DesktopShell extends ConsumerWidget {
                     child: Container(
                       padding: EdgeInsets.all(ext.spaceSM),
                       decoration: BoxDecoration(
-                        border: Border.all(color: theme.colorScheme.outlineVariant),
+                        border: Border.all(
+                          color: theme.colorScheme.outlineVariant,
+                        ),
                         borderRadius: BorderRadius.circular(ext.radiusMD),
                       ),
                       child: Row(
@@ -508,7 +512,10 @@ class _DesktopShell extends ConsumerWidget {
                         icon: const Icon(Icons.add_rounded, size: 16),
                         label: const Text('Add Expense'),
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: ext.spaceLG, vertical: ext.spaceMD),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: ext.spaceLG,
+                            vertical: ext.spaceMD,
+                          ),
                         ),
                       ),
                       SizedBox(width: ext.spaceMD),
@@ -563,12 +570,17 @@ class _DesktopShell extends ConsumerWidget {
                 const Text('Select a group to split an expense in:'),
                 const SizedBox(height: 16),
                 groupsAsync.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (_, __) => const Text('Error loading groups'),
                   data: (groups) {
-                    final activeGroups = groups.where((g) => g.isActive).toList();
+                    final activeGroups = groups
+                        .where((g) => g.isActive)
+                        .toList();
                     if (activeGroups.isEmpty) {
-                      return const Center(child: Text('No active groups found.'));
+                      return const Center(
+                        child: Text('No active groups found.'),
+                      );
                     }
                     return Flexible(
                       child: ListView.builder(
@@ -578,7 +590,11 @@ class _DesktopShell extends ConsumerWidget {
                           final g = activeGroups[index];
                           return ListTile(
                             leading: CircleAvatar(
-                              child: Text(g.name.isNotEmpty ? g.name[0].toUpperCase() : 'G'),
+                              child: Text(
+                                g.name.isNotEmpty
+                                    ? g.name[0].toUpperCase()
+                                    : 'G',
+                              ),
                             ),
                             title: Text(g.name),
                             subtitle: Text('${g.membersCount} members'),
@@ -631,12 +647,17 @@ class _DesktopShell extends ConsumerWidget {
                 const Text('Select a group to record a settlement payment:'),
                 const SizedBox(height: 16),
                 groupsAsync.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (_, __) => const Text('Error loading groups'),
                   data: (groups) {
-                    final activeGroups = groups.where((g) => g.isActive).toList();
+                    final activeGroups = groups
+                        .where((g) => g.isActive)
+                        .toList();
                     if (activeGroups.isEmpty) {
-                      return const Center(child: Text('No active groups found.'));
+                      return const Center(
+                        child: Text('No active groups found.'),
+                      );
                     }
                     return Flexible(
                       child: ListView.builder(
@@ -646,7 +667,11 @@ class _DesktopShell extends ConsumerWidget {
                           final g = activeGroups[index];
                           return ListTile(
                             leading: CircleAvatar(
-                              child: Text(g.name.isNotEmpty ? g.name[0].toUpperCase() : 'G'),
+                              child: Text(
+                                g.name.isNotEmpty
+                                    ? g.name[0].toUpperCase()
+                                    : 'G',
+                              ),
                             ),
                             title: Text(g.name),
                             subtitle: Text('${g.membersCount} members'),
@@ -710,16 +735,23 @@ class _SidebarItem extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(ext.radiusMD),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: ext.spaceMD, vertical: ext.spaceMD),
+          padding: EdgeInsets.symmetric(
+            horizontal: ext.spaceMD,
+            vertical: ext.spaceMD,
+          ),
           decoration: BoxDecoration(
-            color: selected ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3) : Colors.transparent,
+            color: selected
+                ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(ext.radiusMD),
           ),
           child: Row(
             children: [
               Icon(
                 selected ? selectedIcon : icon,
-                color: selected ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                color: selected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurfaceVariant,
                 size: 20,
               ),
               SizedBox(width: ext.spaceMD),
@@ -727,7 +759,9 @@ class _SidebarItem extends StatelessWidget {
                 label,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: selected ? FontWeight.bold : FontWeight.normal,
-                  color: selected ? theme.colorScheme.primary : theme.colorScheme.onSurface,
+                  color: selected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurface,
                 ),
               ),
             ],

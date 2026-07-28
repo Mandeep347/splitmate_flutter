@@ -8,7 +8,9 @@ import 'package:splito_flutter/features/groups/data/repositories/group_repositor
 import 'package:splito_flutter/features/groups/domain/entities/group.dart';
 import 'package:splito_flutter/features/groups/domain/entities/group_member.dart';
 
-class MockIGroupRemoteDatasource extends Mock implements IGroupRemoteDatasource {}
+class MockIGroupRemoteDatasource extends Mock
+    implements IGroupRemoteDatasource {}
+
 class MockIGroupLocalDatasource extends Mock implements IGroupLocalDatasource {}
 
 void main() {
@@ -57,8 +59,12 @@ void main() {
 
   group('GroupRepositoryImpl.getMyGroups', () {
     test('fetches from remote, caches, and returns entities', () async {
-      when(() => mockRemote.getMyGroups()).thenAnswer((_) async => [tGroupModel]);
-      when(() => mockLocal.cacheGroups([tGroupModel])).thenAnswer((_) async => {});
+      when(
+        () => mockRemote.getMyGroups(),
+      ).thenAnswer((_) async => [tGroupModel]);
+      when(
+        () => mockLocal.cacheGroups([tGroupModel]),
+      ).thenAnswer((_) async => {});
 
       final result = await repository.getMyGroups();
 
@@ -69,7 +75,9 @@ void main() {
 
     test('returns cached data on NetworkException', () async {
       when(() => mockRemote.getMyGroups()).thenThrow(const NetworkException());
-      when(() => mockLocal.getCachedGroups()).thenAnswer((_) async => [tGroupModel]);
+      when(
+        () => mockLocal.getCachedGroups(),
+      ).thenAnswer((_) async => [tGroupModel]);
 
       final result = await repository.getMyGroups();
 
@@ -88,7 +96,9 @@ void main() {
 
   group('GroupRepositoryImpl.getGroupById', () {
     test('fetches from remote and caches single group', () async {
-      when(() => mockRemote.getGroupById(groupId: 'group-1')).thenAnswer((_) async => tGroupModel);
+      when(
+        () => mockRemote.getGroupById(groupId: 'group-1'),
+      ).thenAnswer((_) async => tGroupModel);
       when(() => mockLocal.cacheGroup(tGroupModel)).thenAnswer((_) async => {});
 
       final result = await repository.getGroupById(groupId: 'group-1');
@@ -99,8 +109,12 @@ void main() {
     });
 
     test('returns cached group on NetworkException', () async {
-      when(() => mockRemote.getGroupById(groupId: 'group-1')).thenThrow(const NetworkException());
-      when(() => mockLocal.getCachedGroup('group-1')).thenAnswer((_) async => tGroupModel);
+      when(
+        () => mockRemote.getGroupById(groupId: 'group-1'),
+      ).thenThrow(const NetworkException());
+      when(
+        () => mockLocal.getCachedGroup('group-1'),
+      ).thenAnswer((_) async => tGroupModel);
 
       final result = await repository.getGroupById(groupId: 'group-1');
 
@@ -109,11 +123,21 @@ void main() {
       verify(() => mockLocal.getCachedGroup('group-1')).called(1);
     });
 
-    test('throws NetworkException when remote fails and no cached group', () async {
-      when(() => mockRemote.getGroupById(groupId: 'group-1')).thenThrow(const NetworkException());
-      when(() => mockLocal.getCachedGroup('group-1')).thenAnswer((_) async => null);
+    test(
+      'throws NetworkException when remote fails and no cached group',
+      () async {
+        when(
+          () => mockRemote.getGroupById(groupId: 'group-1'),
+        ).thenThrow(const NetworkException());
+        when(
+          () => mockLocal.getCachedGroup('group-1'),
+        ).thenAnswer((_) async => null);
 
-      expect(() => repository.getGroupById(groupId: 'group-1'), throwsA(isA<NetworkException>()));
-    });
+        expect(
+          () => repository.getGroupById(groupId: 'group-1'),
+          throwsA(isA<NetworkException>()),
+        );
+      },
+    );
   });
 }

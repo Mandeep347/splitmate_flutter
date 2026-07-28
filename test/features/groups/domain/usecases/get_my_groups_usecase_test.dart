@@ -40,7 +40,9 @@ void main() {
 
   group('GetMyGroupsUseCase', () {
     test('returns list of groups on success', () async {
-      when(() => mockRepository.getMyGroups()).thenAnswer((_) async => [tGroup]);
+      when(
+        () => mockRepository.getMyGroups(),
+      ).thenAnswer((_) async => [tGroup]);
 
       final result = await usecase();
 
@@ -49,19 +51,25 @@ void main() {
     });
 
     test('throws NetworkFailure on NetworkException', () async {
-      when(() => mockRepository.getMyGroups()).thenThrow(const NetworkException());
+      when(
+        () => mockRepository.getMyGroups(),
+      ).thenThrow(const NetworkException());
 
       expect(() => usecase(), throwsA(isA<NetworkFailure>()));
     });
 
     test('throws UnknownFailure on unexpected exception', () async {
-      when(() => mockRepository.getMyGroups()).thenThrow(Exception('unexpected'));
+      when(
+        () => mockRepository.getMyGroups(),
+      ).thenThrow(Exception('unexpected'));
 
       expect(() => usecase(), throwsA(isA<UnknownFailure>()));
     });
 
     test('does not re-wrap Failure subclasses', () async {
-      when(() => mockRepository.getMyGroups()).thenThrow(const ServerFailure('Already a failure'));
+      when(
+        () => mockRepository.getMyGroups(),
+      ).thenThrow(const ServerFailure('Already a failure'));
 
       expect(() => usecase(), throwsA(isA<ServerFailure>()));
     });

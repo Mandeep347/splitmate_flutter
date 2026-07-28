@@ -105,9 +105,7 @@ class SettlementListPage extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               itemCount: settlements.length,
               itemBuilder: (context, index) {
-                return SettlementListTile(
-                  settlement: settlements[index],
-                );
+                return SettlementListTile(settlement: settlements[index]);
               },
             ),
           );

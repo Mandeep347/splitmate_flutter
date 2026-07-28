@@ -89,7 +89,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                 Text(
                   _isTimedOut
                       ? 'App initialization timed out. Please check your network connection.'
-                      : (authState.error?.toString() ?? 'Failed to initialize session.'),
+                      : (authState.error?.toString() ??
+                            'Failed to initialize session.'),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -105,9 +106,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                   },
                 ),
               ] else ...[
-                CircularProgressIndicator(
-                  color: theme.colorScheme.primary,
-                ),
+                CircularProgressIndicator(color: theme.colorScheme.primary),
               ],
             ],
           ),

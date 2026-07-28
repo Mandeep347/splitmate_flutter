@@ -8,10 +8,7 @@ class SettlementProgressBar extends StatelessWidget {
   final double value;
 
   /// Creates a const [SettlementProgressBar] instance.
-  const SettlementProgressBar({
-    super.key,
-    required this.value,
-  });
+  const SettlementProgressBar({super.key, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,10 @@ class SettlementProgressBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(ext.radiusXS),
                 gradient: isFullySettled
                     ? const LinearGradient(
-                        colors: [Color(0xFF10B981), Color(0xFF059669)], // Emerald Green
+                        colors: [
+                          Color(0xFF10B981),
+                          Color(0xFF059669),
+                        ], // Emerald Green
                       )
                     : ext.primaryGradient,
               ),

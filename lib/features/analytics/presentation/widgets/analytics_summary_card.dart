@@ -107,7 +107,9 @@ class AnalyticsSummaryCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: cells.map((cell) => Expanded(child: cell)).toList(),
+                      children: cells
+                          .map((cell) => Expanded(child: cell))
+                          .toList(),
                     ),
                   );
                 } else {
@@ -134,10 +136,7 @@ class _StatCell extends StatelessWidget {
   final String label;
   final Widget child;
 
-  const _StatCell({
-    required this.label,
-    required this.child,
-  });
+  const _StatCell({required this.label, required this.child});
 
   @override
   Widget build(BuildContext context) {

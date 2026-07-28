@@ -12,10 +12,12 @@ part of 'user_overall_balance_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 UserOverallBalanceModel _$UserOverallBalanceModelFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _UserOverallBalanceModel.fromJson(json);
 }
 
@@ -37,20 +39,24 @@ mixin _$UserOverallBalanceModel {
 
 /// @nodoc
 abstract class $UserOverallBalanceModelCopyWith<$Res> {
-  factory $UserOverallBalanceModelCopyWith(UserOverallBalanceModel value,
-          $Res Function(UserOverallBalanceModel) then) =
-      _$UserOverallBalanceModelCopyWithImpl<$Res, UserOverallBalanceModel>;
+  factory $UserOverallBalanceModelCopyWith(
+    UserOverallBalanceModel value,
+    $Res Function(UserOverallBalanceModel) then,
+  ) = _$UserOverallBalanceModelCopyWithImpl<$Res, UserOverallBalanceModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'counterpart_user_id') String counterpartUserId,
-      @JsonKey(name: 'counterpart_name') String counterpartName,
-      @JsonKey(name: 'net_amount') String netAmount,
-      String currency});
+  $Res call({
+    @JsonKey(name: 'counterpart_user_id') String counterpartUserId,
+    @JsonKey(name: 'counterpart_name') String counterpartName,
+    @JsonKey(name: 'net_amount') String netAmount,
+    String currency,
+  });
 }
 
 /// @nodoc
-class _$UserOverallBalanceModelCopyWithImpl<$Res,
-        $Val extends UserOverallBalanceModel>
+class _$UserOverallBalanceModelCopyWithImpl<
+  $Res,
+  $Val extends UserOverallBalanceModel
+>
     implements $UserOverallBalanceModelCopyWith<$Res> {
   _$UserOverallBalanceModelCopyWithImpl(this._value, this._then);
 
@@ -67,24 +73,27 @@ class _$UserOverallBalanceModelCopyWithImpl<$Res,
     Object? netAmount = null,
     Object? currency = null,
   }) {
-    return _then(_value.copyWith(
-      counterpartUserId: null == counterpartUserId
-          ? _value.counterpartUserId
-          : counterpartUserId // ignore: cast_nullable_to_non_nullable
-              as String,
-      counterpartName: null == counterpartName
-          ? _value.counterpartName
-          : counterpartName // ignore: cast_nullable_to_non_nullable
-              as String,
-      netAmount: null == netAmount
-          ? _value.netAmount
-          : netAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            counterpartUserId: null == counterpartUserId
+                ? _value.counterpartUserId
+                : counterpartUserId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            counterpartName: null == counterpartName
+                ? _value.counterpartName
+                : counterpartName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            netAmount: null == netAmount
+                ? _value.netAmount
+                : netAmount // ignore: cast_nullable_to_non_nullable
+                      as String,
+            currency: null == currency
+                ? _value.currency
+                : currency // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -92,27 +101,31 @@ class _$UserOverallBalanceModelCopyWithImpl<$Res,
 abstract class _$$UserOverallBalanceModelImplCopyWith<$Res>
     implements $UserOverallBalanceModelCopyWith<$Res> {
   factory _$$UserOverallBalanceModelImplCopyWith(
-          _$UserOverallBalanceModelImpl value,
-          $Res Function(_$UserOverallBalanceModelImpl) then) =
-      __$$UserOverallBalanceModelImplCopyWithImpl<$Res>;
+    _$UserOverallBalanceModelImpl value,
+    $Res Function(_$UserOverallBalanceModelImpl) then,
+  ) = __$$UserOverallBalanceModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'counterpart_user_id') String counterpartUserId,
-      @JsonKey(name: 'counterpart_name') String counterpartName,
-      @JsonKey(name: 'net_amount') String netAmount,
-      String currency});
+  $Res call({
+    @JsonKey(name: 'counterpart_user_id') String counterpartUserId,
+    @JsonKey(name: 'counterpart_name') String counterpartName,
+    @JsonKey(name: 'net_amount') String netAmount,
+    String currency,
+  });
 }
 
 /// @nodoc
 class __$$UserOverallBalanceModelImplCopyWithImpl<$Res>
-    extends _$UserOverallBalanceModelCopyWithImpl<$Res,
-        _$UserOverallBalanceModelImpl>
+    extends
+        _$UserOverallBalanceModelCopyWithImpl<
+          $Res,
+          _$UserOverallBalanceModelImpl
+        >
     implements _$$UserOverallBalanceModelImplCopyWith<$Res> {
   __$$UserOverallBalanceModelImplCopyWithImpl(
-      _$UserOverallBalanceModelImpl _value,
-      $Res Function(_$UserOverallBalanceModelImpl) _then)
-      : super(_value, _then);
+    _$UserOverallBalanceModelImpl _value,
+    $Res Function(_$UserOverallBalanceModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -122,36 +135,38 @@ class __$$UserOverallBalanceModelImplCopyWithImpl<$Res>
     Object? netAmount = null,
     Object? currency = null,
   }) {
-    return _then(_$UserOverallBalanceModelImpl(
-      counterpartUserId: null == counterpartUserId
-          ? _value.counterpartUserId
-          : counterpartUserId // ignore: cast_nullable_to_non_nullable
-              as String,
-      counterpartName: null == counterpartName
-          ? _value.counterpartName
-          : counterpartName // ignore: cast_nullable_to_non_nullable
-              as String,
-      netAmount: null == netAmount
-          ? _value.netAmount
-          : netAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$UserOverallBalanceModelImpl(
+        counterpartUserId: null == counterpartUserId
+            ? _value.counterpartUserId
+            : counterpartUserId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        counterpartName: null == counterpartName
+            ? _value.counterpartName
+            : counterpartName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        netAmount: null == netAmount
+            ? _value.netAmount
+            : netAmount // ignore: cast_nullable_to_non_nullable
+                  as String,
+        currency: null == currency
+            ? _value.currency
+            : currency // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$UserOverallBalanceModelImpl extends _UserOverallBalanceModel {
-  const _$UserOverallBalanceModelImpl(
-      {@JsonKey(name: 'counterpart_user_id') required this.counterpartUserId,
-      @JsonKey(name: 'counterpart_name') required this.counterpartName,
-      @JsonKey(name: 'net_amount') required this.netAmount,
-      required this.currency})
-      : super._();
+  const _$UserOverallBalanceModelImpl({
+    @JsonKey(name: 'counterpart_user_id') required this.counterpartUserId,
+    @JsonKey(name: 'counterpart_name') required this.counterpartName,
+    @JsonKey(name: 'net_amount') required this.netAmount,
+    required this.currency,
+  }) : super._();
 
   factory _$UserOverallBalanceModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserOverallBalanceModelImplFromJson(json);
@@ -191,30 +206,36 @@ class _$UserOverallBalanceModelImpl extends _UserOverallBalanceModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, counterpartUserId, counterpartName, netAmount, currency);
+    runtimeType,
+    counterpartUserId,
+    counterpartName,
+    netAmount,
+    currency,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UserOverallBalanceModelImplCopyWith<_$UserOverallBalanceModelImpl>
-      get copyWith => __$$UserOverallBalanceModelImplCopyWithImpl<
-          _$UserOverallBalanceModelImpl>(this, _$identity);
+  get copyWith =>
+      __$$UserOverallBalanceModelImplCopyWithImpl<
+        _$UserOverallBalanceModelImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserOverallBalanceModelImplToJson(
-      this,
-    );
+    return _$$UserOverallBalanceModelImplToJson(this);
   }
 }
 
 abstract class _UserOverallBalanceModel extends UserOverallBalanceModel {
-  const factory _UserOverallBalanceModel(
-      {@JsonKey(name: 'counterpart_user_id')
-      required final String counterpartUserId,
-      @JsonKey(name: 'counterpart_name') required final String counterpartName,
-      @JsonKey(name: 'net_amount') required final String netAmount,
-      required final String currency}) = _$UserOverallBalanceModelImpl;
+  const factory _UserOverallBalanceModel({
+    @JsonKey(name: 'counterpart_user_id')
+    required final String counterpartUserId,
+    @JsonKey(name: 'counterpart_name') required final String counterpartName,
+    @JsonKey(name: 'net_amount') required final String netAmount,
+    required final String currency,
+  }) = _$UserOverallBalanceModelImpl;
   const _UserOverallBalanceModel._() : super._();
 
   factory _UserOverallBalanceModel.fromJson(Map<String, dynamic> json) =
@@ -234,5 +255,5 @@ abstract class _UserOverallBalanceModel extends UserOverallBalanceModel {
   @override
   @JsonKey(ignore: true)
   _$$UserOverallBalanceModelImplCopyWith<_$UserOverallBalanceModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

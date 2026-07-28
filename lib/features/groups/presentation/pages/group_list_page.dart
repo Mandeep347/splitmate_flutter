@@ -32,12 +32,13 @@ class GroupListPage extends ConsumerWidget {
     // Listens to create group mutation to show status SnackBars
     ref.listen<AsyncValue<void>>(createGroupProvider, (previous, next) {
       if (next is AsyncData<void> && previous is AsyncLoading<void>) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Group created!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Group created!')));
       } else if (next is AsyncError<void>) {
-        final errorMessage =
-            next.error is Failure ? (next.error as Failure).message : 'Failed to create group.';
+        final errorMessage = next.error is Failure
+            ? (next.error as Failure).message
+            : 'Failed to create group.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
@@ -110,12 +111,9 @@ class GroupListPage extends ConsumerWidget {
                 crossAxisSpacing: ext.spaceSM,
                 mainAxisSpacing: ext.spaceSM,
               ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return GroupCard(group: list[index]);
-                },
-                childCount: list.length,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return GroupCard(group: list[index]);
+              }, childCount: list.length),
             );
           }
 
@@ -134,14 +132,15 @@ class GroupListPage extends ConsumerWidget {
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
                 if (!isDesktop)
-                  const SliverToBoxAdapter(
-                    child: OverallBalanceCard(),
-                  ),
-                
+                  const SliverToBoxAdapter(child: OverallBalanceCard()),
+
                 // Active Groups Section Title
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: ext.spaceLG, vertical: ext.spaceMD),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ext.spaceLG,
+                      vertical: ext.spaceMD,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -188,7 +187,11 @@ class GroupListPage extends ConsumerWidget {
                 if (settledGroups.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.only(left: ext.spaceLG, top: ext.spaceXL, bottom: ext.spaceMD),
+                      padding: EdgeInsets.only(
+                        left: ext.spaceLG,
+                        top: ext.spaceXL,
+                        bottom: ext.spaceMD,
+                      ),
                       child: Text(
                         'History (Settled Groups)',
                         style: theme.textTheme.titleMedium?.copyWith(

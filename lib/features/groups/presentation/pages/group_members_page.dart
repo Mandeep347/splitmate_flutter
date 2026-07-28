@@ -38,12 +38,13 @@ class GroupMembersPage extends ConsumerWidget {
     // Listen to remove member state changes to show success/error SnackBar
     ref.listen<AsyncValue<void>>(removeMemberProvider, (previous, next) {
       if (next is AsyncData<void> && previous is AsyncLoading<void>) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Member removed!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Member removed!')));
       } else if (next is AsyncError<void> && previous is AsyncLoading<void>) {
-        final errorMessage =
-            next.error is Failure ? (next.error as Failure).message : 'Failed to remove member.';
+        final errorMessage = next.error is Failure
+            ? (next.error as Failure).message
+            : 'Failed to remove member.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
@@ -76,9 +77,7 @@ class GroupMembersPage extends ConsumerWidget {
         ),
         data: (members) {
           if (members.isEmpty) {
-            return const Center(
-              child: Text('No members found.'),
-            );
+            return const Center(child: Text('No members found.'));
           }
 
           return ListView.separated(
@@ -131,7 +130,9 @@ class GroupMembersPage extends ConsumerWidget {
                             isDestructive: true,
                           );
                           if (confirm == true) {
-                            await ref.read(removeMemberProvider.notifier).remove(
+                            await ref
+                                .read(removeMemberProvider.notifier)
+                                .remove(
                                   groupId: groupId,
                                   userId: member.userId,
                                 );

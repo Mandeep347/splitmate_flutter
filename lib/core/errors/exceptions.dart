@@ -26,7 +26,8 @@ class UnauthorizedException extends NetworkClientException {
 class ForbiddenException extends NetworkClientException {
   /// Creates a const [ForbiddenException] instance.
   const ForbiddenException([
-    super.message = 'Access denied. You do not have permissions for this action.',
+    super.message =
+        'Access denied. You do not have permissions for this action.',
     super.code,
   ]);
 }

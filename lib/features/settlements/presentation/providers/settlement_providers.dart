@@ -20,13 +20,17 @@ import 'package:splito_flutter/features/settlements/domain/usecases/get_group_se
 // ============================================================================
 
 /// Provider exposing [GetGroupSettlementsUseCase].
-final getGroupSettlementsUseCaseProvider = Provider<GetGroupSettlementsUseCase>((ref) {
-  final repository = ref.watch(settlementRepositoryProvider);
-  return GetGroupSettlementsUseCase(repository: repository);
-});
+final getGroupSettlementsUseCaseProvider = Provider<GetGroupSettlementsUseCase>(
+  (ref) {
+    final repository = ref.watch(settlementRepositoryProvider);
+    return GetGroupSettlementsUseCase(repository: repository);
+  },
+);
 
 /// Provider exposing [CreateSettlementUseCase].
-final createSettlementUseCaseProvider = Provider<CreateSettlementUseCase>((ref) {
+final createSettlementUseCaseProvider = Provider<CreateSettlementUseCase>((
+  ref,
+) {
   final repository = ref.watch(settlementRepositoryProvider);
   return CreateSettlementUseCase(repository: repository);
 });
@@ -36,7 +40,8 @@ final createSettlementUseCaseProvider = Provider<CreateSettlementUseCase>((ref) 
 // ============================================================================
 
 /// Notifier that manages retrieving and listing settlements history for a group.
-class GroupSettlementsNotifier extends FamilyAsyncNotifier<List<Settlement>, String> {
+class GroupSettlementsNotifier
+    extends FamilyAsyncNotifier<List<Settlement>, String> {
   @override
   FutureOr<List<Settlement>> build(String groupId) {
     final isAuthenticated = ref.watch(authStateProvider);
@@ -64,9 +69,13 @@ class GroupSettlementsNotifier extends FamilyAsyncNotifier<List<Settlement>, Str
 
 /// Family provider exposing the settlement logs of a group.
 final groupSettlementsProvider =
-    AsyncNotifierProvider.family<GroupSettlementsNotifier, List<Settlement>, String>(() {
-  return GroupSettlementsNotifier();
-});
+    AsyncNotifierProvider.family<
+      GroupSettlementsNotifier,
+      List<Settlement>,
+      String
+    >(() {
+      return GroupSettlementsNotifier();
+    });
 
 // ============================================================================
 // SECTION C — Create Settlement
@@ -128,7 +137,9 @@ class CreateSettlementNotifier extends AsyncNotifier<Settlement?> {
         createdAt: DateTime.now(),
       );
 
-      ref.read(groupSettlementsProvider(groupId).notifier).prependSettlement(localSettlement);
+      ref
+          .read(groupSettlementsProvider(groupId).notifier)
+          .prependSettlement(localSettlement);
       ref.invalidate(pendingCountProvider);
 
       state = AsyncData<Settlement?>(localSettlement);
@@ -167,5 +178,5 @@ class CreateSettlementNotifier extends AsyncNotifier<Settlement?> {
 /// Provider exposing [CreateSettlementNotifier].
 final createSettlementProvider =
     AsyncNotifierProvider<CreateSettlementNotifier, Settlement?>(() {
-  return CreateSettlementNotifier();
-});
+      return CreateSettlementNotifier();
+    });

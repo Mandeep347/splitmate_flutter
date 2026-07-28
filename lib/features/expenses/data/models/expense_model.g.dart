@@ -19,9 +19,12 @@ _$ExpenseModelImpl _$$ExpenseModelImplFromJson(Map<String, dynamic> json) =>
       splitType: json['split_type'] as String,
       status: json['status'] as String,
       createdAt: json['created_at'] as String,
-      participants: (json['participants'] as List<dynamic>?)
-              ?.map((e) =>
-                  ExpenseParticipantModel.fromJson(e as Map<String, dynamic>))
+      participants:
+          (json['participants'] as List<dynamic>?)
+              ?.map(
+                (e) =>
+                    ExpenseParticipantModel.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           const [],
     );

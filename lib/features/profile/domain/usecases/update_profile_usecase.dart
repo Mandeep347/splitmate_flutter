@@ -9,16 +9,11 @@ class UpdateProfileUseCase {
   final IAuthRepository repository;
 
   /// Creates a new [UpdateProfileUseCase] instance.
-  const UpdateProfileUseCase({
-    required this.repository,
-  });
+  const UpdateProfileUseCase({required this.repository});
 
   /// Executes the profile update.
   /// Throws a [Failure] on error.
-  Future<LoggedInUser> call({
-    String? name,
-    String? preferredCurrency,
-  }) async {
+  Future<LoggedInUser> call({String? name, String? preferredCurrency}) async {
     try {
       return await repository.updateMe(
         name: name,

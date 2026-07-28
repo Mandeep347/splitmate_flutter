@@ -48,107 +48,142 @@ void main() {
   });
 
   group('CreateExpenseUseCase — local validation', () {
-    test('throws BusinessRuleFailure EMPTY_PARTICIPANTS for EqualSplitInput with empty participants list', () async {
-      const input = EqualSplitInput(participants: []);
+    test(
+      'throws BusinessRuleFailure EMPTY_PARTICIPANTS for EqualSplitInput with empty participants list',
+      () async {
+        const input = EqualSplitInput(participants: []);
 
-      expect(
-        () => useCase(
-          groupId: 'group-1',
-          title: 'Dinner',
-          totalAmount: 3000.0,
-          currency: 'INR',
-          paidByUserId: 'user-1',
-          splitInput: input,
-        ),
-        throwsA(
-          isA<BusinessRuleFailure>().having((f) => f.code, 'code', 'EMPTY_PARTICIPANTS'),
-        ),
-      );
-
-      verifyNever(() => mockRepository.createExpense(
-            groupId: any(named: 'groupId'),
-            title: any(named: 'title'),
-            totalAmount: any(named: 'totalAmount'),
-            currency: any(named: 'currency'),
-            paidByUserId: any(named: 'paidByUserId'),
-            splitInput: any(named: 'splitInput'),
-          ));
-    });
-
-    test('throws BusinessRuleFailure INVALID_SPLIT_TOTAL for ExactSplitInput where amounts do not sum to totalAmount', () async {
-      const input = ExactSplitInput(participants: [
-        ExactParticipantInput(userId: 'u1', owedAmount: 1000.0),
-        ExactParticipantInput(userId: 'u2', owedAmount: 500.0),
-      ]);
-
-      expect(
-        () => useCase(
-          groupId: 'group-1',
-          title: 'Dinner',
-          totalAmount: 3000.0,
-          currency: 'INR',
-          paidByUserId: 'user-1',
-          splitInput: input,
-        ),
-        throwsA(
-          isA<BusinessRuleFailure>().having((f) => f.code, 'code', 'INVALID_SPLIT_TOTAL'),
-        ),
-      );
-
-      verifyNever(() => mockRepository.createExpense(
-            groupId: any(named: 'groupId'),
-            title: any(named: 'title'),
-            totalAmount: any(named: 'totalAmount'),
-            currency: any(named: 'currency'),
-            paidByUserId: any(named: 'paidByUserId'),
-            splitInput: any(named: 'splitInput'),
-          ));
-    });
-
-    test('throws BusinessRuleFailure INVALID_SPLIT_PERCENTAGE for PercentageSplitInput where percentages do not sum to 100', () async {
-      const input = PercentageSplitInput(participants: [
-        PercentageParticipantInput(userId: 'u1', percentage: 40.0),
-        PercentageParticipantInput(userId: 'u2', percentage: 30.0),
-      ]);
-
-      expect(
-        () => useCase(
-          groupId: 'group-1',
-          title: 'Dinner',
-          totalAmount: 3000.0,
-          currency: 'INR',
-          paidByUserId: 'user-1',
-          splitInput: input,
-        ),
-        throwsA(
-          isA<BusinessRuleFailure>().having((f) => f.code, 'code', 'INVALID_SPLIT_PERCENTAGE'),
-        ),
-      );
-
-      verifyNever(() => mockRepository.createExpense(
-            groupId: any(named: 'groupId'),
-            title: any(named: 'title'),
-            totalAmount: any(named: 'totalAmount'),
-            currency: any(named: 'currency'),
-            paidByUserId: any(named: 'paidByUserId'),
-            splitInput: any(named: 'splitInput'),
-          ));
-    });
-
-    test('calls repository and returns Expense when valid', () async {
-      const input = EqualSplitInput(participants: [
-        EqualParticipantInput(userId: 'u1'),
-        EqualParticipantInput(userId: 'u2'),
-      ]);
-
-      when(() => mockRepository.createExpense(
+        expect(
+          () => useCase(
             groupId: 'group-1',
             title: 'Dinner',
-            totalAmount: 2000.0,
+            totalAmount: 3000.0,
             currency: 'INR',
             paidByUserId: 'user-1',
             splitInput: input,
-          )).thenAnswer((_) async => tExpense);
+          ),
+          throwsA(
+            isA<BusinessRuleFailure>().having(
+              (f) => f.code,
+              'code',
+              'EMPTY_PARTICIPANTS',
+            ),
+          ),
+        );
+
+        verifyNever(
+          () => mockRepository.createExpense(
+            groupId: any(named: 'groupId'),
+            title: any(named: 'title'),
+            totalAmount: any(named: 'totalAmount'),
+            currency: any(named: 'currency'),
+            paidByUserId: any(named: 'paidByUserId'),
+            splitInput: any(named: 'splitInput'),
+          ),
+        );
+      },
+    );
+
+    test(
+      'throws BusinessRuleFailure INVALID_SPLIT_TOTAL for ExactSplitInput where amounts do not sum to totalAmount',
+      () async {
+        const input = ExactSplitInput(
+          participants: [
+            ExactParticipantInput(userId: 'u1', owedAmount: 1000.0),
+            ExactParticipantInput(userId: 'u2', owedAmount: 500.0),
+          ],
+        );
+
+        expect(
+          () => useCase(
+            groupId: 'group-1',
+            title: 'Dinner',
+            totalAmount: 3000.0,
+            currency: 'INR',
+            paidByUserId: 'user-1',
+            splitInput: input,
+          ),
+          throwsA(
+            isA<BusinessRuleFailure>().having(
+              (f) => f.code,
+              'code',
+              'INVALID_SPLIT_TOTAL',
+            ),
+          ),
+        );
+
+        verifyNever(
+          () => mockRepository.createExpense(
+            groupId: any(named: 'groupId'),
+            title: any(named: 'title'),
+            totalAmount: any(named: 'totalAmount'),
+            currency: any(named: 'currency'),
+            paidByUserId: any(named: 'paidByUserId'),
+            splitInput: any(named: 'splitInput'),
+          ),
+        );
+      },
+    );
+
+    test(
+      'throws BusinessRuleFailure INVALID_SPLIT_PERCENTAGE for PercentageSplitInput where percentages do not sum to 100',
+      () async {
+        const input = PercentageSplitInput(
+          participants: [
+            PercentageParticipantInput(userId: 'u1', percentage: 40.0),
+            PercentageParticipantInput(userId: 'u2', percentage: 30.0),
+          ],
+        );
+
+        expect(
+          () => useCase(
+            groupId: 'group-1',
+            title: 'Dinner',
+            totalAmount: 3000.0,
+            currency: 'INR',
+            paidByUserId: 'user-1',
+            splitInput: input,
+          ),
+          throwsA(
+            isA<BusinessRuleFailure>().having(
+              (f) => f.code,
+              'code',
+              'INVALID_SPLIT_PERCENTAGE',
+            ),
+          ),
+        );
+
+        verifyNever(
+          () => mockRepository.createExpense(
+            groupId: any(named: 'groupId'),
+            title: any(named: 'title'),
+            totalAmount: any(named: 'totalAmount'),
+            currency: any(named: 'currency'),
+            paidByUserId: any(named: 'paidByUserId'),
+            splitInput: any(named: 'splitInput'),
+          ),
+        );
+      },
+    );
+
+    test('calls repository and returns Expense when valid', () async {
+      const input = EqualSplitInput(
+        participants: [
+          EqualParticipantInput(userId: 'u1'),
+          EqualParticipantInput(userId: 'u2'),
+        ],
+      );
+
+      when(
+        () => mockRepository.createExpense(
+          groupId: 'group-1',
+          title: 'Dinner',
+          totalAmount: 2000.0,
+          currency: 'INR',
+          paidByUserId: 'user-1',
+          splitInput: input,
+        ),
+      ).thenAnswer((_) async => tExpense);
 
       final result = await useCase(
         groupId: 'group-1',
@@ -160,34 +195,40 @@ void main() {
       );
 
       expect(result, tExpense);
-      verify(() => mockRepository.createExpense(
-            groupId: 'group-1',
-            title: 'Dinner',
-            totalAmount: 2000.0,
-            currency: 'INR',
-            paidByUserId: 'user-1',
-            splitInput: input,
-          )).called(1);
+      verify(
+        () => mockRepository.createExpense(
+          groupId: 'group-1',
+          title: 'Dinner',
+          totalAmount: 2000.0,
+          currency: 'INR',
+          paidByUserId: 'user-1',
+          splitInput: input,
+        ),
+      ).called(1);
     });
   });
 
   group('CreateExpenseUseCase — exception mapping', () {
     test('maps BusinessRuleException to BusinessRuleFailure', () async {
-      const input = EqualSplitInput(participants: [
-        EqualParticipantInput(userId: 'u1'),
-      ]);
+      const input = EqualSplitInput(
+        participants: [EqualParticipantInput(userId: 'u1')],
+      );
 
-      when(() => mockRepository.createExpense(
-            groupId: 'group-1',
-            title: 'Dinner',
-            totalAmount: 2000.0,
-            currency: 'INR',
-            paidByUserId: 'user-1',
-            splitInput: input,
-          )).thenThrow(const BusinessRuleException(
-        message: 'Invalid input',
-        errors: {'code': 'SOME_ERROR'},
-      ));
+      when(
+        () => mockRepository.createExpense(
+          groupId: 'group-1',
+          title: 'Dinner',
+          totalAmount: 2000.0,
+          currency: 'INR',
+          paidByUserId: 'user-1',
+          splitInput: input,
+        ),
+      ).thenThrow(
+        const BusinessRuleException(
+          message: 'Invalid input',
+          errors: {'code': 'SOME_ERROR'},
+        ),
+      );
 
       expect(
         () => useCase(
@@ -203,18 +244,20 @@ void main() {
     });
 
     test('maps NetworkException to NetworkFailure', () async {
-      const input = EqualSplitInput(participants: [
-        EqualParticipantInput(userId: 'u1'),
-      ]);
+      const input = EqualSplitInput(
+        participants: [EqualParticipantInput(userId: 'u1')],
+      );
 
-      when(() => mockRepository.createExpense(
-            groupId: 'group-1',
-            title: 'Dinner',
-            totalAmount: 2000.0,
-            currency: 'INR',
-            paidByUserId: 'user-1',
-            splitInput: input,
-          )).thenThrow(const NetworkException('No Internet'));
+      when(
+        () => mockRepository.createExpense(
+          groupId: 'group-1',
+          title: 'Dinner',
+          totalAmount: 2000.0,
+          currency: 'INR',
+          paidByUserId: 'user-1',
+          splitInput: input,
+        ),
+      ).thenThrow(const NetworkException('No Internet'));
 
       expect(
         () => useCase(
@@ -230,18 +273,20 @@ void main() {
     });
 
     test('does not re-wrap Failure subtypes', () async {
-      const input = EqualSplitInput(participants: [
-        EqualParticipantInput(userId: 'u1'),
-      ]);
+      const input = EqualSplitInput(
+        participants: [EqualParticipantInput(userId: 'u1')],
+      );
 
-      when(() => mockRepository.createExpense(
-            groupId: 'group-1',
-            title: 'Dinner',
-            totalAmount: 2000.0,
-            currency: 'INR',
-            paidByUserId: 'user-1',
-            splitInput: input,
-          )).thenThrow(const AuthFailure('Unauthorized'));
+      when(
+        () => mockRepository.createExpense(
+          groupId: 'group-1',
+          title: 'Dinner',
+          totalAmount: 2000.0,
+          currency: 'INR',
+          paidByUserId: 'user-1',
+          splitInput: input,
+        ),
+      ).thenThrow(const AuthFailure('Unauthorized'));
 
       expect(
         () => useCase(

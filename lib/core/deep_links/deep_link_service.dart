@@ -38,10 +38,14 @@ class DeepLinkService {
     if (host == 'verify' || path == '/verify-email' || path == 'verify-email') {
       debugPrint('DeepLink matched verify with token: $token');
       router.go('${AppRoutes.verifyEmailPath}?token=$token');
-    } else if (host == 'reset-password' || path == '/reset-password' || path == 'reset-password') {
+    } else if (host == 'reset-password' ||
+        path == '/reset-password' ||
+        path == 'reset-password') {
       debugPrint('DeepLink matched reset-password with token: $token');
       router.go('${AppRoutes.resetPasswordPath}?token=$token');
-    } else if (host == 'groups' || path.startsWith('/groups/') || path.startsWith('groups/')) {
+    } else if (host == 'groups' ||
+        path.startsWith('/groups/') ||
+        path.startsWith('groups/')) {
       final String groupId;
       if (host == 'groups') {
         groupId = path.replaceFirst('/', '');

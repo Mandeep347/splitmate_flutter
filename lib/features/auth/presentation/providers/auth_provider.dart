@@ -71,7 +71,9 @@ final verifyEmailUseCaseProvider = Provider<VerifyEmailUseCase>((ref) {
 });
 
 /// Provider for [ResendVerificationUseCase].
-final resendVerificationUseCaseProvider = Provider<ResendVerificationUseCase>((ref) {
+final resendVerificationUseCaseProvider = Provider<ResendVerificationUseCase>((
+  ref,
+) {
   final repository = ref.watch(authRepositoryProvider);
   return ResendVerificationUseCase(repository: repository);
 });
@@ -127,10 +129,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   }
 
   /// Triggers user login flow and updates session states.
-  Future<void> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     state = const AsyncLoading<AuthState>();
     try {
       final loginUseCase = ref.read(loginUseCaseProvider);
@@ -154,11 +153,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     state = const AsyncLoading<AuthState>();
     try {
       final registerUseCase = ref.read(registerUseCaseProvider);
-      await registerUseCase(
-        name: name,
-        email: email,
-        password: password,
-      );
+      await registerUseCase(name: name, email: email, password: password);
 
       state = const AsyncValue.data(AuthStateUnauthenticated());
     } catch (e, stack) {
@@ -184,7 +179,9 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   Future<void> resendVerification({required String email}) async {
     state = const AsyncLoading<AuthState>();
     try {
-      final resendVerificationUseCase = ref.read(resendVerificationUseCaseProvider);
+      final resendVerificationUseCase = ref.read(
+        resendVerificationUseCaseProvider,
+      );
       await resendVerificationUseCase(email: email);
       state = const AsyncValue.data(AuthStateUnauthenticated());
     } catch (e, stack) {
@@ -207,7 +204,10 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   }
 
   /// Completes password reset with new password.
-  Future<void> resetPassword({required String token, required String newPassword}) async {
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
     state = const AsyncLoading<AuthState>();
     try {
       final resetPasswordUseCase = ref.read(resetPasswordUseCaseProvider);

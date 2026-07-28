@@ -24,15 +24,15 @@ class EditExpenseSheet {
 class _EditExpenseSheetContent extends ConsumerStatefulWidget {
   final Expense expense;
 
-  const _EditExpenseSheetContent({
-    required this.expense,
-  });
+  const _EditExpenseSheetContent({required this.expense});
 
   @override
-  ConsumerState<_EditExpenseSheetContent> createState() => _EditExpenseSheetContentState();
+  ConsumerState<_EditExpenseSheetContent> createState() =>
+      _EditExpenseSheetContentState();
 }
 
-class _EditExpenseSheetContentState extends ConsumerState<_EditExpenseSheetContent> {
+class _EditExpenseSheetContentState
+    extends ConsumerState<_EditExpenseSheetContent> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
@@ -41,7 +41,9 @@ class _EditExpenseSheetContentState extends ConsumerState<_EditExpenseSheetConte
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.expense.title);
-    _descriptionController = TextEditingController(text: widget.expense.description ?? '');
+    _descriptionController = TextEditingController(
+      text: widget.expense.description ?? '',
+    );
   }
 
   @override
@@ -57,7 +59,9 @@ class _EditExpenseSheetContentState extends ConsumerState<_EditExpenseSheetConte
     }
 
     try {
-      await ref.read(updateExpenseProvider.notifier).updateExpense(
+      await ref
+          .read(updateExpenseProvider.notifier)
+          .updateExpense(
             expenseId: widget.expense.id,
             groupId: widget.expense.groupId,
             title: _titleController.text.trim(),
@@ -81,7 +85,9 @@ class _EditExpenseSheetContentState extends ConsumerState<_EditExpenseSheetConte
         Navigator.of(context).pop();
       } else if (next is AsyncError<void> && previous is AsyncLoading<void>) {
         final failure = next.error;
-        final message = failure is Failure ? failure.message : 'Failed to update expense.';
+        final message = failure is Failure
+            ? failure.message
+            : 'Failed to update expense.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
@@ -131,7 +137,9 @@ class _EditExpenseSheetContentState extends ConsumerState<_EditExpenseSheetConte
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                  color: theme.colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.5,
+                  ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(

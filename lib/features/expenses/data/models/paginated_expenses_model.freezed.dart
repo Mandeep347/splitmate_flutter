@@ -12,10 +12,12 @@ part of 'paginated_expenses_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 PaginatedExpensesModel _$PaginatedExpensesModelFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _PaginatedExpensesModel.fromJson(json);
 }
 
@@ -37,21 +39,25 @@ mixin _$PaginatedExpensesModel {
 
 /// @nodoc
 abstract class $PaginatedExpensesModelCopyWith<$Res> {
-  factory $PaginatedExpensesModelCopyWith(PaginatedExpensesModel value,
-          $Res Function(PaginatedExpensesModel) then) =
-      _$PaginatedExpensesModelCopyWithImpl<$Res, PaginatedExpensesModel>;
+  factory $PaginatedExpensesModelCopyWith(
+    PaginatedExpensesModel value,
+    $Res Function(PaginatedExpensesModel) then,
+  ) = _$PaginatedExpensesModelCopyWithImpl<$Res, PaginatedExpensesModel>;
   @useResult
-  $Res call(
-      {List<ExpenseModel> items,
-      int page,
-      int limit,
-      @JsonKey(name: 'total_pages') int totalPages,
-      @JsonKey(name: 'total_items') int totalItems});
+  $Res call({
+    List<ExpenseModel> items,
+    int page,
+    int limit,
+    @JsonKey(name: 'total_pages') int totalPages,
+    @JsonKey(name: 'total_items') int totalItems,
+  });
 }
 
 /// @nodoc
-class _$PaginatedExpensesModelCopyWithImpl<$Res,
-        $Val extends PaginatedExpensesModel>
+class _$PaginatedExpensesModelCopyWithImpl<
+  $Res,
+  $Val extends PaginatedExpensesModel
+>
     implements $PaginatedExpensesModelCopyWith<$Res> {
   _$PaginatedExpensesModelCopyWithImpl(this._value, this._then);
 
@@ -69,28 +75,31 @@ class _$PaginatedExpensesModelCopyWithImpl<$Res,
     Object? totalPages = null,
     Object? totalItems = null,
   }) {
-    return _then(_value.copyWith(
-      items: null == items
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<ExpenseModel>,
-      page: null == page
-          ? _value.page
-          : page // ignore: cast_nullable_to_non_nullable
-              as int,
-      limit: null == limit
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalPages: null == totalPages
-          ? _value.totalPages
-          : totalPages // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalItems: null == totalItems
-          ? _value.totalItems
-          : totalItems // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            items: null == items
+                ? _value.items
+                : items // ignore: cast_nullable_to_non_nullable
+                      as List<ExpenseModel>,
+            page: null == page
+                ? _value.page
+                : page // ignore: cast_nullable_to_non_nullable
+                      as int,
+            limit: null == limit
+                ? _value.limit
+                : limit // ignore: cast_nullable_to_non_nullable
+                      as int,
+            totalPages: null == totalPages
+                ? _value.totalPages
+                : totalPages // ignore: cast_nullable_to_non_nullable
+                      as int,
+            totalItems: null == totalItems
+                ? _value.totalItems
+                : totalItems // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -98,28 +107,29 @@ class _$PaginatedExpensesModelCopyWithImpl<$Res,
 abstract class _$$PaginatedExpensesModelImplCopyWith<$Res>
     implements $PaginatedExpensesModelCopyWith<$Res> {
   factory _$$PaginatedExpensesModelImplCopyWith(
-          _$PaginatedExpensesModelImpl value,
-          $Res Function(_$PaginatedExpensesModelImpl) then) =
-      __$$PaginatedExpensesModelImplCopyWithImpl<$Res>;
+    _$PaginatedExpensesModelImpl value,
+    $Res Function(_$PaginatedExpensesModelImpl) then,
+  ) = __$$PaginatedExpensesModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {List<ExpenseModel> items,
-      int page,
-      int limit,
-      @JsonKey(name: 'total_pages') int totalPages,
-      @JsonKey(name: 'total_items') int totalItems});
+  $Res call({
+    List<ExpenseModel> items,
+    int page,
+    int limit,
+    @JsonKey(name: 'total_pages') int totalPages,
+    @JsonKey(name: 'total_items') int totalItems,
+  });
 }
 
 /// @nodoc
 class __$$PaginatedExpensesModelImplCopyWithImpl<$Res>
-    extends _$PaginatedExpensesModelCopyWithImpl<$Res,
-        _$PaginatedExpensesModelImpl>
+    extends
+        _$PaginatedExpensesModelCopyWithImpl<$Res, _$PaginatedExpensesModelImpl>
     implements _$$PaginatedExpensesModelImplCopyWith<$Res> {
   __$$PaginatedExpensesModelImplCopyWithImpl(
-      _$PaginatedExpensesModelImpl _value,
-      $Res Function(_$PaginatedExpensesModelImpl) _then)
-      : super(_value, _then);
+    _$PaginatedExpensesModelImpl _value,
+    $Res Function(_$PaginatedExpensesModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -130,42 +140,44 @@ class __$$PaginatedExpensesModelImplCopyWithImpl<$Res>
     Object? totalPages = null,
     Object? totalItems = null,
   }) {
-    return _then(_$PaginatedExpensesModelImpl(
-      items: null == items
-          ? _value._items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<ExpenseModel>,
-      page: null == page
-          ? _value.page
-          : page // ignore: cast_nullable_to_non_nullable
-              as int,
-      limit: null == limit
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalPages: null == totalPages
-          ? _value.totalPages
-          : totalPages // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalItems: null == totalItems
-          ? _value.totalItems
-          : totalItems // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$PaginatedExpensesModelImpl(
+        items: null == items
+            ? _value._items
+            : items // ignore: cast_nullable_to_non_nullable
+                  as List<ExpenseModel>,
+        page: null == page
+            ? _value.page
+            : page // ignore: cast_nullable_to_non_nullable
+                  as int,
+        limit: null == limit
+            ? _value.limit
+            : limit // ignore: cast_nullable_to_non_nullable
+                  as int,
+        totalPages: null == totalPages
+            ? _value.totalPages
+            : totalPages // ignore: cast_nullable_to_non_nullable
+                  as int,
+        totalItems: null == totalItems
+            ? _value.totalItems
+            : totalItems // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$PaginatedExpensesModelImpl extends _PaginatedExpensesModel {
-  const _$PaginatedExpensesModelImpl(
-      {required final List<ExpenseModel> items,
-      required this.page,
-      required this.limit,
-      @JsonKey(name: 'total_pages') required this.totalPages,
-      @JsonKey(name: 'total_items') required this.totalItems})
-      : _items = items,
-        super._();
+  const _$PaginatedExpensesModelImpl({
+    required final List<ExpenseModel> items,
+    required this.page,
+    required this.limit,
+    @JsonKey(name: 'total_pages') required this.totalPages,
+    @JsonKey(name: 'total_items') required this.totalItems,
+  }) : _items = items,
+       super._();
 
   factory _$PaginatedExpensesModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$PaginatedExpensesModelImplFromJson(json);
@@ -211,36 +223,38 @@ class _$PaginatedExpensesModelImpl extends _PaginatedExpensesModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_items),
-      page,
-      limit,
-      totalPages,
-      totalItems);
+    runtimeType,
+    const DeepCollectionEquality().hash(_items),
+    page,
+    limit,
+    totalPages,
+    totalItems,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$PaginatedExpensesModelImplCopyWith<_$PaginatedExpensesModelImpl>
-      get copyWith => __$$PaginatedExpensesModelImplCopyWithImpl<
-          _$PaginatedExpensesModelImpl>(this, _$identity);
+  get copyWith =>
+      __$$PaginatedExpensesModelImplCopyWithImpl<_$PaginatedExpensesModelImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PaginatedExpensesModelImplToJson(
-      this,
-    );
+    return _$$PaginatedExpensesModelImplToJson(this);
   }
 }
 
 abstract class _PaginatedExpensesModel extends PaginatedExpensesModel {
-  const factory _PaginatedExpensesModel(
-          {required final List<ExpenseModel> items,
-          required final int page,
-          required final int limit,
-          @JsonKey(name: 'total_pages') required final int totalPages,
-          @JsonKey(name: 'total_items') required final int totalItems}) =
-      _$PaginatedExpensesModelImpl;
+  const factory _PaginatedExpensesModel({
+    required final List<ExpenseModel> items,
+    required final int page,
+    required final int limit,
+    @JsonKey(name: 'total_pages') required final int totalPages,
+    @JsonKey(name: 'total_items') required final int totalItems,
+  }) = _$PaginatedExpensesModelImpl;
   const _PaginatedExpensesModel._() : super._();
 
   factory _PaginatedExpensesModel.fromJson(Map<String, dynamic> json) =
@@ -261,5 +275,5 @@ abstract class _PaginatedExpensesModel extends PaginatedExpensesModel {
   @override
   @JsonKey(ignore: true)
   _$$PaginatedExpensesModelImplCopyWith<_$PaginatedExpensesModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

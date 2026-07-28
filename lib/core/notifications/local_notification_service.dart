@@ -15,7 +15,9 @@ class LocalNotificationService {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -31,9 +33,10 @@ class LocalNotificationService {
       _initialized = true;
 
       // Request Android 13+ (API 33+) notification permissions
-      final androidImplementation =
-          _notificationsPlugin.resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
+      final androidImplementation = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       if (androidImplementation != null) {
         await androidImplementation.requestNotificationsPermission();
       }
@@ -56,7 +59,8 @@ class LocalNotificationService {
     const androidDetails = AndroidNotificationDetails(
       'splitmate_channel',
       '${AppBranding.name} Notifications',
-      channelDescription: 'Notifications for expenses, balances, and group updates',
+      channelDescription:
+          'Notifications for expenses, balances, and group updates',
       importance: Importance.high,
       priority: Priority.high,
       showWhen: true,
@@ -72,7 +76,13 @@ class LocalNotificationService {
     );
 
     try {
-      await _notificationsPlugin.show(id, title, body, details, payload: payload);
+      await _notificationsPlugin.show(
+        id,
+        title,
+        body,
+        details,
+        payload: payload,
+      );
     } catch (e) {
       debugPrint('Failed to display system notification: $e');
     }
@@ -92,6 +102,8 @@ class LocalNotificationService {
 }
 
 /// Provider exposing [LocalNotificationService].
-final localNotificationServiceProvider = Provider<LocalNotificationService>((ref) {
+final localNotificationServiceProvider = Provider<LocalNotificationService>((
+  ref,
+) {
   return LocalNotificationService();
 });

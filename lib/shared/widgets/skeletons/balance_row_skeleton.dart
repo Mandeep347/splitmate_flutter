@@ -28,7 +28,14 @@ class BalanceRowSkeleton extends StatelessWidget {
               ],
             ),
           ),
-          Container(height: 32, width: 80, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16))),
+          Container(
+            height: 32,
+            width: 80,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
         ],
       ),
     );

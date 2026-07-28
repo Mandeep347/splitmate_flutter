@@ -2,13 +2,7 @@ import 'package:flutter/material.dart';
 import '../utils/design_tokens.dart';
 
 /// Preset color styles for Status Chips.
-enum StatusType {
-  success,
-  error,
-  warning,
-  info,
-  neutral,
-}
+enum StatusType { success, error, warning, info, neutral }
 
 /// Static colored status indicator badge.
 class StatusChip extends StatelessWidget {
@@ -107,8 +101,12 @@ class SelectableChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bgColor = isSelected ? theme.colorScheme.primary : theme.colorScheme.surface;
-    final textColor = isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface;
+    final bgColor = isSelected
+        ? theme.colorScheme.primary
+        : theme.colorScheme.surface;
+    final textColor = isSelected
+        ? theme.colorScheme.onPrimary
+        : theme.colorScheme.onSurface;
     final borderSide = isSelected
         ? BorderSide.none
         : BorderSide(color: theme.colorScheme.outlineVariant);
@@ -154,10 +152,16 @@ class AmountChip extends StatelessWidget {
     final theme = Theme.of(context);
     final isNegative = amount < 0;
     final absAmount = amount.abs().toStringAsFixed(2);
-    final label = isNegative ? 'Owe: $currencySymbol$absAmount' : 'Get back: $currencySymbol$absAmount';
+    final label = isNegative
+        ? 'Owe: $currencySymbol$absAmount'
+        : 'Get back: $currencySymbol$absAmount';
 
-    final bgColor = isNegative ? theme.colorScheme.errorContainer : theme.colorScheme.secondaryContainer;
-    final textColor = isNegative ? theme.colorScheme.onErrorContainer : theme.colorScheme.onSecondaryContainer;
+    final bgColor = isNegative
+        ? theme.colorScheme.errorContainer
+        : theme.colorScheme.secondaryContainer;
+    final textColor = isNegative
+        ? theme.colorScheme.onErrorContainer
+        : theme.colorScheme.onSecondaryContainer;
 
     return Container(
       padding: const EdgeInsets.symmetric(

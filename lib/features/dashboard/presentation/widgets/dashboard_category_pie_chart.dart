@@ -19,7 +19,8 @@ class DashboardCategoryPieChart extends StatefulWidget {
   });
 
   @override
-  State<DashboardCategoryPieChart> createState() => _DashboardCategoryPieChartState();
+  State<DashboardCategoryPieChart> createState() =>
+      _DashboardCategoryPieChartState();
 }
 
 class _DashboardCategoryPieChartState extends State<DashboardCategoryPieChart> {
@@ -74,7 +75,8 @@ class _DashboardCategoryPieChartState extends State<DashboardCategoryPieChart> {
       );
     }
 
-    final hasSelection = _touchedIndex >= 0 && _touchedIndex < widget.shares.length;
+    final hasSelection =
+        _touchedIndex >= 0 && _touchedIndex < widget.shares.length;
     final selectedShare = hasSelection ? widget.shares[_touchedIndex] : null;
 
     final sections = widget.shares.asMap().entries.map((entry) {
@@ -142,7 +144,9 @@ class _DashboardCategoryPieChartState extends State<DashboardCategoryPieChart> {
                             _touchedIndex = -1;
                             return;
                           }
-                          _touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                          _touchedIndex = pieTouchResponse
+                              .touchedSection!
+                              .touchedSectionIndex;
                         });
                       },
                     ),
@@ -219,7 +223,10 @@ class _DashboardCategoryPieChartState extends State<DashboardCategoryPieChart> {
                   borderRadius: BorderRadius.circular(8),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 150),
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: isSelected
                           ? color.withValues(alpha: 0.12)
@@ -235,11 +242,7 @@ class _DashboardCategoryPieChartState extends State<DashboardCategoryPieChart> {
                             color: color.withValues(alpha: 0.18),
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: Icon(
-                            icon,
-                            size: 12,
-                            color: color,
-                          ),
+                          child: Icon(icon, size: 12, color: color),
                         ),
                         const SizedBox(width: 8),
 
@@ -248,7 +251,9 @@ class _DashboardCategoryPieChartState extends State<DashboardCategoryPieChart> {
                           child: Text(
                             share.category.displayName,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.w600,
                               color: isSelected
                                   ? theme.colorScheme.onSurface
                                   : theme.colorScheme.onSurfaceVariant,
@@ -260,18 +265,26 @@ class _DashboardCategoryPieChartState extends State<DashboardCategoryPieChart> {
 
                         // Percentage Chip
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? color
-                                : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                                : theme.colorScheme.surfaceContainerHighest
+                                      .withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             '${(share.percentage * 100).toStringAsFixed(0)}%',
                             style: theme.textTheme.labelSmall?.copyWith(
-                              color: isSelected ? Colors.white : theme.colorScheme.onSurfaceVariant,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              color: isSelected
+                                  ? Colors.white
+                                  : theme.colorScheme.onSurfaceVariant,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                               fontSize: 10,
                             ),
                           ),

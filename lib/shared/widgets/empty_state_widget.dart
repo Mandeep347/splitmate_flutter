@@ -73,10 +73,7 @@ class EmptyStateWidget extends StatelessWidget {
             ),
             if (hasAction) ...[
               SizedBox(height: ext.spaceXL),
-              PrimaryButton(
-                label: actionLabel!,
-                onPressed: onAction,
-              ),
+              PrimaryButton(label: actionLabel!, onPressed: onAction),
             ],
           ],
         ),

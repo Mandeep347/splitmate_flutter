@@ -12,10 +12,12 @@ part of 'expense_participant_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ExpenseParticipantModel _$ExpenseParticipantModelFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _ExpenseParticipantModel.fromJson(json);
 }
 
@@ -37,21 +39,25 @@ mixin _$ExpenseParticipantModel {
 
 /// @nodoc
 abstract class $ExpenseParticipantModelCopyWith<$Res> {
-  factory $ExpenseParticipantModelCopyWith(ExpenseParticipantModel value,
-          $Res Function(ExpenseParticipantModel) then) =
-      _$ExpenseParticipantModelCopyWithImpl<$Res, ExpenseParticipantModel>;
+  factory $ExpenseParticipantModelCopyWith(
+    ExpenseParticipantModel value,
+    $Res Function(ExpenseParticipantModel) then,
+  ) = _$ExpenseParticipantModelCopyWithImpl<$Res, ExpenseParticipantModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'user_id') String userId,
-      String name,
-      @JsonKey(name: 'owed_amount') String owedAmount,
-      String? percentage,
-      int? shares});
+  $Res call({
+    @JsonKey(name: 'user_id') String userId,
+    String name,
+    @JsonKey(name: 'owed_amount') String owedAmount,
+    String? percentage,
+    int? shares,
+  });
 }
 
 /// @nodoc
-class _$ExpenseParticipantModelCopyWithImpl<$Res,
-        $Val extends ExpenseParticipantModel>
+class _$ExpenseParticipantModelCopyWithImpl<
+  $Res,
+  $Val extends ExpenseParticipantModel
+>
     implements $ExpenseParticipantModelCopyWith<$Res> {
   _$ExpenseParticipantModelCopyWithImpl(this._value, this._then);
 
@@ -69,28 +75,31 @@ class _$ExpenseParticipantModelCopyWithImpl<$Res,
     Object? percentage = freezed,
     Object? shares = freezed,
   }) {
-    return _then(_value.copyWith(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      owedAmount: null == owedAmount
-          ? _value.owedAmount
-          : owedAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      percentage: freezed == percentage
-          ? _value.percentage
-          : percentage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      shares: freezed == shares
-          ? _value.shares
-          : shares // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            userId: null == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            owedAmount: null == owedAmount
+                ? _value.owedAmount
+                : owedAmount // ignore: cast_nullable_to_non_nullable
+                      as String,
+            percentage: freezed == percentage
+                ? _value.percentage
+                : percentage // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            shares: freezed == shares
+                ? _value.shares
+                : shares // ignore: cast_nullable_to_non_nullable
+                      as int?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -98,28 +107,32 @@ class _$ExpenseParticipantModelCopyWithImpl<$Res,
 abstract class _$$ExpenseParticipantModelImplCopyWith<$Res>
     implements $ExpenseParticipantModelCopyWith<$Res> {
   factory _$$ExpenseParticipantModelImplCopyWith(
-          _$ExpenseParticipantModelImpl value,
-          $Res Function(_$ExpenseParticipantModelImpl) then) =
-      __$$ExpenseParticipantModelImplCopyWithImpl<$Res>;
+    _$ExpenseParticipantModelImpl value,
+    $Res Function(_$ExpenseParticipantModelImpl) then,
+  ) = __$$ExpenseParticipantModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'user_id') String userId,
-      String name,
-      @JsonKey(name: 'owed_amount') String owedAmount,
-      String? percentage,
-      int? shares});
+  $Res call({
+    @JsonKey(name: 'user_id') String userId,
+    String name,
+    @JsonKey(name: 'owed_amount') String owedAmount,
+    String? percentage,
+    int? shares,
+  });
 }
 
 /// @nodoc
 class __$$ExpenseParticipantModelImplCopyWithImpl<$Res>
-    extends _$ExpenseParticipantModelCopyWithImpl<$Res,
-        _$ExpenseParticipantModelImpl>
+    extends
+        _$ExpenseParticipantModelCopyWithImpl<
+          $Res,
+          _$ExpenseParticipantModelImpl
+        >
     implements _$$ExpenseParticipantModelImplCopyWith<$Res> {
   __$$ExpenseParticipantModelImplCopyWithImpl(
-      _$ExpenseParticipantModelImpl _value,
-      $Res Function(_$ExpenseParticipantModelImpl) _then)
-      : super(_value, _then);
+    _$ExpenseParticipantModelImpl _value,
+    $Res Function(_$ExpenseParticipantModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -130,41 +143,43 @@ class __$$ExpenseParticipantModelImplCopyWithImpl<$Res>
     Object? percentage = freezed,
     Object? shares = freezed,
   }) {
-    return _then(_$ExpenseParticipantModelImpl(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      owedAmount: null == owedAmount
-          ? _value.owedAmount
-          : owedAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      percentage: freezed == percentage
-          ? _value.percentage
-          : percentage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      shares: freezed == shares
-          ? _value.shares
-          : shares // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
+    return _then(
+      _$ExpenseParticipantModelImpl(
+        userId: null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        owedAmount: null == owedAmount
+            ? _value.owedAmount
+            : owedAmount // ignore: cast_nullable_to_non_nullable
+                  as String,
+        percentage: freezed == percentage
+            ? _value.percentage
+            : percentage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        shares: freezed == shares
+            ? _value.shares
+            : shares // ignore: cast_nullable_to_non_nullable
+                  as int?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ExpenseParticipantModelImpl extends _ExpenseParticipantModel {
-  const _$ExpenseParticipantModelImpl(
-      {@JsonKey(name: 'user_id') required this.userId,
-      required this.name,
-      @JsonKey(name: 'owed_amount') required this.owedAmount,
-      this.percentage,
-      this.shares})
-      : super._();
+  const _$ExpenseParticipantModelImpl({
+    @JsonKey(name: 'user_id') required this.userId,
+    required this.name,
+    @JsonKey(name: 'owed_amount') required this.owedAmount,
+    this.percentage,
+    this.shares,
+  }) : super._();
 
   factory _$ExpenseParticipantModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ExpenseParticipantModelImplFromJson(json);
@@ -210,24 +225,25 @@ class _$ExpenseParticipantModelImpl extends _ExpenseParticipantModel {
   @override
   @pragma('vm:prefer-inline')
   _$$ExpenseParticipantModelImplCopyWith<_$ExpenseParticipantModelImpl>
-      get copyWith => __$$ExpenseParticipantModelImplCopyWithImpl<
-          _$ExpenseParticipantModelImpl>(this, _$identity);
+  get copyWith =>
+      __$$ExpenseParticipantModelImplCopyWithImpl<
+        _$ExpenseParticipantModelImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ExpenseParticipantModelImplToJson(
-      this,
-    );
+    return _$$ExpenseParticipantModelImplToJson(this);
   }
 }
 
 abstract class _ExpenseParticipantModel extends ExpenseParticipantModel {
-  const factory _ExpenseParticipantModel(
-      {@JsonKey(name: 'user_id') required final String userId,
-      required final String name,
-      @JsonKey(name: 'owed_amount') required final String owedAmount,
-      final String? percentage,
-      final int? shares}) = _$ExpenseParticipantModelImpl;
+  const factory _ExpenseParticipantModel({
+    @JsonKey(name: 'user_id') required final String userId,
+    required final String name,
+    @JsonKey(name: 'owed_amount') required final String owedAmount,
+    final String? percentage,
+    final int? shares,
+  }) = _$ExpenseParticipantModelImpl;
   const _ExpenseParticipantModel._() : super._();
 
   factory _ExpenseParticipantModel.fromJson(Map<String, dynamic> json) =
@@ -248,5 +264,5 @@ abstract class _ExpenseParticipantModel extends ExpenseParticipantModel {
   @override
   @JsonKey(ignore: true)
   _$$ExpenseParticipantModelImplCopyWith<_$ExpenseParticipantModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

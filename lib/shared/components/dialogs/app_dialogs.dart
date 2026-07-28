@@ -75,10 +75,7 @@ class ConfirmationDialog extends StatelessWidget {
 class LoadingDialog extends StatelessWidget {
   final String message;
 
-  const LoadingDialog({
-    super.key,
-    this.message = 'Loading...',
-  });
+  const LoadingDialog({super.key, this.message = 'Loading...'});
 
   /// Static helper to display the loading modal.
   static void show(BuildContext context, {String message = 'Loading...'}) {
@@ -107,12 +104,7 @@ class LoadingDialog extends StatelessWidget {
           children: [
             const CircularProgressIndicator(),
             const SizedBox(width: AppDesignTokens.spaceXL),
-            Expanded(
-              child: Text(
-                message,
-                style: theme.textTheme.bodyLarge,
-              ),
-            ),
+            Expanded(child: Text(message, style: theme.textTheme.bodyLarge)),
           ],
         ),
       ),
@@ -141,11 +133,8 @@ class ErrorDialog extends StatelessWidget {
   }) {
     return showDialog<void>(
       context: context,
-      builder: (context) => ErrorDialog(
-        title: title,
-        message: message,
-        closeLabel: closeLabel,
-      ),
+      builder: (context) =>
+          ErrorDialog(title: title, message: message, closeLabel: closeLabel),
     );
   }
 
@@ -195,11 +184,8 @@ class SuccessDialog extends StatelessWidget {
   }) {
     return showDialog<void>(
       context: context,
-      builder: (context) => SuccessDialog(
-        title: title,
-        message: message,
-        closeLabel: closeLabel,
-      ),
+      builder: (context) =>
+          SuccessDialog(title: title, message: message, closeLabel: closeLabel),
     );
   }
 

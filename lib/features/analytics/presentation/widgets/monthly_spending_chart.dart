@@ -111,13 +111,17 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                     Icon(
                       Icons.swipe_left_rounded,
                       size: 14,
-                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.7,
+                      ),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       'Scroll for more months',
                       style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurfaceVariant.withValues(
+                          alpha: 0.7,
+                        ),
                         fontSize: 10,
                       ),
                     ),
@@ -138,7 +142,10 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                       child: SizedBox(
                         width: chartContentWidth,
                         child: Padding(
-                          padding: const EdgeInsets.only(right: 12.0, top: 12.0),
+                          padding: const EdgeInsets.only(
+                            right: 12.0,
+                            top: 12.0,
+                          ),
                           child: BarChart(
                             BarChartData(
                               alignment: BarChartAlignment.spaceAround,
@@ -146,14 +153,21 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                               barTouchData: BarTouchData(
                                 handleBuiltInTouches: true,
                                 touchTooltipData: BarTouchTooltipData(
-                                  getTooltipColor: (_) => theme.colorScheme.surfaceContainerHighest,
+                                  getTooltipColor: (_) =>
+                                      theme.colorScheme.surfaceContainerHighest,
                                   tooltipRoundedRadius: 10,
-                                  tooltipPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  tooltipPadding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
                                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
                                     final item = monthlyData[groupIndex];
-                                    final symbol = _currencySymbol(widget.currency);
+                                    final symbol = _currencySymbol(
+                                      widget.currency,
+                                    );
                                     final formatter = NumberFormat('#,##0.00');
-                                    final formattedAmount = '$symbol${formatter.format(rod.toY)}';
+                                    final formattedAmount =
+                                        '$symbol${formatter.format(rod.toY)}';
                                     final countText = item.expenseCount == 1
                                         ? '1 expense'
                                         : '${item.expenseCount} expenses';
@@ -176,12 +190,16 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                                     reservedSize: 36,
                                     getTitlesWidget: (value, meta) {
                                       final index = value.toInt();
-                                      if (index < 0 || index >= monthlyData.length) {
+                                      if (index < 0 ||
+                                          index >= monthlyData.length) {
                                         return const SizedBox.shrink();
                                       }
                                       final item = monthlyData[index];
-                                      final shortMonth = _shortMonth(item.monthLabel);
-                                      final shortYear = "'${(item.year % 100).toString().padLeft(2, '0')}";
+                                      final shortMonth = _shortMonth(
+                                        item.monthLabel,
+                                      );
+                                      final shortYear =
+                                          "'${(item.year % 100).toString().padLeft(2, '0')}";
 
                                       return SideTitleWidget(
                                         axisSide: meta.axisSide,
@@ -191,18 +209,24 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                                           children: [
                                             Text(
                                               shortMonth,
-                                              style: theme.textTheme.labelSmall?.copyWith(
-                                                color: theme.colorScheme.onSurface,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                              ),
+                                              style: theme.textTheme.labelSmall
+                                                  ?.copyWith(
+                                                    color: theme
+                                                        .colorScheme
+                                                        .onSurface,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 10,
+                                                  ),
                                             ),
                                             Text(
                                               shortYear,
-                                              style: theme.textTheme.labelSmall?.copyWith(
-                                                color: theme.colorScheme.onSurfaceVariant,
-                                                fontSize: 9,
-                                              ),
+                                              style: theme.textTheme.labelSmall
+                                                  ?.copyWith(
+                                                    color: theme
+                                                        .colorScheme
+                                                        .onSurfaceVariant,
+                                                    fontSize: 9,
+                                                  ),
                                             ),
                                           ],
                                         ),
@@ -216,10 +240,13 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                                     reservedSize: 38,
                                     interval: maxY > 0 ? (maxY / 3) : 1,
                                     getTitlesWidget: (value, meta) {
-                                      if (value == 0 || value >= meta.max * 0.95) {
+                                      if (value == 0 ||
+                                          value >= meta.max * 0.95) {
                                         return const SizedBox.shrink();
                                       }
-                                      final symbol = _currencySymbol(widget.currency);
+                                      final symbol = _currencySymbol(
+                                        widget.currency,
+                                      );
                                       final String label = value >= 1000
                                           ? '$symbol${(value / 1000).toStringAsFixed(value % 1000 == 0 ? 0 : 1)}k'
                                           : '$symbol${value.toStringAsFixed(0)}';
@@ -228,10 +255,13 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                                         space: 6,
                                         child: Text(
                                           label,
-                                          style: theme.textTheme.labelSmall?.copyWith(
-                                            color: theme.colorScheme.onSurfaceVariant,
-                                            fontSize: 10,
-                                          ),
+                                          style: theme.textTheme.labelSmall
+                                              ?.copyWith(
+                                                color: theme
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                                fontSize: 10,
+                                              ),
                                         ),
                                       );
                                     },
@@ -250,7 +280,8 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                                 horizontalInterval: maxY > 0 ? (maxY / 3) : 1,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
+                                    color: theme.colorScheme.outlineVariant
+                                        .withValues(alpha: 0.3),
                                     strokeWidth: 1,
                                     dashArray: [4, 4],
                                   );
@@ -258,7 +289,9 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                               ),
                               borderData: FlBorderData(show: false),
                               barGroups: monthlyData.asMap().entries.map((e) {
-                                final isHighest = e.value.totalAmount == maxAmount && maxAmount > 0;
+                                final isHighest =
+                                    e.value.totalAmount == maxAmount &&
+                                    maxAmount > 0;
                                 return BarChartGroupData(
                                   x: e.key,
                                   barRods: [
@@ -268,14 +301,19 @@ class _MonthlySpendingChartState extends State<MonthlySpendingChart> {
                                         colors: [
                                           isHighest
                                               ? theme.colorScheme.primary
-                                              : theme.colorScheme.primary.withValues(alpha: 0.75),
-                                          theme.colorScheme.primary.withValues(alpha: 0.4),
+                                              : theme.colorScheme.primary
+                                                    .withValues(alpha: 0.75),
+                                          theme.colorScheme.primary.withValues(
+                                            alpha: 0.4,
+                                          ),
                                         ],
                                         begin: Alignment.topCenter,
                                         end: Alignment.bottomCenter,
                                       ),
                                       width: barWidth,
-                                      borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+                                      borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(6),
+                                      ),
                                     ),
                                   ],
                                 );

@@ -10,9 +10,7 @@ class GetExpenseSearchResultsUseCase {
   final IExpenseRepository expenseRepository;
 
   /// Creates a const [GetExpenseSearchResultsUseCase] instance.
-  const GetExpenseSearchResultsUseCase({
-    required this.expenseRepository,
-  });
+  const GetExpenseSearchResultsUseCase({required this.expenseRepository});
 
   /// Executes the usecase.
   /// Throws [Failure] subclass on error.
@@ -35,7 +33,9 @@ class GetExpenseSearchResultsUseCase {
 
       if (searchQuery != null && searchQuery.trim().isNotEmpty) {
         final query = searchQuery.trim().toLowerCase();
-        list = list.where((e) => e.title.toLowerCase().contains(query)).toList();
+        list = list
+            .where((e) => e.title.toLowerCase().contains(query))
+            .toList();
       }
 
       if (fromDate != null) {

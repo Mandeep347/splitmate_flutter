@@ -32,50 +32,71 @@ void main() {
   });
 
   group('CreateSettlementUseCase — local validation', () {
-    test('throws BusinessRuleFailure INVALID_AMOUNT when amount is 0', () async {
-      expect(
-        () => usecase.call(
-          groupId: 'group-1',
-          fromUserId: 'user-1',
-          toUserId: 'user-2',
-          amount: 0.0,
-          currency: 'INR',
-        ),
-        throwsA(
-          isA<BusinessRuleFailure>().having((f) => f.code, 'code', 'INVALID_AMOUNT'),
-        ),
-      );
-    });
+    test(
+      'throws BusinessRuleFailure INVALID_AMOUNT when amount is 0',
+      () async {
+        expect(
+          () => usecase.call(
+            groupId: 'group-1',
+            fromUserId: 'user-1',
+            toUserId: 'user-2',
+            amount: 0.0,
+            currency: 'INR',
+          ),
+          throwsA(
+            isA<BusinessRuleFailure>().having(
+              (f) => f.code,
+              'code',
+              'INVALID_AMOUNT',
+            ),
+          ),
+        );
+      },
+    );
 
-    test('throws BusinessRuleFailure INVALID_AMOUNT when amount is negative', () async {
-      expect(
-        () => usecase.call(
-          groupId: 'group-1',
-          fromUserId: 'user-1',
-          toUserId: 'user-2',
-          amount: -100.0,
-          currency: 'INR',
-        ),
-        throwsA(
-          isA<BusinessRuleFailure>().having((f) => f.code, 'code', 'INVALID_AMOUNT'),
-        ),
-      );
-    });
+    test(
+      'throws BusinessRuleFailure INVALID_AMOUNT when amount is negative',
+      () async {
+        expect(
+          () => usecase.call(
+            groupId: 'group-1',
+            fromUserId: 'user-1',
+            toUserId: 'user-2',
+            amount: -100.0,
+            currency: 'INR',
+          ),
+          throwsA(
+            isA<BusinessRuleFailure>().having(
+              (f) => f.code,
+              'code',
+              'INVALID_AMOUNT',
+            ),
+          ),
+        );
+      },
+    );
 
-    test('throws BusinessRuleFailure SELF_SETTLEMENT_INVALID when fromUserId equals toUserId', () async {
-      expect(
-        () => usecase.call(
-          groupId: 'group-1',
-          fromUserId: 'user-1',
-          toUserId: 'user-1',
-          amount: 500.0,
-          currency: 'INR',
-        ),
-        throwsA(
-          isA<BusinessRuleFailure>().having((f) => f.code, 'code', 'SELF_SETTLEMENT_INVALID'),
-        ),
-      );
-    });
+    test(
+      'throws BusinessRuleFailure SELF_SETTLEMENT_INVALID when fromUserId equals toUserId',
+      () async {
+        expect(
+          () => usecase.call(
+            groupId: 'group-1',
+            fromUserId: 'user-1',
+            toUserId: 'user-1',
+            amount: 500.0,
+            currency: 'INR',
+          ),
+          throwsA(
+            isA<BusinessRuleFailure>().having(
+              (f) => f.code,
+              'code',
+              'SELF_SETTLEMENT_INVALID',
+            ),
+          ),
+        );
+      },
+    );
 
     test('does NOT call repository when local validation fails', () async {
       try {
@@ -88,25 +109,29 @@ void main() {
         );
       } catch (_) {}
 
-      verifyNever(() => mockRepo.createSettlement(
-            groupId: any(named: 'groupId'),
-            fromUserId: any(named: 'fromUserId'),
-            toUserId: any(named: 'toUserId'),
-            amount: any(named: 'amount'),
-            currency: any(named: 'currency'),
-            note: any(named: 'note'),
-          ));
+      verifyNever(
+        () => mockRepo.createSettlement(
+          groupId: any(named: 'groupId'),
+          fromUserId: any(named: 'fromUserId'),
+          toUserId: any(named: 'toUserId'),
+          amount: any(named: 'amount'),
+          currency: any(named: 'currency'),
+          note: any(named: 'note'),
+        ),
+      );
     });
 
     test('calls repository and returns Settlement when valid', () async {
-      when(() => mockRepo.createSettlement(
-            groupId: 'group-1',
-            fromUserId: 'user-1',
-            toUserId: 'user-2',
-            amount: 500.0,
-            currency: 'INR',
-            note: 'Paid via UPI',
-          )).thenAnswer((_) async => tSettlement);
+      when(
+        () => mockRepo.createSettlement(
+          groupId: 'group-1',
+          fromUserId: 'user-1',
+          toUserId: 'user-2',
+          amount: 500.0,
+          currency: 'INR',
+          note: 'Paid via UPI',
+        ),
+      ).thenAnswer((_) async => tSettlement);
 
       final result = await usecase.call(
         groupId: 'group-1',
@@ -118,30 +143,36 @@ void main() {
       );
 
       expect(result, equals(tSettlement));
-      verify(() => mockRepo.createSettlement(
-            groupId: 'group-1',
-            fromUserId: 'user-1',
-            toUserId: 'user-2',
-            amount: 500.0,
-            currency: 'INR',
-            note: 'Paid via UPI',
-          )).called(1);
+      verify(
+        () => mockRepo.createSettlement(
+          groupId: 'group-1',
+          fromUserId: 'user-1',
+          toUserId: 'user-2',
+          amount: 500.0,
+          currency: 'INR',
+          note: 'Paid via UPI',
+        ),
+      ).called(1);
     });
   });
 
   group('CreateSettlementUseCase — exception mapping', () {
     test('maps BusinessRuleException to BusinessRuleFailure', () async {
-      when(() => mockRepo.createSettlement(
-            groupId: any(named: 'groupId'),
-            fromUserId: any(named: 'fromUserId'),
-            toUserId: any(named: 'toUserId'),
-            amount: any(named: 'amount'),
-            currency: any(named: 'currency'),
-            note: any(named: 'note'),
-          )).thenThrow(const BusinessRuleException(
-        message: 'Invalid split rule',
-        errors: {'code': 'RULE_ERR'},
-      ));
+      when(
+        () => mockRepo.createSettlement(
+          groupId: any(named: 'groupId'),
+          fromUserId: any(named: 'fromUserId'),
+          toUserId: any(named: 'toUserId'),
+          amount: any(named: 'amount'),
+          currency: any(named: 'currency'),
+          note: any(named: 'note'),
+        ),
+      ).thenThrow(
+        const BusinessRuleException(
+          message: 'Invalid split rule',
+          errors: {'code': 'RULE_ERR'},
+        ),
+      );
 
       expect(
         () => usecase.call(
@@ -158,14 +189,16 @@ void main() {
     });
 
     test('maps NetworkException to NetworkFailure', () async {
-      when(() => mockRepo.createSettlement(
-            groupId: any(named: 'groupId'),
-            fromUserId: any(named: 'fromUserId'),
-            toUserId: any(named: 'toUserId'),
-            amount: any(named: 'amount'),
-            currency: any(named: 'currency'),
-            note: any(named: 'note'),
-          )).thenThrow(const NetworkException('Connection timed out'));
+      when(
+        () => mockRepo.createSettlement(
+          groupId: any(named: 'groupId'),
+          fromUserId: any(named: 'fromUserId'),
+          toUserId: any(named: 'toUserId'),
+          amount: any(named: 'amount'),
+          currency: any(named: 'currency'),
+          note: any(named: 'note'),
+        ),
+      ).thenThrow(const NetworkException('Connection timed out'));
 
       expect(
         () => usecase.call(
@@ -176,20 +209,26 @@ void main() {
           currency: 'INR',
         ),
         throwsA(
-          isA<NetworkFailure>().having((f) => f.message, 'message', 'Connection timed out'),
+          isA<NetworkFailure>().having(
+            (f) => f.message,
+            'message',
+            'Connection timed out',
+          ),
         ),
       );
     });
 
     test('does not re-wrap Failure subtypes', () async {
-      when(() => mockRepo.createSettlement(
-            groupId: any(named: 'groupId'),
-            fromUserId: any(named: 'fromUserId'),
-            toUserId: any(named: 'toUserId'),
-            amount: any(named: 'amount'),
-            currency: any(named: 'currency'),
-            note: any(named: 'note'),
-          )).thenThrow(const BusinessRuleFailure('Auth fail', 'AUTH_FAILED'));
+      when(
+        () => mockRepo.createSettlement(
+          groupId: any(named: 'groupId'),
+          fromUserId: any(named: 'fromUserId'),
+          toUserId: any(named: 'toUserId'),
+          amount: any(named: 'amount'),
+          currency: any(named: 'currency'),
+          note: any(named: 'note'),
+        ),
+      ).thenThrow(const BusinessRuleFailure('Auth fail', 'AUTH_FAILED'));
 
       expect(
         () => usecase.call(
@@ -200,7 +239,11 @@ void main() {
           currency: 'INR',
         ),
         throwsA(
-          isA<BusinessRuleFailure>().having((f) => f.code, 'code', 'AUTH_FAILED'),
+          isA<BusinessRuleFailure>().having(
+            (f) => f.code,
+            'code',
+            'AUTH_FAILED',
+          ),
         ),
       );
     });

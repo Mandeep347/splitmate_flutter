@@ -16,14 +16,18 @@ class GroupAnalyticsModel with _$GroupAnalyticsModel {
     required String currency,
     @JsonKey(name: 'total_expenses_amount') required String totalExpensesAmount,
     @JsonKey(name: 'total_expense_count') required int totalExpenseCount,
-    @JsonKey(name: 'total_settlements_amount') required String totalSettlementsAmount,
+    @JsonKey(name: 'total_settlements_amount')
+    required String totalSettlementsAmount,
     @JsonKey(name: 'settlement_rate') required String settlementRate,
-    @JsonKey(name: 'average_expense_amount') required String averageExpenseAmount,
-    @JsonKey(name: 'largest_expense_amount') required String largestExpenseAmount,
+    @JsonKey(name: 'average_expense_amount')
+    required String averageExpenseAmount,
+    @JsonKey(name: 'largest_expense_amount')
+    required String largestExpenseAmount,
     @JsonKey(name: 'largest_expense_title') String? largestExpenseTitle,
     @JsonKey(name: 'top_spender_name') String? topSpenderName,
     required List<MemberContributionModel> members,
-    @JsonKey(name: 'monthly_spending') required List<MonthlySpendingModel> monthlySpending,
+    @JsonKey(name: 'monthly_spending')
+    required List<MonthlySpendingModel> monthlySpending,
   }) = _GroupAnalyticsModel;
 
   const GroupAnalyticsModel._();
@@ -47,7 +51,9 @@ class GroupAnalyticsModel with _$GroupAnalyticsModel {
       topSpenderName: topSpenderName,
       settlementRate: double.parse(settlementRate) / 100.0,
       memberContributions: members.map((m) => m.toEntity()).toList(),
-      monthlySpending: monthlySpending.map((m) => m.toEntity(currency: currency)).toList(),
+      monthlySpending: monthlySpending
+          .map((m) => m.toEntity(currency: currency))
+          .toList(),
     );
   }
 }

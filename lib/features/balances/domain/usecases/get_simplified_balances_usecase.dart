@@ -9,9 +9,7 @@ class GetSimplifiedBalancesUseCase {
   final IBalanceRepository repository;
 
   /// Creates a new [GetSimplifiedBalancesUseCase] instance.
-  const GetSimplifiedBalancesUseCase({
-    required this.repository,
-  });
+  const GetSimplifiedBalancesUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws a [Failure] on error.
@@ -36,7 +34,8 @@ extension on NetworkClientException {
   String? get errorCode {
     if (this is BusinessRuleException) {
       final br = this as BusinessRuleException;
-      return br.errors?['code'] as String? ?? br.errors?['errorCode'] as String?;
+      return br.errors?['code'] as String? ??
+          br.errors?['errorCode'] as String?;
     }
     return null;
   }

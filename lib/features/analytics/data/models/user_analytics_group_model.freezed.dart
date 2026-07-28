@@ -12,10 +12,12 @@ part of 'user_analytics_group_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 UserAnalyticsGroupModel _$UserAnalyticsGroupModelFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _UserAnalyticsGroupModel.fromJson(json);
 }
 
@@ -43,23 +45,27 @@ mixin _$UserAnalyticsGroupModel {
 
 /// @nodoc
 abstract class $UserAnalyticsGroupModelCopyWith<$Res> {
-  factory $UserAnalyticsGroupModelCopyWith(UserAnalyticsGroupModel value,
-          $Res Function(UserAnalyticsGroupModel) then) =
-      _$UserAnalyticsGroupModelCopyWithImpl<$Res, UserAnalyticsGroupModel>;
+  factory $UserAnalyticsGroupModelCopyWith(
+    UserAnalyticsGroupModel value,
+    $Res Function(UserAnalyticsGroupModel) then,
+  ) = _$UserAnalyticsGroupModelCopyWithImpl<$Res, UserAnalyticsGroupModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'group_id') String groupId,
-      @JsonKey(name: 'group_name') String groupName,
-      @JsonKey(name: 'total_spent') String totalSpent,
-      @JsonKey(name: 'user_paid') String userPaid,
-      @JsonKey(name: 'user_owed') String userOwed,
-      @JsonKey(name: 'expense_count') int expenseCount,
-      String currency});
+  $Res call({
+    @JsonKey(name: 'group_id') String groupId,
+    @JsonKey(name: 'group_name') String groupName,
+    @JsonKey(name: 'total_spent') String totalSpent,
+    @JsonKey(name: 'user_paid') String userPaid,
+    @JsonKey(name: 'user_owed') String userOwed,
+    @JsonKey(name: 'expense_count') int expenseCount,
+    String currency,
+  });
 }
 
 /// @nodoc
-class _$UserAnalyticsGroupModelCopyWithImpl<$Res,
-        $Val extends UserAnalyticsGroupModel>
+class _$UserAnalyticsGroupModelCopyWithImpl<
+  $Res,
+  $Val extends UserAnalyticsGroupModel
+>
     implements $UserAnalyticsGroupModelCopyWith<$Res> {
   _$UserAnalyticsGroupModelCopyWithImpl(this._value, this._then);
 
@@ -79,36 +85,39 @@ class _$UserAnalyticsGroupModelCopyWithImpl<$Res,
     Object? expenseCount = null,
     Object? currency = null,
   }) {
-    return _then(_value.copyWith(
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      groupName: null == groupName
-          ? _value.groupName
-          : groupName // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalSpent: null == totalSpent
-          ? _value.totalSpent
-          : totalSpent // ignore: cast_nullable_to_non_nullable
-              as String,
-      userPaid: null == userPaid
-          ? _value.userPaid
-          : userPaid // ignore: cast_nullable_to_non_nullable
-              as String,
-      userOwed: null == userOwed
-          ? _value.userOwed
-          : userOwed // ignore: cast_nullable_to_non_nullable
-              as String,
-      expenseCount: null == expenseCount
-          ? _value.expenseCount
-          : expenseCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            groupId: null == groupId
+                ? _value.groupId
+                : groupId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            groupName: null == groupName
+                ? _value.groupName
+                : groupName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            totalSpent: null == totalSpent
+                ? _value.totalSpent
+                : totalSpent // ignore: cast_nullable_to_non_nullable
+                      as String,
+            userPaid: null == userPaid
+                ? _value.userPaid
+                : userPaid // ignore: cast_nullable_to_non_nullable
+                      as String,
+            userOwed: null == userOwed
+                ? _value.userOwed
+                : userOwed // ignore: cast_nullable_to_non_nullable
+                      as String,
+            expenseCount: null == expenseCount
+                ? _value.expenseCount
+                : expenseCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            currency: null == currency
+                ? _value.currency
+                : currency // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -116,30 +125,34 @@ class _$UserAnalyticsGroupModelCopyWithImpl<$Res,
 abstract class _$$UserAnalyticsGroupModelImplCopyWith<$Res>
     implements $UserAnalyticsGroupModelCopyWith<$Res> {
   factory _$$UserAnalyticsGroupModelImplCopyWith(
-          _$UserAnalyticsGroupModelImpl value,
-          $Res Function(_$UserAnalyticsGroupModelImpl) then) =
-      __$$UserAnalyticsGroupModelImplCopyWithImpl<$Res>;
+    _$UserAnalyticsGroupModelImpl value,
+    $Res Function(_$UserAnalyticsGroupModelImpl) then,
+  ) = __$$UserAnalyticsGroupModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'group_id') String groupId,
-      @JsonKey(name: 'group_name') String groupName,
-      @JsonKey(name: 'total_spent') String totalSpent,
-      @JsonKey(name: 'user_paid') String userPaid,
-      @JsonKey(name: 'user_owed') String userOwed,
-      @JsonKey(name: 'expense_count') int expenseCount,
-      String currency});
+  $Res call({
+    @JsonKey(name: 'group_id') String groupId,
+    @JsonKey(name: 'group_name') String groupName,
+    @JsonKey(name: 'total_spent') String totalSpent,
+    @JsonKey(name: 'user_paid') String userPaid,
+    @JsonKey(name: 'user_owed') String userOwed,
+    @JsonKey(name: 'expense_count') int expenseCount,
+    String currency,
+  });
 }
 
 /// @nodoc
 class __$$UserAnalyticsGroupModelImplCopyWithImpl<$Res>
-    extends _$UserAnalyticsGroupModelCopyWithImpl<$Res,
-        _$UserAnalyticsGroupModelImpl>
+    extends
+        _$UserAnalyticsGroupModelCopyWithImpl<
+          $Res,
+          _$UserAnalyticsGroupModelImpl
+        >
     implements _$$UserAnalyticsGroupModelImplCopyWith<$Res> {
   __$$UserAnalyticsGroupModelImplCopyWithImpl(
-      _$UserAnalyticsGroupModelImpl _value,
-      $Res Function(_$UserAnalyticsGroupModelImpl) _then)
-      : super(_value, _then);
+    _$UserAnalyticsGroupModelImpl _value,
+    $Res Function(_$UserAnalyticsGroupModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -152,51 +165,53 @@ class __$$UserAnalyticsGroupModelImplCopyWithImpl<$Res>
     Object? expenseCount = null,
     Object? currency = null,
   }) {
-    return _then(_$UserAnalyticsGroupModelImpl(
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      groupName: null == groupName
-          ? _value.groupName
-          : groupName // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalSpent: null == totalSpent
-          ? _value.totalSpent
-          : totalSpent // ignore: cast_nullable_to_non_nullable
-              as String,
-      userPaid: null == userPaid
-          ? _value.userPaid
-          : userPaid // ignore: cast_nullable_to_non_nullable
-              as String,
-      userOwed: null == userOwed
-          ? _value.userOwed
-          : userOwed // ignore: cast_nullable_to_non_nullable
-              as String,
-      expenseCount: null == expenseCount
-          ? _value.expenseCount
-          : expenseCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$UserAnalyticsGroupModelImpl(
+        groupId: null == groupId
+            ? _value.groupId
+            : groupId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        groupName: null == groupName
+            ? _value.groupName
+            : groupName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        totalSpent: null == totalSpent
+            ? _value.totalSpent
+            : totalSpent // ignore: cast_nullable_to_non_nullable
+                  as String,
+        userPaid: null == userPaid
+            ? _value.userPaid
+            : userPaid // ignore: cast_nullable_to_non_nullable
+                  as String,
+        userOwed: null == userOwed
+            ? _value.userOwed
+            : userOwed // ignore: cast_nullable_to_non_nullable
+                  as String,
+        expenseCount: null == expenseCount
+            ? _value.expenseCount
+            : expenseCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        currency: null == currency
+            ? _value.currency
+            : currency // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$UserAnalyticsGroupModelImpl extends _UserAnalyticsGroupModel {
-  const _$UserAnalyticsGroupModelImpl(
-      {@JsonKey(name: 'group_id') required this.groupId,
-      @JsonKey(name: 'group_name') required this.groupName,
-      @JsonKey(name: 'total_spent') required this.totalSpent,
-      @JsonKey(name: 'user_paid') required this.userPaid,
-      @JsonKey(name: 'user_owed') required this.userOwed,
-      @JsonKey(name: 'expense_count') required this.expenseCount,
-      required this.currency})
-      : super._();
+  const _$UserAnalyticsGroupModelImpl({
+    @JsonKey(name: 'group_id') required this.groupId,
+    @JsonKey(name: 'group_name') required this.groupName,
+    @JsonKey(name: 'total_spent') required this.totalSpent,
+    @JsonKey(name: 'user_paid') required this.userPaid,
+    @JsonKey(name: 'user_owed') required this.userOwed,
+    @JsonKey(name: 'expense_count') required this.expenseCount,
+    required this.currency,
+  }) : super._();
 
   factory _$UserAnalyticsGroupModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserAnalyticsGroupModelImplFromJson(json);
@@ -249,33 +264,42 @@ class _$UserAnalyticsGroupModelImpl extends _UserAnalyticsGroupModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, groupId, groupName, totalSpent,
-      userPaid, userOwed, expenseCount, currency);
+  int get hashCode => Object.hash(
+    runtimeType,
+    groupId,
+    groupName,
+    totalSpent,
+    userPaid,
+    userOwed,
+    expenseCount,
+    currency,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UserAnalyticsGroupModelImplCopyWith<_$UserAnalyticsGroupModelImpl>
-      get copyWith => __$$UserAnalyticsGroupModelImplCopyWithImpl<
-          _$UserAnalyticsGroupModelImpl>(this, _$identity);
+  get copyWith =>
+      __$$UserAnalyticsGroupModelImplCopyWithImpl<
+        _$UserAnalyticsGroupModelImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserAnalyticsGroupModelImplToJson(
-      this,
-    );
+    return _$$UserAnalyticsGroupModelImplToJson(this);
   }
 }
 
 abstract class _UserAnalyticsGroupModel extends UserAnalyticsGroupModel {
-  const factory _UserAnalyticsGroupModel(
-      {@JsonKey(name: 'group_id') required final String groupId,
-      @JsonKey(name: 'group_name') required final String groupName,
-      @JsonKey(name: 'total_spent') required final String totalSpent,
-      @JsonKey(name: 'user_paid') required final String userPaid,
-      @JsonKey(name: 'user_owed') required final String userOwed,
-      @JsonKey(name: 'expense_count') required final int expenseCount,
-      required final String currency}) = _$UserAnalyticsGroupModelImpl;
+  const factory _UserAnalyticsGroupModel({
+    @JsonKey(name: 'group_id') required final String groupId,
+    @JsonKey(name: 'group_name') required final String groupName,
+    @JsonKey(name: 'total_spent') required final String totalSpent,
+    @JsonKey(name: 'user_paid') required final String userPaid,
+    @JsonKey(name: 'user_owed') required final String userOwed,
+    @JsonKey(name: 'expense_count') required final int expenseCount,
+    required final String currency,
+  }) = _$UserAnalyticsGroupModelImpl;
   const _UserAnalyticsGroupModel._() : super._();
 
   factory _UserAnalyticsGroupModel.fromJson(Map<String, dynamic> json) =
@@ -304,5 +328,5 @@ abstract class _UserAnalyticsGroupModel extends UserAnalyticsGroupModel {
   @override
   @JsonKey(ignore: true)
   _$$UserAnalyticsGroupModelImplCopyWith<_$UserAnalyticsGroupModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

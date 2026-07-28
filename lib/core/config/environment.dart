@@ -1,9 +1,5 @@
 /// Defines supported environment types.
-enum EnvironmentType {
-  dev,
-  staging,
-  prod,
-}
+enum EnvironmentType { dev, staging, prod }
 
 /// Environment configuration loader for Splito.
 /// Reads configuration variables injected at compile-time via --dart-define or --dart-define-from-file.

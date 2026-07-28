@@ -96,10 +96,17 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
     }
   }
 
-  Widget _buildFilterSummaryBar(BuildContext context, ThemeData theme, AppThemeExtension ext) {
+  Widget _buildFilterSummaryBar(
+    BuildContext context,
+    ThemeData theme,
+    AppThemeExtension ext,
+  ) {
     return Container(
       color: theme.colorScheme.primaryContainer.withValues(alpha: 0.2),
-      padding: EdgeInsets.symmetric(horizontal: ext.spaceMD, vertical: ext.spaceXS),
+      padding: EdgeInsets.symmetric(
+        horizontal: ext.spaceMD,
+        vertical: ext.spaceXS,
+      ),
       child: Row(
         children: [
           Text(
@@ -112,7 +119,9 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
           const Spacer(),
           TextButton(
             onPressed: () {
-              ref.read(expenseSearchProvider(widget.groupId).notifier).clearFilters();
+              ref
+                  .read(expenseSearchProvider(widget.groupId).notifier)
+                  .clearFilters();
             },
             child: const Text('Clear'),
           ),
@@ -124,11 +133,14 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(groupExpensesProvider(widget.groupId));
-    final isCompact = ref.watch(settingsProvider).valueOrNull?.compactExpenseList ?? false;
+    final isCompact =
+        ref.watch(settingsProvider).valueOrNull?.compactExpenseList ?? false;
     final theme = Theme.of(context);
     final ext = theme.extension<AppThemeExtension>()!;
 
-    final filtersState = ref.watch(expenseSearchFiltersProvider(widget.groupId));
+    final filtersState = ref.watch(
+      expenseSearchFiltersProvider(widget.groupId),
+    );
     final hasFilters = filtersState.hasActiveFilters;
     final isSearchMode = _isSearching || hasFilters;
 
@@ -145,7 +157,9 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
                   hintText: 'Search expenses…',
                   border: InputBorder.none,
                 ),
-                onChanged: (q) => ref.read(expenseSearchProvider(widget.groupId).notifier).updateQuery(q),
+                onChanged: (q) => ref
+                    .read(expenseSearchProvider(widget.groupId).notifier)
+                    .updateQuery(q),
               )
             : Text(widget.groupName),
         leading: _isSearching
@@ -155,7 +169,9 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
                   setState(() {
                     _isSearching = false;
                   });
-                  ref.read(expenseSearchProvider(widget.groupId).notifier).clearFilters();
+                  ref
+                      .read(expenseSearchProvider(widget.groupId).notifier)
+                      .clearFilters();
                   _searchController.clear();
                 },
               )
@@ -193,7 +209,8 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
                         ),
                     ],
                   ),
-                  onPressed: () => ExpenseFilterSheet.show(context, widget.groupId, members),
+                  onPressed: () =>
+                      ExpenseFilterSheet.show(context, widget.groupId, members),
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
@@ -214,19 +231,22 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
                       ? const EdgeInsets.fromLTRB(12, 8, 12, 100)
                       : const EdgeInsets.fromLTRB(16, 12, 16, 100),
                   itemCount: 5,
-                  itemBuilder: (context, index) => const ExpenseListTileSkeleton(),
+                  itemBuilder: (context, index) =>
+                      const ExpenseListTileSkeleton(),
                 ),
               ),
               data: (items) {
                 if (items.isEmpty) {
                   return Column(
                     children: [
-                      if (hasFilters) _buildFilterSummaryBar(context, theme, ext),
+                      if (hasFilters)
+                        _buildFilterSummaryBar(context, theme, ext),
                       const Expanded(
                         child: EmptyStateWidget(
                           icon: Icons.search_off_outlined,
                           title: 'No results found',
-                          subtitle: 'Try adjusting your search queries or filter choices.',
+                          subtitle:
+                              'Try adjusting your search queries or filter choices.',
                         ),
                       ),
                     ],
@@ -257,7 +277,8 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
             )
           : AsyncValueWidget<PaginatedExpenses>(
               value: state,
-              onRetry: () => ref.invalidate(groupExpensesProvider(widget.groupId)),
+              onRetry: () =>
+                  ref.invalidate(groupExpensesProvider(widget.groupId)),
               loading: () => ShimmerWrapper(
                 isLoading: true,
                 child: ListView.builder(
@@ -265,7 +286,8 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
                       ? const EdgeInsets.fromLTRB(12, 8, 12, 100)
                       : const EdgeInsets.fromLTRB(16, 12, 16, 100),
                   itemCount: 5,
-                  itemBuilder: (context, index) => const ExpenseListTileSkeleton(),
+                  itemBuilder: (context, index) =>
+                      const ExpenseListTileSkeleton(),
                 ),
               ),
               data: (paginatedData) {
@@ -296,9 +318,7 @@ class _ExpenseListPageState extends ConsumerState<ExpenseListPage> {
                       if (index == items.length) {
                         return const Padding(
                           padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                          child: Center(child: CircularProgressIndicator()),
                         );
                       }
 

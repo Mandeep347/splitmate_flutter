@@ -40,7 +40,8 @@ class AppBottomSheetWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final bottomInset = mediaQuery.viewInsets.bottom; // Support keyboard offsets
+    final bottomInset =
+        mediaQuery.viewInsets.bottom; // Support keyboard offsets
 
     return SafeArea(
       child: Padding(
@@ -55,13 +56,17 @@ class AppBottomSheetWrapper extends StatelessWidget {
                 height: 4,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.outlineVariant,
-                  borderRadius: BorderRadius.circular(AppDesignTokens.radiusRound),
+                  borderRadius: BorderRadius.circular(
+                    AppDesignTokens.radiusRound,
+                  ),
                 ),
               ),
               const SizedBox(height: AppDesignTokens.spaceSM),
             ],
             Padding(
-              padding: padding ?? const EdgeInsets.all(AppDesignTokens.screenPadding),
+              padding:
+                  padding ??
+                  const EdgeInsets.all(AppDesignTokens.screenPadding),
               child: child,
             ),
           ],
@@ -132,7 +137,9 @@ class ScrollableBottomSheet extends StatelessWidget {
               height: 4,
               decoration: BoxDecoration(
                 color: theme.colorScheme.outlineVariant,
-                borderRadius: BorderRadius.circular(AppDesignTokens.radiusRound),
+                borderRadius: BorderRadius.circular(
+                  AppDesignTokens.radiusRound,
+                ),
               ),
             ),
             Padding(
@@ -145,9 +152,7 @@ class ScrollableBottomSheet extends StatelessWidget {
               ),
             ),
             const Divider(height: 1),
-            Expanded(
-              child: builder(context, scrollController),
-            ),
+            Expanded(child: builder(context, scrollController)),
           ],
         );
       },

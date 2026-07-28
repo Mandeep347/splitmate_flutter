@@ -23,7 +23,7 @@ class AnalyticsSkeleton extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            
+
             // Top payer badge placeholder
             Container(
               height: 80,
@@ -36,11 +36,7 @@ class AnalyticsSkeleton extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Chart placeholder
-            Container(
-              height: 22,
-              width: 150,
-              color: Colors.white,
-            ),
+            Container(height: 22, width: 150, color: Colors.white),
             const SizedBox(height: 16),
             Container(
               height: 220,
@@ -53,11 +49,7 @@ class AnalyticsSkeleton extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Member contribution placeholder
-            Container(
-              height: 22,
-              width: 180,
-              color: Colors.white,
-            ),
+            Container(height: 22, width: 180, color: Colors.white),
             const SizedBox(height: 16),
             Container(
               height: 160,

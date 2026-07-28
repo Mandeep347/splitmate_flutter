@@ -9,7 +9,9 @@ import 'package:splito_flutter/features/auth/data/repositories/auth_repository_i
 import 'package:splito_flutter/features/auth/domain/entities/auth_tokens.dart';
 
 class MockAuthRemoteDatasource extends Mock implements IAuthRemoteDatasource {}
+
 class MockTokenStorageService extends Mock implements ITokenStorageService {}
+
 class MockAuthLocalDatasource extends Mock implements IAuthLocalDatasource {}
 
 void main() {
@@ -40,12 +42,15 @@ void main() {
 
     test('returns AuthTokens and saves tokens on success', () async {
       // Arrange
-      when(() => mockRemoteDatasource.login(email: email, password: password))
-          .thenAnswer((_) async => tokenResponse);
-      when(() => mockTokenStorage.saveTokens(
-            accessToken: any(named: 'accessToken'),
-            refreshToken: any(named: 'refreshToken'),
-          )).thenAnswer((_) async {});
+      when(
+        () => mockRemoteDatasource.login(email: email, password: password),
+      ).thenAnswer((_) async => tokenResponse);
+      when(
+        () => mockTokenStorage.saveTokens(
+          accessToken: any(named: 'accessToken'),
+          refreshToken: any(named: 'refreshToken'),
+        ),
+      ).thenAnswer((_) async {});
 
       // Act
       final result = await repository.login(email: email, password: password);
@@ -54,44 +59,53 @@ void main() {
       expect(result, isA<AuthTokens>());
       expect(result.accessToken, equals(tokenResponse.accessToken));
       expect(result.refreshToken, equals(tokenResponse.refreshToken));
-      verify(() => mockRemoteDatasource.login(email: email, password: password))
-          .called(1);
-      verify(() => mockTokenStorage.saveTokens(
-            accessToken: tokenResponse.accessToken,
-            refreshToken: tokenResponse.refreshToken,
-          )).called(1);
+      verify(
+        () => mockRemoteDatasource.login(email: email, password: password),
+      ).called(1);
+      verify(
+        () => mockTokenStorage.saveTokens(
+          accessToken: tokenResponse.accessToken,
+          refreshToken: tokenResponse.refreshToken,
+        ),
+      ).called(1);
     });
 
     test('throws UnauthorizedException on UnauthorizedException', () async {
       // Arrange
-      when(() => mockRemoteDatasource.login(email: email, password: password))
-          .thenThrow(const UnauthorizedException('Invalid credentials'));
+      when(
+        () => mockRemoteDatasource.login(email: email, password: password),
+      ).thenThrow(const UnauthorizedException('Invalid credentials'));
 
       // Act & Assert
       expect(
         () => repository.login(email: email, password: password),
         throwsA(isA<UnauthorizedException>()),
       );
-      verify(() => mockRemoteDatasource.login(email: email, password: password))
-          .called(1);
-      verifyNever(() => mockTokenStorage.saveTokens(
-            accessToken: any(named: 'accessToken'),
-            refreshToken: any(named: 'refreshToken'),
-          ));
+      verify(
+        () => mockRemoteDatasource.login(email: email, password: password),
+      ).called(1);
+      verifyNever(
+        () => mockTokenStorage.saveTokens(
+          accessToken: any(named: 'accessToken'),
+          refreshToken: any(named: 'refreshToken'),
+        ),
+      );
     });
 
     test('throws NetworkException on NetworkException', () async {
       // Arrange
-      when(() => mockRemoteDatasource.login(email: email, password: password))
-          .thenThrow(const NetworkException('No connection'));
+      when(
+        () => mockRemoteDatasource.login(email: email, password: password),
+      ).thenThrow(const NetworkException('No connection'));
 
       // Act & Assert
       expect(
         () => repository.login(email: email, password: password),
         throwsA(isA<NetworkException>()),
       );
-      verify(() => mockRemoteDatasource.login(email: email, password: password))
-          .called(1);
+      verify(
+        () => mockRemoteDatasource.login(email: email, password: password),
+      ).called(1);
     });
   });
 
@@ -125,7 +139,9 @@ void main() {
     test('clears tokens and cached user', () async {
       // Arrange
       when(() => mockTokenStorage.clearTokens()).thenAnswer((_) async {});
-      when(() => mockLocalDatasource.clearCachedUser()).thenAnswer((_) async {});
+      when(
+        () => mockLocalDatasource.clearCachedUser(),
+      ).thenAnswer((_) async {});
 
       // Act
       await repository.logout();

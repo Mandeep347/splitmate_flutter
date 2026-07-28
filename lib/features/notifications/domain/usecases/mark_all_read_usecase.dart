@@ -8,9 +8,7 @@ class MarkAllReadUseCase {
   final INotificationRepository repository;
 
   /// Creates a new [MarkAllReadUseCase] instance.
-  const MarkAllReadUseCase({
-    required this.repository,
-  });
+  const MarkAllReadUseCase({required this.repository});
 
   /// Executes the usecase.
   Future<int> call() async {
@@ -34,7 +32,8 @@ extension on NetworkClientException {
   String? get errorCode {
     if (this is BusinessRuleException) {
       final br = this as BusinessRuleException;
-      return br.errors?['code'] as String? ?? br.errors?['errorCode'] as String?;
+      return br.errors?['code'] as String? ??
+          br.errors?['errorCode'] as String?;
     }
     return null;
   }

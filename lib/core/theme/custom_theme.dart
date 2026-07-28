@@ -44,10 +44,7 @@ abstract class CustomTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(extensions.radiusMD),
-          side: BorderSide(
-            color: scheme.surfaceContainerHighest,
-            width: 1,
-          ),
+          side: BorderSide(color: scheme.surfaceContainerHighest, width: 1),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -96,7 +93,10 @@ abstract class CustomTheme {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(extensions.radiusMD),
-          borderSide: BorderSide(color: scheme.surfaceContainerHighest, width: 1),
+          borderSide: BorderSide(
+            color: scheme.surfaceContainerHighest,
+            width: 1,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(extensions.radiusMD),
@@ -111,7 +111,9 @@ abstract class CustomTheme {
           borderSide: BorderSide(color: scheme.error, width: 2),
         ),
         labelStyle: TextStyle(color: scheme.onSurfaceVariant),
-        hintStyle: TextStyle(color: scheme.onSurfaceVariant.withValues(alpha: 0.6)),
+        hintStyle: TextStyle(
+          color: scheme.onSurfaceVariant.withValues(alpha: 0.6),
+        ),
       ),
       dividerTheme: DividerThemeData(
         color: scheme.surfaceContainerHighest,
@@ -151,10 +153,7 @@ abstract class CustomTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(extensions.radiusMD),
-          side: BorderSide(
-            color: scheme.surfaceContainerHighest,
-            width: 1,
-          ),
+          side: BorderSide(color: scheme.surfaceContainerHighest, width: 1),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -203,7 +202,10 @@ abstract class CustomTheme {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(extensions.radiusMD),
-          borderSide: BorderSide(color: scheme.surfaceContainerHighest, width: 1),
+          borderSide: BorderSide(
+            color: scheme.surfaceContainerHighest,
+            width: 1,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(extensions.radiusMD),
@@ -218,7 +220,9 @@ abstract class CustomTheme {
           borderSide: BorderSide(color: scheme.error, width: 2),
         ),
         labelStyle: TextStyle(color: scheme.onSurfaceVariant),
-        hintStyle: TextStyle(color: scheme.onSurfaceVariant.withValues(alpha: 0.6)),
+        hintStyle: TextStyle(
+          color: scheme.onSurfaceVariant.withValues(alpha: 0.6),
+        ),
       ),
       dividerTheme: DividerThemeData(
         color: scheme.surfaceContainerHighest,

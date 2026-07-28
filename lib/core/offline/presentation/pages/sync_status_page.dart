@@ -57,15 +57,15 @@ class _SyncStatusPageState extends ConsumerState<SyncStatusPage> {
             ? 'Synced ${result.succeeded} ${result.succeeded == 1 ? 'action' : 'actions'} successfully!'
             : 'Sync completed: ${result.succeeded} succeeded, ${result.failed} failed, ${result.exhausted} exhausted.';
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sync failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Sync failed: $e')));
       }
     } finally {
       if (mounted) {
@@ -87,9 +87,9 @@ class _SyncStatusPageState extends ConsumerState<SyncStatusPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to clear logs: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to clear logs: $e')));
       }
     }
   }
@@ -97,7 +97,8 @@ class _SyncStatusPageState extends ConsumerState<SyncStatusPage> {
   String _formatActionType(OfflineAction action) {
     return switch (action) {
       final CreateExpenseAction a => 'Create Expense ("${a.title}")',
-      final CreateSettlementAction a => 'Record Settlement (${a.currency} ${a.amount.toStringAsFixed(2)})',
+      final CreateSettlementAction a =>
+        'Record Settlement (${a.currency} ${a.amount.toStringAsFixed(2)})',
       final AddMemberAction a => 'Add Member (${a.email})',
     };
   }
@@ -135,211 +136,240 @@ class _SyncStatusPageState extends ConsumerState<SyncStatusPage> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 800),
           child: RefreshIndicator(
-        onRefresh: _loadPendingActions,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Connection Status Card
-              Card(
-                elevation: 0,
-                color: isOnline
-                    ? const Color(0xFF10B981).withValues(alpha: 0.12)
-                    : const Color(0xFFF59E0B).withValues(alpha: 0.12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(
-                    color: isOnline
-                        ? const Color(0xFF10B981).withValues(alpha: 0.4)
-                        : const Color(0xFFF59E0B).withValues(alpha: 0.4),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: isOnline
-                              ? const Color(0xFF10B981)
-                              : const Color(0xFFF59E0B),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          isOnline ? Icons.wifi_rounded : Icons.wifi_off_rounded,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              isOnline ? 'Online Connection Restored' : 'Device is Offline',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: isOnline
-                                    ? const Color(0xFF047857)
-                                    : const Color(0xFFB45309),
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              isOnline
-                                  ? 'Queued actions will automatically sync in the background.'
-                                  : 'Actions queued now will sync once network returns.',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Action Summary & Sync Button Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            onRefresh: _loadPendingActions,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Pending Actions (${_pendingActions.length})',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  // Connection Status Card
+                  Card(
+                    elevation: 0,
+                    color: isOnline
+                        ? const Color(0xFF10B981).withValues(alpha: 0.12)
+                        : const Color(0xFFF59E0B).withValues(alpha: 0.12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: BorderSide(
+                        color: isOnline
+                            ? const Color(0xFF10B981).withValues(alpha: 0.4)
+                            : const Color(0xFFF59E0B).withValues(alpha: 0.4),
+                      ),
                     ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: (isOnline && !_isSyncing && _pendingActions.isNotEmpty)
-                        ? _triggerSync
-                        : null,
-                    icon: _isSyncing
-                        ? const SizedBox(
-                            width: 14,
-                            height: 14,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.sync_rounded, size: 18),
-                    label: Text(_isSyncing ? 'Syncing...' : 'Sync Now'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-
-              // Queue List Items
-              if (_isLoadingList)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              else if (_pendingActions.isEmpty)
-                Card(
-                  elevation: 0,
-                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(
-                      color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: Center(
-                      child: Column(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
                         children: [
-                          Icon(Icons.check_circle_outline_rounded,
-                              size: 40, color: Color(0xFF10B981)),
-                          SizedBox(height: 12),
-                          Text(
-                            'All Actions Synced',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: isOnline
+                                  ? const Color(0xFF10B981)
+                                  : const Color(0xFFF59E0B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              isOnline
+                                  ? Icons.wifi_rounded
+                                  : Icons.wifi_off_rounded,
+                              color: Colors.white,
+                              size: 20,
                             ),
                           ),
-                          SizedBox(height: 4),
-                          Text(
-                            'No pending mutations in the local offline queue.',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  isOnline
+                                      ? 'Online Connection Restored'
+                                      : 'Device is Offline',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: isOnline
+                                        ? const Color(0xFF047857)
+                                        : const Color(0xFFB45309),
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  isOnline
+                                      ? 'Queued actions will automatically sync in the background.'
+                                      : 'Actions queued now will sync once network returns.',
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                )
-              else
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _pendingActions.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    final action = _pendingActions[index];
-                    final dateStr = DateFormat('MMM d, h:mm a').format(action.createdAt);
+                  const SizedBox(height: 20),
 
-                    return Card(
+                  // Action Summary & Sync Button Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Pending Actions (${_pendingActions.length})',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed:
+                            (isOnline &&
+                                !_isSyncing &&
+                                _pendingActions.isNotEmpty)
+                            ? _triggerSync
+                            : null,
+                        icon: _isSyncing
+                            ? const SizedBox(
+                                width: 14,
+                                height: 14,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.sync_rounded, size: 18),
+                        label: Text(_isSyncing ? 'Syncing...' : 'Sync Now'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Queue List Items
+                  if (_isLoadingList)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(32.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  else if (_pendingActions.isEmpty)
+                    Card(
                       elevation: 0,
-                      color: theme.colorScheme.surface,
+                      color: theme.colorScheme.surfaceContainerHighest
+                          .withValues(alpha: 0.3),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: BorderSide(
-                          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                          color: theme.colorScheme.outlineVariant.withValues(
+                            alpha: 0.5,
+                          ),
                         ),
                       ),
-                      child: ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.4),
-                            borderRadius: BorderRadius.circular(8),
+                      child: const Padding(
+                        padding: EdgeInsets.all(32.0),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline_rounded,
+                                size: 40,
+                                color: Color(0xFF10B981),
+                              ),
+                              SizedBox(height: 12),
+                              Text(
+                                'All Actions Synced',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'No pending mutations in the local offline queue.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
-                          child: Icon(
-                            _getActionIcon(action),
-                            color: theme.colorScheme.primary,
-                            size: 20,
-                          ),
                         ),
-                        title: Text(
-                          _formatActionType(action),
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text(
-                          'Queued: $dateStr · Retries: ${action.retryCount}/${action.maxRetries}',
-                          style: const TextStyle(fontSize: 11),
-                        ),
-                        trailing: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                      ),
+                    )
+                  else
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _pendingActions.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 8),
+                      itemBuilder: (context, index) {
+                        final action = _pendingActions[index];
+                        final dateStr = DateFormat(
+                          'MMM d, h:mm a',
+                        ).format(action.createdAt);
+
+                        return Card(
+                          elevation: 0,
+                          color: theme.colorScheme.surface,
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Text(
-                            'Pending',
-                            style: TextStyle(
-                              color: Color(0xFFD97706),
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                            side: BorderSide(
+                              color: theme.colorScheme.outlineVariant
+                                  .withValues(alpha: 0.5),
                             ),
                           ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-            ],
+                          child: ListTile(
+                            leading: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primaryContainer
+                                    .withValues(alpha: 0.4),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Icon(
+                                _getActionIcon(action),
+                                color: theme.colorScheme.primary,
+                                size: 20,
+                              ),
+                            ),
+                            title: Text(
+                              _formatActionType(action),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            subtitle: Text(
+                              'Queued: $dateStr · Retries: ${action.retryCount}/${action.maxRetries}',
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                            trailing: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(
+                                  0xFFF59E0B,
+                                ).withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Text(
+                                'Pending',
+                                style: TextStyle(
+                                  color: Color(0xFFD97706),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
-      ),
       ),
     );
   }

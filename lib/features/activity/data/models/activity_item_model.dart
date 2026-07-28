@@ -21,10 +21,7 @@ class ActivityItemModel with _$ActivityItemModel {
       _$ActivityItemModelFromJson(json);
 
   /// Converts this data model into a domain [ActivityItem] entity.
-  ActivityItem toEntity({
-    required String groupId,
-    required int index,
-  }) {
+  ActivityItem toEntity({required String groupId, required int index}) {
     return ActivityItem(
       id: index.toString(),
       groupId: groupId,

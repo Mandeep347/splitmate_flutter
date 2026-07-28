@@ -15,10 +15,7 @@ class ActivityListTile extends ConsumerWidget {
   final ActivityItem activity;
 
   /// Creates a new [ActivityListTile] instance.
-  const ActivityListTile({
-    required this.activity,
-    super.key,
-  });
+  const ActivityListTile({required this.activity, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,10 +50,7 @@ class ActivityListTile extends ConsumerWidget {
           CircleAvatar(
             radius: 18,
             backgroundColor: theme.colorScheme.primaryContainer,
-            child: ActivityIcon(
-              iconKey: activity.iconKey,
-              size: 16,
-            ),
+            child: ActivityIcon(iconKey: activity.iconKey, size: 16),
           ),
           const SizedBox(width: 12),
           Expanded(

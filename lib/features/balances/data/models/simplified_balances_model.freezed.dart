@@ -12,10 +12,12 @@ part of 'simplified_balances_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SimplifiedBalancesModel _$SimplifiedBalancesModelFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _SimplifiedBalancesModel.fromJson(json);
 }
 
@@ -35,19 +37,23 @@ mixin _$SimplifiedBalancesModel {
 
 /// @nodoc
 abstract class $SimplifiedBalancesModelCopyWith<$Res> {
-  factory $SimplifiedBalancesModelCopyWith(SimplifiedBalancesModel value,
-          $Res Function(SimplifiedBalancesModel) then) =
-      _$SimplifiedBalancesModelCopyWithImpl<$Res, SimplifiedBalancesModel>;
+  factory $SimplifiedBalancesModelCopyWith(
+    SimplifiedBalancesModel value,
+    $Res Function(SimplifiedBalancesModel) then,
+  ) = _$SimplifiedBalancesModelCopyWithImpl<$Res, SimplifiedBalancesModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'group_id') String groupId,
-      String currency,
-      List<PairwiseBalanceModel> transactions});
+  $Res call({
+    @JsonKey(name: 'group_id') String groupId,
+    String currency,
+    List<PairwiseBalanceModel> transactions,
+  });
 }
 
 /// @nodoc
-class _$SimplifiedBalancesModelCopyWithImpl<$Res,
-        $Val extends SimplifiedBalancesModel>
+class _$SimplifiedBalancesModelCopyWithImpl<
+  $Res,
+  $Val extends SimplifiedBalancesModel
+>
     implements $SimplifiedBalancesModelCopyWith<$Res> {
   _$SimplifiedBalancesModelCopyWithImpl(this._value, this._then);
 
@@ -63,20 +69,23 @@ class _$SimplifiedBalancesModelCopyWithImpl<$Res,
     Object? currency = null,
     Object? transactions = null,
   }) {
-    return _then(_value.copyWith(
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-      transactions: null == transactions
-          ? _value.transactions
-          : transactions // ignore: cast_nullable_to_non_nullable
-              as List<PairwiseBalanceModel>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            groupId: null == groupId
+                ? _value.groupId
+                : groupId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            currency: null == currency
+                ? _value.currency
+                : currency // ignore: cast_nullable_to_non_nullable
+                      as String,
+            transactions: null == transactions
+                ? _value.transactions
+                : transactions // ignore: cast_nullable_to_non_nullable
+                      as List<PairwiseBalanceModel>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -84,26 +93,30 @@ class _$SimplifiedBalancesModelCopyWithImpl<$Res,
 abstract class _$$SimplifiedBalancesModelImplCopyWith<$Res>
     implements $SimplifiedBalancesModelCopyWith<$Res> {
   factory _$$SimplifiedBalancesModelImplCopyWith(
-          _$SimplifiedBalancesModelImpl value,
-          $Res Function(_$SimplifiedBalancesModelImpl) then) =
-      __$$SimplifiedBalancesModelImplCopyWithImpl<$Res>;
+    _$SimplifiedBalancesModelImpl value,
+    $Res Function(_$SimplifiedBalancesModelImpl) then,
+  ) = __$$SimplifiedBalancesModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'group_id') String groupId,
-      String currency,
-      List<PairwiseBalanceModel> transactions});
+  $Res call({
+    @JsonKey(name: 'group_id') String groupId,
+    String currency,
+    List<PairwiseBalanceModel> transactions,
+  });
 }
 
 /// @nodoc
 class __$$SimplifiedBalancesModelImplCopyWithImpl<$Res>
-    extends _$SimplifiedBalancesModelCopyWithImpl<$Res,
-        _$SimplifiedBalancesModelImpl>
+    extends
+        _$SimplifiedBalancesModelCopyWithImpl<
+          $Res,
+          _$SimplifiedBalancesModelImpl
+        >
     implements _$$SimplifiedBalancesModelImplCopyWith<$Res> {
   __$$SimplifiedBalancesModelImplCopyWithImpl(
-      _$SimplifiedBalancesModelImpl _value,
-      $Res Function(_$SimplifiedBalancesModelImpl) _then)
-      : super(_value, _then);
+    _$SimplifiedBalancesModelImpl _value,
+    $Res Function(_$SimplifiedBalancesModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -112,32 +125,34 @@ class __$$SimplifiedBalancesModelImplCopyWithImpl<$Res>
     Object? currency = null,
     Object? transactions = null,
   }) {
-    return _then(_$SimplifiedBalancesModelImpl(
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-      transactions: null == transactions
-          ? _value._transactions
-          : transactions // ignore: cast_nullable_to_non_nullable
-              as List<PairwiseBalanceModel>,
-    ));
+    return _then(
+      _$SimplifiedBalancesModelImpl(
+        groupId: null == groupId
+            ? _value.groupId
+            : groupId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        currency: null == currency
+            ? _value.currency
+            : currency // ignore: cast_nullable_to_non_nullable
+                  as String,
+        transactions: null == transactions
+            ? _value._transactions
+            : transactions // ignore: cast_nullable_to_non_nullable
+                  as List<PairwiseBalanceModel>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$SimplifiedBalancesModelImpl extends _SimplifiedBalancesModel {
-  const _$SimplifiedBalancesModelImpl(
-      {@JsonKey(name: 'group_id') required this.groupId,
-      required this.currency,
-      required final List<PairwiseBalanceModel> transactions})
-      : _transactions = transactions,
-        super._();
+  const _$SimplifiedBalancesModelImpl({
+    @JsonKey(name: 'group_id') required this.groupId,
+    required this.currency,
+    required final List<PairwiseBalanceModel> transactions,
+  }) : _transactions = transactions,
+       super._();
 
   factory _$SimplifiedBalancesModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SimplifiedBalancesModelImplFromJson(json);
@@ -168,36 +183,42 @@ class _$SimplifiedBalancesModelImpl extends _SimplifiedBalancesModel {
             (identical(other.groupId, groupId) || other.groupId == groupId) &&
             (identical(other.currency, currency) ||
                 other.currency == currency) &&
-            const DeepCollectionEquality()
-                .equals(other._transactions, _transactions));
+            const DeepCollectionEquality().equals(
+              other._transactions,
+              _transactions,
+            ));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, groupId, currency,
-      const DeepCollectionEquality().hash(_transactions));
+  int get hashCode => Object.hash(
+    runtimeType,
+    groupId,
+    currency,
+    const DeepCollectionEquality().hash(_transactions),
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$SimplifiedBalancesModelImplCopyWith<_$SimplifiedBalancesModelImpl>
-      get copyWith => __$$SimplifiedBalancesModelImplCopyWithImpl<
-          _$SimplifiedBalancesModelImpl>(this, _$identity);
+  get copyWith =>
+      __$$SimplifiedBalancesModelImplCopyWithImpl<
+        _$SimplifiedBalancesModelImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SimplifiedBalancesModelImplToJson(
-      this,
-    );
+    return _$$SimplifiedBalancesModelImplToJson(this);
   }
 }
 
 abstract class _SimplifiedBalancesModel extends SimplifiedBalancesModel {
-  const factory _SimplifiedBalancesModel(
-          {@JsonKey(name: 'group_id') required final String groupId,
-          required final String currency,
-          required final List<PairwiseBalanceModel> transactions}) =
-      _$SimplifiedBalancesModelImpl;
+  const factory _SimplifiedBalancesModel({
+    @JsonKey(name: 'group_id') required final String groupId,
+    required final String currency,
+    required final List<PairwiseBalanceModel> transactions,
+  }) = _$SimplifiedBalancesModelImpl;
   const _SimplifiedBalancesModel._() : super._();
 
   factory _SimplifiedBalancesModel.fromJson(Map<String, dynamic> json) =
@@ -213,5 +234,5 @@ abstract class _SimplifiedBalancesModel extends SimplifiedBalancesModel {
   @override
   @JsonKey(ignore: true)
   _$$SimplifiedBalancesModelImplCopyWith<_$SimplifiedBalancesModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

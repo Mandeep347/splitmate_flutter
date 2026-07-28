@@ -21,9 +21,7 @@ class EmptyView extends StatelessWidget {
   });
 
   /// Factory constructor for No Internet State.
-  factory EmptyView.noInternet({
-    required VoidCallback onRetry,
-  }) {
+  factory EmptyView.noInternet({required VoidCallback onRetry}) {
     return EmptyView(
       icon: Icons.wifi_off_outlined,
       title: 'No Internet Connection',
@@ -122,33 +120,28 @@ class ErrorView extends StatelessWidget {
   });
 
   /// Factory constructor for Network/Connection Failure.
-  factory ErrorView.network({
-    required VoidCallback onRetry,
-  }) {
+  factory ErrorView.network({required VoidCallback onRetry}) {
     return ErrorView(
       title: 'Network Error',
-      description: 'A network problem occurred. Please check your connectivity and try again.',
+      description:
+          'A network problem occurred. Please check your connectivity and try again.',
       onRetry: onRetry,
     );
   }
 
   /// Factory constructor for Backend Server Exception.
-  factory ErrorView.server({
-    String? message,
-    VoidCallback? onRetry,
-  }) {
+  factory ErrorView.server({String? message, VoidCallback? onRetry}) {
     return ErrorView(
       title: 'Server Error',
-      description: message ?? 'An unexpected error occurred on the server. Please try again later.',
+      description:
+          message ??
+          'An unexpected error occurred on the server. Please try again later.',
       onRetry: onRetry,
     );
   }
 
   /// Factory constructor for standard Fallback Error.
-  factory ErrorView.generic({
-    String? message,
-    VoidCallback? onRetry,
-  }) {
+  factory ErrorView.generic({String? message, VoidCallback? onRetry}) {
     return ErrorView(
       title: 'Something Went Wrong',
       description: message ?? 'An unexpected error occurred. Please try again.',

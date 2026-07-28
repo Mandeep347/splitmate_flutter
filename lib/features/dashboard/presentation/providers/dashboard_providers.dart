@@ -23,10 +23,10 @@ class DashboardStats {
   });
 
   const DashboardStats.zero()
-      : totalSpent = 0.0,
-        youPaid = 0.0,
-        youOwe = 0.0,
-        netBalance = 0.0;
+    : totalSpent = 0.0,
+      youPaid = 0.0,
+      youOwe = 0.0,
+      netBalance = 0.0;
 }
 
 /// Provider that aggregates spending across all active groups.
@@ -59,7 +59,7 @@ final dashboardStatsProvider = Provider<AsyncValue<DashboardStats>>((ref) {
         analyticsState.when(
           data: (analytics) {
             totalSpent += analytics.totalExpenses;
-            
+
             // Find current user's contribution in this group
             final userContrib = analytics.memberContributions.firstWhere(
               (c) => c.userId == currentUser.id,
@@ -92,12 +92,14 @@ final dashboardStatsProvider = Provider<AsyncValue<DashboardStats>>((ref) {
         return AsyncValue.error(firstError!, firstStack!);
       }
 
-      return AsyncValue.data(DashboardStats(
-        totalSpent: totalSpent,
-        youPaid: youPaid,
-        youOwe: youOwe,
-        netBalance: youPaid - youOwe,
-      ));
+      return AsyncValue.data(
+        DashboardStats(
+          totalSpent: totalSpent,
+          youPaid: youPaid,
+          youOwe: youOwe,
+          netBalance: youPaid - youOwe,
+        ),
+      );
     },
   );
 });
@@ -145,69 +147,75 @@ final allExpensesProvider = Provider<AsyncValue<List<Expense>>>((ref) {
 });
 
 /// Combined monthly spending timeline metrics across all active groups.
-final globalMonthlySpendingProvider = Provider<AsyncValue<List<MonthlySpending>>>((ref) {
-  final groupsState = ref.watch(myGroupsProvider);
+final globalMonthlySpendingProvider =
+    Provider<AsyncValue<List<MonthlySpending>>>((ref) {
+      final groupsState = ref.watch(myGroupsProvider);
 
-  return groupsState.when(
-    loading: () => const AsyncValue.loading(),
-    error: (err, stack) => AsyncValue.error(err, stack),
-    data: (groups) {
-      final activeGroups = groups.where((g) => g.isActive).toList();
-      final Map<String, _MonthlySpendingBuilder> monthlyMap = {};
-      bool anyLoading = false;
-      Object? firstError;
-      StackTrace? firstStack;
+      return groupsState.when(
+        loading: () => const AsyncValue.loading(),
+        error: (err, stack) => AsyncValue.error(err, stack),
+        data: (groups) {
+          final activeGroups = groups.where((g) => g.isActive).toList();
+          final Map<String, _MonthlySpendingBuilder> monthlyMap = {};
+          bool anyLoading = false;
+          Object? firstError;
+          StackTrace? firstStack;
 
-      for (final group in activeGroups) {
-        final analyticsState = ref.watch(groupAnalyticsProvider(group.id));
-        analyticsState.when(
-          data: (analytics) {
-            for (final s in analytics.monthlySpending) {
-              final key = '${s.year}-${s.month}';
-              final builder = monthlyMap.putIfAbsent(
-                key,
-                () => _MonthlySpendingBuilder(year: s.year, month: s.month),
-              );
-              builder.totalAmount += s.totalAmount;
-              builder.expenseCount += s.expenseCount;
-            }
-          },
-          loading: () => anyLoading = true,
-          error: (err, stack) {
-            firstError ??= err;
-            firstStack ??= stack;
-          },
-        );
-      }
+          for (final group in activeGroups) {
+            final analyticsState = ref.watch(groupAnalyticsProvider(group.id));
+            analyticsState.when(
+              data: (analytics) {
+                for (final s in analytics.monthlySpending) {
+                  final key = '${s.year}-${s.month}';
+                  final builder = monthlyMap.putIfAbsent(
+                    key,
+                    () => _MonthlySpendingBuilder(year: s.year, month: s.month),
+                  );
+                  builder.totalAmount += s.totalAmount;
+                  builder.expenseCount += s.expenseCount;
+                }
+              },
+              loading: () => anyLoading = true,
+              error: (err, stack) {
+                firstError ??= err;
+                firstStack ??= stack;
+              },
+            );
+          }
 
-      if (anyLoading && monthlyMap.isEmpty) {
-        return const AsyncValue.loading();
-      }
+          if (anyLoading && monthlyMap.isEmpty) {
+            return const AsyncValue.loading();
+          }
 
-      if (firstError != null && monthlyMap.isEmpty) {
-        return AsyncValue.error(firstError!, firstStack!);
-      }
+          if (firstError != null && monthlyMap.isEmpty) {
+            return AsyncValue.error(firstError!, firstStack!);
+          }
 
-      final monthlyList = monthlyMap.values
-          .map<MonthlySpending>((m) => MonthlySpending(
-                year: m.year,
-                month: m.month,
-                monthLabel: DateFormat('MMM').format(DateTime(m.year, m.month)),
-                totalAmount: m.totalAmount,
-                expenseCount: m.expenseCount,
-                currency: 'INR',
-              ))
-          .toList()
-        ..sort((a, b) {
-          final yearCompare = a.year.compareTo(b.year);
-          if (yearCompare != 0) return yearCompare;
-          return a.month.compareTo(b.month);
-        });
+          final monthlyList =
+              monthlyMap.values
+                  .map<MonthlySpending>(
+                    (m) => MonthlySpending(
+                      year: m.year,
+                      month: m.month,
+                      monthLabel: DateFormat(
+                        'MMM',
+                      ).format(DateTime(m.year, m.month)),
+                      totalAmount: m.totalAmount,
+                      expenseCount: m.expenseCount,
+                      currency: 'INR',
+                    ),
+                  )
+                  .toList()
+                ..sort((a, b) {
+                  final yearCompare = a.year.compareTo(b.year);
+                  if (yearCompare != 0) return yearCompare;
+                  return a.month.compareTo(b.month);
+                });
 
-      return AsyncValue.data(monthlyList);
-    },
-  );
-});
+          return AsyncValue.data(monthlyList);
+        },
+      );
+    });
 
 class _MonthlySpendingBuilder {
   final int year;
@@ -235,11 +243,17 @@ class CategoryShare {
   final double amount;
   final double percentage;
 
-  const CategoryShare({required this.category, required this.amount, required this.percentage});
+  const CategoryShare({
+    required this.category,
+    required this.amount,
+    required this.percentage,
+  });
 }
 
 /// Dynamic categorization of global expenses for visual summary.
-final globalCategorySharesProvider = Provider<AsyncValue<List<CategoryShare>>>((ref) {
+final globalCategorySharesProvider = Provider<AsyncValue<List<CategoryShare>>>((
+  ref,
+) {
   final expensesAsync = ref.watch(allExpensesProvider);
 
   return expensesAsync.when(
@@ -280,16 +294,53 @@ final globalCategorySharesProvider = Provider<AsyncValue<List<CategoryShare>>>((
 
 ExpenseCategory _classify(String title) {
   final t = title.toLowerCase();
-  if (t.contains('cafe') || t.contains('dinner') || t.contains('lunch') || t.contains('restaurant') || t.contains('food') || t.contains('groceries') || t.contains('drinks') || t.contains('pizza') || t.contains('coffee') || t.contains('eat') || t.contains('breakfast')) {
+  if (t.contains('cafe') ||
+      t.contains('dinner') ||
+      t.contains('lunch') ||
+      t.contains('restaurant') ||
+      t.contains('food') ||
+      t.contains('groceries') ||
+      t.contains('drinks') ||
+      t.contains('pizza') ||
+      t.contains('coffee') ||
+      t.contains('eat') ||
+      t.contains('breakfast')) {
     return ExpenseCategory.foodAndDining;
   }
-  if (t.contains('fuel') || t.contains('goa') || t.contains('cab') || t.contains('uber') || t.contains('flight') || t.contains('train') || t.contains('travel') || t.contains('ticket') || t.contains('hotel') || t.contains('stay') || t.contains('gas') || t.contains('bus') || t.contains('trip')) {
+  if (t.contains('fuel') ||
+      t.contains('goa') ||
+      t.contains('cab') ||
+      t.contains('uber') ||
+      t.contains('flight') ||
+      t.contains('train') ||
+      t.contains('travel') ||
+      t.contains('ticket') ||
+      t.contains('hotel') ||
+      t.contains('stay') ||
+      t.contains('gas') ||
+      t.contains('bus') ||
+      t.contains('trip')) {
     return ExpenseCategory.travel;
   }
-  if (t.contains('gift') || t.contains('cloth') || t.contains('amazon') || t.contains('shopping') || t.contains('shoes') || t.contains('movie') || t.contains('cinema') || t.contains('show') || t.contains('ticket')) {
+  if (t.contains('gift') ||
+      t.contains('cloth') ||
+      t.contains('amazon') ||
+      t.contains('shopping') ||
+      t.contains('shoes') ||
+      t.contains('movie') ||
+      t.contains('cinema') ||
+      t.contains('show') ||
+      t.contains('ticket')) {
     return ExpenseCategory.shopping;
   }
-  if (t.contains('electricity') || t.contains('bill') || t.contains('rent') || t.contains('wifi') || t.contains('internet') || t.contains('water') || t.contains('power') || t.contains('utility')) {
+  if (t.contains('electricity') ||
+      t.contains('bill') ||
+      t.contains('rent') ||
+      t.contains('wifi') ||
+      t.contains('internet') ||
+      t.contains('water') ||
+      t.contains('power') ||
+      t.contains('utility')) {
     return ExpenseCategory.billsAndUtilities;
   }
   return ExpenseCategory.other;

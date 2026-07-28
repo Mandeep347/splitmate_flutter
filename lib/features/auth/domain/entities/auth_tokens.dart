@@ -7,8 +7,5 @@ class AuthTokens {
   final String refreshToken;
 
   /// Creates a new [AuthTokens] instance.
-  const AuthTokens({
-    required this.accessToken,
-    required this.refreshToken,
-  });
+  const AuthTokens({required this.accessToken, required this.refreshToken});
 }

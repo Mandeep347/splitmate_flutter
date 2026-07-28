@@ -98,7 +98,9 @@ class TokenStorageService implements ITokenStorageService {
       if (value != null) return value;
     } catch (_) {
       // ignore: avoid_print
-      debugPrint('Warning: Secure storage read failed for $key. Trying fallback.');
+      debugPrint(
+        'Warning: Secure storage read failed for $key. Trying fallback.',
+      );
     }
 
     try {
@@ -106,7 +108,9 @@ class TokenStorageService implements ITokenStorageService {
       if (value != null) return value;
     } catch (_) {
       // ignore: avoid_print
-      debugPrint('Warning: Fallback storage read also failed for $key. Using in-memory.');
+      debugPrint(
+        'Warning: Fallback storage read also failed for $key. Using in-memory.',
+      );
     }
 
     return _memoryCache[key];

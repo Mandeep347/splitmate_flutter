@@ -54,24 +54,33 @@ class DashboardPage extends ConsumerWidget {
     final categorySharesAsync = ref.watch(globalCategorySharesProvider);
     final isOnline = ref.watch(isOnlineProvider);
 
-    final groups = groupsAsync.hasValue ? groupsAsync.requireValue : const <Group>[];
-    final analytics = userAnalyticsAsync.hasValue ? userAnalyticsAsync.requireValue :
-        UserAnalytics(
-          userId: user?.id ?? '',
-          userName: user?.name ?? '',
-          totalPaidAllGroups: 0.0,
-          totalOwedToOthers: 0.0,
-          totalOthersOweUser: 0.0,
-          netBalance: 0.0,
-          totalGroupsCount: groups.length,
-          totalExpenseCount: 0,
-          groups: const [],
-          monthlySpending: const [],
-        );
-    final activities = activityAsync.hasValue ? activityAsync.requireValue : const <ActivityItem>[];
-    final categoryShares = categorySharesAsync.hasValue ? categorySharesAsync.requireValue : const <CategoryShare>[];
+    final groups = groupsAsync.hasValue
+        ? groupsAsync.requireValue
+        : const <Group>[];
+    final analytics = userAnalyticsAsync.hasValue
+        ? userAnalyticsAsync.requireValue
+        : UserAnalytics(
+            userId: user?.id ?? '',
+            userName: user?.name ?? '',
+            totalPaidAllGroups: 0.0,
+            totalOwedToOthers: 0.0,
+            totalOthersOweUser: 0.0,
+            netBalance: 0.0,
+            totalGroupsCount: groups.length,
+            totalExpenseCount: 0,
+            groups: const [],
+            monthlySpending: const [],
+          );
+    final activities = activityAsync.hasValue
+        ? activityAsync.requireValue
+        : const <ActivityItem>[];
+    final categoryShares = categorySharesAsync.hasValue
+        ? categorySharesAsync.requireValue
+        : const <CategoryShare>[];
 
-    final String greetingText = user != null ? '${_greeting()}, ${user.name}' : _greeting();
+    final String greetingText = user != null
+        ? '${_greeting()}, ${user.name}'
+        : _greeting();
 
     Widget mainContent(List<Group> groups, UserAnalytics analytics) {
       final groupMap = {for (var g in groups) g.id: g};
@@ -112,7 +121,9 @@ class DashboardPage extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.15),
+                color: theme.colorScheme.primaryContainer.withValues(
+                  alpha: 0.15,
+                ),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: theme.colorScheme.primary.withValues(alpha: 0.3),
@@ -188,13 +199,19 @@ class DashboardPage extends ConsumerWidget {
             )
           else
             Column(
-              children: shownGroups.map((g) => GroupCard(group: g, compact: true)).toList(),
+              children: shownGroups
+                  .map((g) => GroupCard(group: g, compact: true))
+                  .toList(),
             ),
         ],
       );
     }
 
-    Widget sidebarContent(List<ActivityItem> activities, UserAnalytics analytics, List<CategoryShare> categories) {
+    Widget sidebarContent(
+      List<ActivityItem> activities,
+      UserAnalytics analytics,
+      List<CategoryShare> categories,
+    ) {
       final recentActivities = activities.take(5).toList();
       final hasData = analytics.totalExpenseCount > 0;
 
@@ -208,7 +225,8 @@ class DashboardPage extends ConsumerWidget {
                 child: const EmptyStateWidget(
                   icon: Icons.analytics_outlined,
                   title: 'No activity yet',
-                  subtitle: 'Make groups and create expenses to see personalized analytics.',
+                  subtitle:
+                      'Make groups and create expenses to see personalized analytics.',
                 ),
               ),
             ),
@@ -277,7 +295,8 @@ class DashboardPage extends ConsumerWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () => context.go(AppRoutes.globalActivityPath),
+                        onPressed: () =>
+                            context.go(AppRoutes.globalActivityPath),
                         child: const Text('View all'),
                       ),
                     ],
@@ -319,11 +338,17 @@ class DashboardPage extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
+                border: Border.all(
+                  color: const Color(0xFFF59E0B).withValues(alpha: 0.4),
+                ),
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.wifi_off_rounded, size: 14, color: Color(0xFFD97706)),
+                  Icon(
+                    Icons.wifi_off_rounded,
+                    size: 14,
+                    color: Color(0xFFD97706),
+                  ),
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -353,11 +378,7 @@ class DashboardPage extends ConsumerWidget {
                 ),
                 Expanded(
                   flex: 2,
-                  child: sidebarContent(
-                    activities,
-                    analytics,
-                    categoryShares,
-                  ),
+                  child: sidebarContent(activities, analytics, categoryShares),
                 ),
               ],
             )
@@ -366,11 +387,7 @@ class DashboardPage extends ConsumerWidget {
               children: [
                 mainContent(groups, analytics),
                 const SizedBox(height: 24),
-                sidebarContent(
-                  activities,
-                  analytics,
-                  categoryShares,
-                ),
+                sidebarContent(activities, analytics, categoryShares),
                 const SizedBox(height: 80),
               ],
             ),
@@ -411,13 +428,13 @@ class DashboardPage extends ConsumerWidget {
                     data: (_) => buildDashboardBody(),
                   )
                 : (groupsAsync.isLoading && groups.isEmpty)
-                    ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(32.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    : buildDashboardBody(),
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(32.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : buildDashboardBody(),
           ),
         ),
       ),
@@ -452,9 +469,7 @@ class _BalanceCard extends StatelessWidget {
         child: Container(
           width: double.infinity,
           height: 180,
-          decoration: BoxDecoration(
-            gradient: ext.primaryGradient,
-          ),
+          decoration: BoxDecoration(gradient: ext.primaryGradient),
           child: Stack(
             children: [
               Positioned.fill(
@@ -574,7 +589,9 @@ class _OverviewGrid extends StatelessWidget {
         title: 'Net Balance',
         amount: analytics.netBalance,
         icon: Icons.account_balance_wallet_outlined,
-        color: analytics.netBalance >= 0 ? const Color(0xFF14B8A6) : const Color(0xFFEF4444),
+        color: analytics.netBalance >= 0
+            ? const Color(0xFF14B8A6)
+            : const Color(0xFFEF4444),
         subtitle: 'Overall net share',
       ),
     ];
@@ -582,12 +599,14 @@ class _OverviewGrid extends StatelessWidget {
     if (isDesktop) {
       return Row(
         children: items
-            .map((item) => Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: ext.spaceXS),
-                    child: _StatCard(item: item),
-                  ),
-                ))
+            .map(
+              (item) => Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: ext.spaceXS),
+                  child: _StatCard(item: item),
+                ),
+              ),
+            )
             .toList(),
       );
     } else {
@@ -598,10 +617,12 @@ class _OverviewGrid extends StatelessWidget {
             spacing: ext.spaceSM,
             runSpacing: ext.spaceSM,
             children: items
-                .map((item) => SizedBox(
-                      width: cardWidth,
-                      child: _StatCard(item: item),
-                    ))
+                .map(
+                  (item) => SizedBox(
+                    width: cardWidth,
+                    child: _StatCard(item: item),
+                  ),
+                )
                 .toList(),
           );
         },
@@ -659,11 +680,7 @@ class _StatCard extends StatelessWidget {
                     color: item.color.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    item.icon,
-                    size: 16,
-                    color: item.color,
-                  ),
+                  child: Icon(item.icon, size: 16, color: item.color),
                 ),
               ],
             ),

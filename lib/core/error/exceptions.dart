@@ -11,10 +11,7 @@ abstract class AppException implements Exception {
 class ServerException extends AppException {
   final int? statusCode;
 
-  const ServerException(
-    super.message, {
-    this.statusCode,
-  });
+  const ServerException(super.message, {this.statusCode});
 }
 
 /// Thrown when a transient network connection drop occurs (no DNS, timeout, socket error).
@@ -31,8 +28,5 @@ class CacheException extends AppException {
 class ValidationException extends AppException {
   final Map<String, List<String>> errors;
 
-  const ValidationException(
-    super.message, {
-    required this.errors,
-  });
+  const ValidationException(super.message, {required this.errors});
 }

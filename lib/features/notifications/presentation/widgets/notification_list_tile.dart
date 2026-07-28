@@ -12,10 +12,7 @@ class NotificationListTile extends ConsumerWidget {
   final AppNotification notification;
 
   /// Creates a new [NotificationListTile] instance.
-  const NotificationListTile({
-    required this.notification,
-    super.key,
-  });
+  const NotificationListTile({required this.notification, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,12 +41,15 @@ class NotificationListTile extends ConsumerWidget {
           onTap: () {
             // Fire-and-forget: Mark as read silently in the background
             try {
-              ref.read(markReadProvider.notifier).markRead(notificationId: notification.id);
+              ref
+                  .read(markReadProvider.notifier)
+                  .markRead(notificationId: notification.id);
             } catch (_) {}
 
             // Navigate immediately based on type
             final metadata = notification.metadata;
-            if ((notification.type == 'EXPENSE_CREATED' || notification.type == 'EXPENSE_REVERSED') &&
+            if ((notification.type == 'EXPENSE_CREATED' ||
+                    notification.type == 'EXPENSE_REVERSED') &&
                 metadata != null &&
                 metadata.containsKey('group_id') &&
                 metadata.containsKey('expense_id')) {
@@ -60,21 +60,23 @@ class NotificationListTile extends ConsumerWidget {
                   'expenseId': metadata['expense_id'] as String,
                 },
               );
-            } else if ((notification.type == 'SETTLEMENT_RECORDED' || notification.type == 'MEMBER_ADDED') &&
+            } else if ((notification.type == 'SETTLEMENT_RECORDED' ||
+                    notification.type == 'MEMBER_ADDED') &&
                 metadata != null &&
                 metadata.containsKey('group_id')) {
               context.goNamed(
                 AppRoutes.groupDetailsName,
-                pathParameters: {
-                  'groupId': metadata['group_id'] as String,
-                },
+                pathParameters: {'groupId': metadata['group_id'] as String},
               );
             } else {
               context.goNamed(AppRoutes.groupsName);
             }
           },
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             leading: CircleAvatar(
               radius: 20,
               backgroundColor: isUnread

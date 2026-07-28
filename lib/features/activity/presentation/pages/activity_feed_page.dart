@@ -73,7 +73,9 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
       ),
       body: Builder(
         builder: (context) {
-          final feed = activityState.hasValue ? activityState.requireValue : null;
+          final feed = activityState.hasValue
+              ? activityState.requireValue
+              : null;
           final isOnline = ref.watch(isOnlineProvider);
           final isDesktop = ResponsiveLayout.isDesktop(context);
 
@@ -82,9 +84,13 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
               return ShimmerWrapper(
                 isLoading: true,
                 child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
                   itemCount: 5,
-                  itemBuilder: (context, index) => const ActivityListTileSkeleton(),
+                  itemBuilder: (context, index) =>
+                      const ActivityListTileSkeleton(),
                 ),
               );
             }
@@ -92,8 +98,8 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: Text(
-                  activityState.error != null 
-                      ? 'Error: ${activityState.error}' 
+                  activityState.error != null
+                      ? 'Error: ${activityState.error}'
                       : 'An error occurred',
                   textAlign: TextAlign.center,
                 ),
@@ -112,15 +118,24 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
                 if (!isOnline && !isDesktop)
                   Container(
                     margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
+                      border: Border.all(
+                        color: const Color(0xFFF59E0B).withValues(alpha: 0.4),
+                      ),
                     ),
                     child: const Row(
                       children: [
-                        Icon(Icons.wifi_off_rounded, size: 14, color: Color(0xFFD97706)),
+                        Icon(
+                          Icons.wifi_off_rounded,
+                          size: 14,
+                          color: Color(0xFFD97706),
+                        ),
                         SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -136,29 +151,35 @@ class _ActivityFeedPageState extends ConsumerState<ActivityFeedPage> {
                     ),
                   ),
                 Expanded(
-                  child: feed.items.isEmpty 
-                    ? const EmptyStateWidget(
-                        icon: Icons.history_outlined,
-                        title: 'No activity yet',
-                        subtitle: 'Activity will appear here as your group adds expenses and settlements.',
-                      )
-                    : ListView.builder(
-                        controller: _scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                        itemCount: feed.items.length + (feed.hasMore ? 1 : 0),
-                        itemBuilder: (context, index) {
-                          if (index == feed.items.length) {
-                            return const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: CircularProgressIndicator(),
-                              ),
+                  child: feed.items.isEmpty
+                      ? const EmptyStateWidget(
+                          icon: Icons.history_outlined,
+                          title: 'No activity yet',
+                          subtitle:
+                              'Activity will appear here as your group adds expenses and settlements.',
+                        )
+                      : ListView.builder(
+                          controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8.0,
+                          ),
+                          itemCount: feed.items.length + (feed.hasMore ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == feed.items.length) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                            return ActivityListTile(
+                              activity: feed.items[index],
                             );
-                          }
-                          return ActivityListTile(activity: feed.items[index]);
-                        },
-                      ),
+                          },
+                        ),
                 ),
               ],
             ),

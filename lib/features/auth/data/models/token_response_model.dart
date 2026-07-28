@@ -22,9 +22,6 @@ class TokenResponseModel with _$TokenResponseModel {
 
   /// Converts this data model into a pure domain [AuthTokens] entity.
   AuthTokens toEntity() {
-    return AuthTokens(
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-    );
+    return AuthTokens(accessToken: accessToken, refreshToken: refreshToken);
   }
 }

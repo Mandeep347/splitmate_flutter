@@ -18,12 +18,15 @@ void main() {
 
   group('RemoveMemberUseCase', () {
     test('completes without error on success', () async {
-      when(() => mockRepository.removeMember(groupId: 'group-1', userId: 'user-2'))
-          .thenAnswer((_) async => {});
+      when(
+        () => mockRepository.removeMember(groupId: 'group-1', userId: 'user-2'),
+      ).thenAnswer((_) async => {});
 
       await usecase(groupId: 'group-1', userId: 'user-2');
 
-      verify(() => mockRepository.removeMember(groupId: 'group-1', userId: 'user-2')).called(1);
+      verify(
+        () => mockRepository.removeMember(groupId: 'group-1', userId: 'user-2'),
+      ).called(1);
     });
 
     test('throws BusinessRuleFailure on BusinessRuleException', () async {
@@ -32,20 +35,26 @@ void main() {
         errors: {'code': 'RULE_VIOLATION'},
       );
 
-      when(() => mockRepository.removeMember(groupId: 'group-1', userId: 'user-2'))
-          .thenThrow(exception);
+      when(
+        () => mockRepository.removeMember(groupId: 'group-1', userId: 'user-2'),
+      ).thenThrow(exception);
 
       expect(
         () => usecase(groupId: 'group-1', userId: 'user-2'),
         throwsA(
-          isA<BusinessRuleFailure>().having((f) => f.fieldErrors, 'fieldErrors', exception.errors),
+          isA<BusinessRuleFailure>().having(
+            (f) => f.fieldErrors,
+            'fieldErrors',
+            exception.errors,
+          ),
         ),
       );
     });
 
     test('throws ServerFailure with FORBIDDEN on ForbiddenException', () async {
-      when(() => mockRepository.removeMember(groupId: 'group-1', userId: 'user-2'))
-          .thenThrow(const ForbiddenException('Forbidden action.'));
+      when(
+        () => mockRepository.removeMember(groupId: 'group-1', userId: 'user-2'),
+      ).thenThrow(const ForbiddenException('Forbidden action.'));
 
       expect(
         () => usecase(groupId: 'group-1', userId: 'user-2'),

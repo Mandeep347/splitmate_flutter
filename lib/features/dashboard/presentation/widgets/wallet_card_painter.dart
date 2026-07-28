@@ -13,11 +13,19 @@ class WalletCardPainter extends CustomPainter {
 
     // Draw background glowing circle 1 (top-right)
     paint.color = Colors.white.withValues(alpha: 0.08);
-    canvas.drawCircle(Offset(size.width * 0.85, size.height * 0.2), size.height * 0.6, paint);
+    canvas.drawCircle(
+      Offset(size.width * 0.85, size.height * 0.2),
+      size.height * 0.6,
+      paint,
+    );
 
     // Draw background glowing circle 2 (bottom-right)
     paint.color = Colors.white.withValues(alpha: 0.05);
-    canvas.drawCircle(Offset(size.width * 0.95, size.height * 0.85), size.height * 0.45, paint);
+    canvas.drawCircle(
+      Offset(size.width * 0.95, size.height * 0.85),
+      size.height * 0.45,
+      paint,
+    );
 
     // Draw decorative wavy lines (fintech grid look)
     final linePaint = Paint()

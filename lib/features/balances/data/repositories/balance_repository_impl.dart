@@ -11,14 +11,10 @@ class BalanceRepositoryImpl implements IBalanceRepository {
   final IBalanceRemoteDatasource datasource;
 
   /// Creates a new [BalanceRepositoryImpl] instance.
-  const BalanceRepositoryImpl({
-    required this.datasource,
-  });
+  const BalanceRepositoryImpl({required this.datasource});
 
   @override
-  Future<GroupBalances> getGroupBalances({
-    required String groupId,
-  }) async {
+  Future<GroupBalances> getGroupBalances({required String groupId}) async {
     final model = await datasource.getGroupBalances(groupId: groupId);
     return model.toEntity();
   }

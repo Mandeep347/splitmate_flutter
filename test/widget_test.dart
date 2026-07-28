@@ -5,7 +5,10 @@ import 'package:splito_flutter/core/storage/token_storage_service.dart';
 
 class FakeTokenStorageService implements ITokenStorageService {
   @override
-  Future<void> saveTokens({required String accessToken, required String refreshToken}) async {}
+  Future<void> saveTokens({
+    required String accessToken,
+    required String refreshToken,
+  }) async {}
 
   @override
   Future<String?> getAccessToken() async => null;
@@ -26,7 +29,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          tokenStorageServiceProvider.overrideWithValue(FakeTokenStorageService()),
+          tokenStorageServiceProvider.overrideWithValue(
+            FakeTokenStorageService(),
+          ),
         ],
         child: const SplitoApp(),
       ),

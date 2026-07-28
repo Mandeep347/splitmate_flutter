@@ -12,7 +12,8 @@ part of 'monthly_spending_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 MonthlySpendingModel _$MonthlySpendingModelFromJson(Map<String, dynamic> json) {
   return _MonthlySpendingModel.fromJson(json);
@@ -37,21 +38,25 @@ mixin _$MonthlySpendingModel {
 
 /// @nodoc
 abstract class $MonthlySpendingModelCopyWith<$Res> {
-  factory $MonthlySpendingModelCopyWith(MonthlySpendingModel value,
-          $Res Function(MonthlySpendingModel) then) =
-      _$MonthlySpendingModelCopyWithImpl<$Res, MonthlySpendingModel>;
+  factory $MonthlySpendingModelCopyWith(
+    MonthlySpendingModel value,
+    $Res Function(MonthlySpendingModel) then,
+  ) = _$MonthlySpendingModelCopyWithImpl<$Res, MonthlySpendingModel>;
   @useResult
-  $Res call(
-      {int year,
-      int month,
-      @JsonKey(name: 'month_label') String monthLabel,
-      @JsonKey(name: 'total_amount') String totalAmount,
-      @JsonKey(name: 'expense_count') int expenseCount});
+  $Res call({
+    int year,
+    int month,
+    @JsonKey(name: 'month_label') String monthLabel,
+    @JsonKey(name: 'total_amount') String totalAmount,
+    @JsonKey(name: 'expense_count') int expenseCount,
+  });
 }
 
 /// @nodoc
-class _$MonthlySpendingModelCopyWithImpl<$Res,
-        $Val extends MonthlySpendingModel>
+class _$MonthlySpendingModelCopyWithImpl<
+  $Res,
+  $Val extends MonthlySpendingModel
+>
     implements $MonthlySpendingModelCopyWith<$Res> {
   _$MonthlySpendingModelCopyWithImpl(this._value, this._then);
 
@@ -69,54 +74,60 @@ class _$MonthlySpendingModelCopyWithImpl<$Res,
     Object? totalAmount = null,
     Object? expenseCount = null,
   }) {
-    return _then(_value.copyWith(
-      year: null == year
-          ? _value.year
-          : year // ignore: cast_nullable_to_non_nullable
-              as int,
-      month: null == month
-          ? _value.month
-          : month // ignore: cast_nullable_to_non_nullable
-              as int,
-      monthLabel: null == monthLabel
-          ? _value.monthLabel
-          : monthLabel // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalAmount: null == totalAmount
-          ? _value.totalAmount
-          : totalAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      expenseCount: null == expenseCount
-          ? _value.expenseCount
-          : expenseCount // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            year: null == year
+                ? _value.year
+                : year // ignore: cast_nullable_to_non_nullable
+                      as int,
+            month: null == month
+                ? _value.month
+                : month // ignore: cast_nullable_to_non_nullable
+                      as int,
+            monthLabel: null == monthLabel
+                ? _value.monthLabel
+                : monthLabel // ignore: cast_nullable_to_non_nullable
+                      as String,
+            totalAmount: null == totalAmount
+                ? _value.totalAmount
+                : totalAmount // ignore: cast_nullable_to_non_nullable
+                      as String,
+            expenseCount: null == expenseCount
+                ? _value.expenseCount
+                : expenseCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$MonthlySpendingModelImplCopyWith<$Res>
     implements $MonthlySpendingModelCopyWith<$Res> {
-  factory _$$MonthlySpendingModelImplCopyWith(_$MonthlySpendingModelImpl value,
-          $Res Function(_$MonthlySpendingModelImpl) then) =
-      __$$MonthlySpendingModelImplCopyWithImpl<$Res>;
+  factory _$$MonthlySpendingModelImplCopyWith(
+    _$MonthlySpendingModelImpl value,
+    $Res Function(_$MonthlySpendingModelImpl) then,
+  ) = __$$MonthlySpendingModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int year,
-      int month,
-      @JsonKey(name: 'month_label') String monthLabel,
-      @JsonKey(name: 'total_amount') String totalAmount,
-      @JsonKey(name: 'expense_count') int expenseCount});
+  $Res call({
+    int year,
+    int month,
+    @JsonKey(name: 'month_label') String monthLabel,
+    @JsonKey(name: 'total_amount') String totalAmount,
+    @JsonKey(name: 'expense_count') int expenseCount,
+  });
 }
 
 /// @nodoc
 class __$$MonthlySpendingModelImplCopyWithImpl<$Res>
     extends _$MonthlySpendingModelCopyWithImpl<$Res, _$MonthlySpendingModelImpl>
     implements _$$MonthlySpendingModelImplCopyWith<$Res> {
-  __$$MonthlySpendingModelImplCopyWithImpl(_$MonthlySpendingModelImpl _value,
-      $Res Function(_$MonthlySpendingModelImpl) _then)
-      : super(_value, _then);
+  __$$MonthlySpendingModelImplCopyWithImpl(
+    _$MonthlySpendingModelImpl _value,
+    $Res Function(_$MonthlySpendingModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -127,41 +138,43 @@ class __$$MonthlySpendingModelImplCopyWithImpl<$Res>
     Object? totalAmount = null,
     Object? expenseCount = null,
   }) {
-    return _then(_$MonthlySpendingModelImpl(
-      year: null == year
-          ? _value.year
-          : year // ignore: cast_nullable_to_non_nullable
-              as int,
-      month: null == month
-          ? _value.month
-          : month // ignore: cast_nullable_to_non_nullable
-              as int,
-      monthLabel: null == monthLabel
-          ? _value.monthLabel
-          : monthLabel // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalAmount: null == totalAmount
-          ? _value.totalAmount
-          : totalAmount // ignore: cast_nullable_to_non_nullable
-              as String,
-      expenseCount: null == expenseCount
-          ? _value.expenseCount
-          : expenseCount // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$MonthlySpendingModelImpl(
+        year: null == year
+            ? _value.year
+            : year // ignore: cast_nullable_to_non_nullable
+                  as int,
+        month: null == month
+            ? _value.month
+            : month // ignore: cast_nullable_to_non_nullable
+                  as int,
+        monthLabel: null == monthLabel
+            ? _value.monthLabel
+            : monthLabel // ignore: cast_nullable_to_non_nullable
+                  as String,
+        totalAmount: null == totalAmount
+            ? _value.totalAmount
+            : totalAmount // ignore: cast_nullable_to_non_nullable
+                  as String,
+        expenseCount: null == expenseCount
+            ? _value.expenseCount
+            : expenseCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$MonthlySpendingModelImpl extends _MonthlySpendingModel {
-  const _$MonthlySpendingModelImpl(
-      {required this.year,
-      required this.month,
-      @JsonKey(name: 'month_label') required this.monthLabel,
-      @JsonKey(name: 'total_amount') required this.totalAmount,
-      @JsonKey(name: 'expense_count') required this.expenseCount})
-      : super._();
+  const _$MonthlySpendingModelImpl({
+    required this.year,
+    required this.month,
+    @JsonKey(name: 'month_label') required this.monthLabel,
+    @JsonKey(name: 'total_amount') required this.totalAmount,
+    @JsonKey(name: 'expense_count') required this.expenseCount,
+  }) : super._();
 
   factory _$MonthlySpendingModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MonthlySpendingModelImplFromJson(json);
@@ -203,32 +216,38 @@ class _$MonthlySpendingModelImpl extends _MonthlySpendingModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, year, month, monthLabel, totalAmount, expenseCount);
+    runtimeType,
+    year,
+    month,
+    monthLabel,
+    totalAmount,
+    expenseCount,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$MonthlySpendingModelImplCopyWith<_$MonthlySpendingModelImpl>
-      get copyWith =>
-          __$$MonthlySpendingModelImplCopyWithImpl<_$MonthlySpendingModelImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$MonthlySpendingModelImplCopyWithImpl<_$MonthlySpendingModelImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MonthlySpendingModelImplToJson(
-      this,
-    );
+    return _$$MonthlySpendingModelImplToJson(this);
   }
 }
 
 abstract class _MonthlySpendingModel extends MonthlySpendingModel {
-  const factory _MonthlySpendingModel(
-          {required final int year,
-          required final int month,
-          @JsonKey(name: 'month_label') required final String monthLabel,
-          @JsonKey(name: 'total_amount') required final String totalAmount,
-          @JsonKey(name: 'expense_count') required final int expenseCount}) =
-      _$MonthlySpendingModelImpl;
+  const factory _MonthlySpendingModel({
+    required final int year,
+    required final int month,
+    @JsonKey(name: 'month_label') required final String monthLabel,
+    @JsonKey(name: 'total_amount') required final String totalAmount,
+    @JsonKey(name: 'expense_count') required final int expenseCount,
+  }) = _$MonthlySpendingModelImpl;
   const _MonthlySpendingModel._() : super._();
 
   factory _MonthlySpendingModel.fromJson(Map<String, dynamic> json) =
@@ -250,5 +269,5 @@ abstract class _MonthlySpendingModel extends MonthlySpendingModel {
   @override
   @JsonKey(ignore: true)
   _$$MonthlySpendingModelImplCopyWith<_$MonthlySpendingModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

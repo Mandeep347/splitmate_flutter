@@ -38,7 +38,9 @@ class GroupBalancesPage extends ConsumerWidget {
 
     final groupDetailAsync = ref.watch(groupDetailProvider(groupId));
     final groupBalancesAsync = ref.watch(groupBalancesProvider(groupId));
-    final simplifiedBalancesAsync = ref.watch(simplifiedBalancesProvider(groupId));
+    final simplifiedBalancesAsync = ref.watch(
+      simplifiedBalancesProvider(groupId),
+    );
     final isOnline = ref.watch(isOnlineProvider);
 
     final group = groupDetailAsync.valueOrNull;
@@ -92,15 +94,24 @@ class GroupBalancesPage extends ConsumerWidget {
               if (!isOnline)
                 Container(
                   margin: EdgeInsets.only(bottom: ext.spaceMD),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
+                    border: Border.all(
+                      color: const Color(0xFFF59E0B).withValues(alpha: 0.4),
+                    ),
                   ),
                   child: const Row(
                     children: [
-                      Icon(Icons.wifi_off_rounded, size: 14, color: Color(0xFFD97706)),
+                      Icon(
+                        Icons.wifi_off_rounded,
+                        size: 14,
+                        color: Color(0xFFD97706),
+                      ),
                       SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -123,7 +134,9 @@ class GroupBalancesPage extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: BorderSide(
-                    color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                    color: theme.colorScheme.outlineVariant.withValues(
+                      alpha: 0.5,
+                    ),
                   ),
                 ),
                 child: Padding(
@@ -147,8 +160,10 @@ class GroupBalancesPage extends ConsumerWidget {
                       SizedBox(height: ext.spaceMD),
                       Builder(
                         builder: (context) {
-                          final simplified = simplifiedBalancesAsync.hasValue ? simplifiedBalancesAsync.requireValue : null;
-                          
+                          final simplified = simplifiedBalancesAsync.hasValue
+                              ? simplifiedBalancesAsync.requireValue
+                              : null;
+
                           if (simplified == null) {
                             if (simplifiedBalancesAsync.isLoading) {
                               return ShimmerWrapper(
@@ -165,13 +180,21 @@ class GroupBalancesPage extends ConsumerWidget {
                               return const Padding(
                                 padding: EdgeInsets.all(16.0),
                                 child: Center(
-                                  child: Text('Connect to the internet to view balances.', textAlign: TextAlign.center),
+                                  child: Text(
+                                    'Connect to the internet to view balances.',
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               );
                             }
                             return Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: Center(child: Text(simplifiedBalancesAsync.error.toString(), textAlign: TextAlign.center)),
+                              child: Center(
+                                child: Text(
+                                  simplifiedBalancesAsync.error.toString(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             );
                           }
 
@@ -221,7 +244,9 @@ class GroupBalancesPage extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: BorderSide(
-                    color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                    color: theme.colorScheme.outlineVariant.withValues(
+                      alpha: 0.5,
+                    ),
                   ),
                 ),
                 child: Padding(
@@ -245,7 +270,9 @@ class GroupBalancesPage extends ConsumerWidget {
                       SizedBox(height: ext.spaceMD),
                       Builder(
                         builder: (context) {
-                          final groupBalances = groupBalancesAsync.hasValue ? groupBalancesAsync.requireValue : null;
+                          final groupBalances = groupBalancesAsync.hasValue
+                              ? groupBalancesAsync.requireValue
+                              : null;
 
                           if (groupBalances == null) {
                             if (groupBalancesAsync.isLoading) {
@@ -263,13 +290,21 @@ class GroupBalancesPage extends ConsumerWidget {
                               return const Padding(
                                 padding: EdgeInsets.all(16.0),
                                 child: Center(
-                                  child: Text('Connect to the internet to view balances.', textAlign: TextAlign.center),
+                                  child: Text(
+                                    'Connect to the internet to view balances.',
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               );
                             }
                             return Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: Center(child: Text(groupBalancesAsync.error.toString(), textAlign: TextAlign.center)),
+                              child: Center(
+                                child: Text(
+                                  groupBalancesAsync.error.toString(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             );
                           }
 
@@ -310,7 +345,9 @@ class GroupBalancesPage extends ConsumerWidget {
 
               // Bottom Settle Up button
               SettleUpButton(
-                onPressed: (!isOnline || (groupBalancesAsync.valueOrNull?.isAllSettled ?? true))
+                onPressed:
+                    (!isOnline ||
+                        (groupBalancesAsync.valueOrNull?.isAllSettled ?? true))
                     ? null
                     : navigateToCreateSettlement,
               ),

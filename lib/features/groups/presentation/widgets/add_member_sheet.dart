@@ -13,10 +13,7 @@ class AddMemberSheet extends ConsumerStatefulWidget {
   final String groupId;
 
   /// Creates a const [AddMemberSheet] instance.
-  const AddMemberSheet({
-    super.key,
-    required this.groupId,
-  });
+  const AddMemberSheet({super.key, required this.groupId});
 
   /// Displays the sheet.
   static Future<void> show(BuildContext context, String groupId) {
@@ -46,10 +43,9 @@ class _AddMemberSheetState extends ConsumerState<AddMemberSheet> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      ref.read(addMemberProvider.notifier).add(
-            groupId: widget.groupId,
-            email: _emailController.text.trim(),
-          );
+      ref
+          .read(addMemberProvider.notifier)
+          .add(groupId: widget.groupId, email: _emailController.text.trim());
     }
   }
 
@@ -64,12 +60,15 @@ class _AddMemberSheetState extends ConsumerState<AddMemberSheet> {
     ref.listen<AsyncValue<void>>(addMemberProvider, (previous, next) {
       if (next is AsyncData<void> && previous is AsyncLoading<void>) {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Member added!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Member added!')));
       } else if (next is AsyncError<void> && previous is AsyncLoading<void>) {
         final isOnline = ref.read(isOnlineProvider);
-        final errorMessage = AppErrorHandler.toOfflineAwareMessage(next.error, isOnline);
+        final errorMessage = AppErrorHandler.toOfflineAwareMessage(
+          next.error,
+          isOnline,
+        );
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),

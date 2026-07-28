@@ -40,7 +40,9 @@ void main() {
           ),
         ),
       );
-      verifyNever(() => mockRepo.saveSettings(settings: any(named: 'settings')));
+      verifyNever(
+        () => mockRepo.saveSettings(settings: any(named: 'settings')),
+      );
     });
 
     test('throws BusinessRuleFailure for empty currency', () async {
@@ -55,7 +57,9 @@ void main() {
           ),
         ),
       );
-      verifyNever(() => mockRepo.saveSettings(settings: any(named: 'settings')));
+      verifyNever(
+        () => mockRepo.saveSettings(settings: any(named: 'settings')),
+      );
     });
 
     test('does NOT call repository on validation failure', () async {
@@ -63,12 +67,15 @@ void main() {
       try {
         await usecase(settings: invalid);
       } catch (_) {}
-      verifyNever(() => mockRepo.saveSettings(settings: any(named: 'settings')));
+      verifyNever(
+        () => mockRepo.saveSettings(settings: any(named: 'settings')),
+      );
     });
 
     test('calls repository with valid settings', () async {
-      when(() => mockRepo.saveSettings(settings: any(named: 'settings')))
-          .thenAnswer((_) async {});
+      when(
+        () => mockRepo.saveSettings(settings: any(named: 'settings')),
+      ).thenAnswer((_) async {});
 
       await usecase(settings: tSettings);
 
@@ -76,8 +83,9 @@ void main() {
     });
 
     test('accepts all valid themeMode values', () async {
-      when(() => mockRepo.saveSettings(settings: any(named: 'settings')))
-          .thenAnswer((_) async {});
+      when(
+        () => mockRepo.saveSettings(settings: any(named: 'settings')),
+      ).thenAnswer((_) async {});
 
       for (final mode in ['system', 'light', 'dark']) {
         final s = tSettings.copyWith(themeMode: mode);

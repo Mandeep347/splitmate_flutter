@@ -27,7 +27,9 @@ import 'package:splito_flutter/features/groups/presentation/providers/group_prov
 // ============================================================================
 
 /// Provider exposing [GetGroupExpensesUseCase].
-final getGroupExpensesUseCaseProvider = Provider<GetGroupExpensesUseCase>((ref) {
+final getGroupExpensesUseCaseProvider = Provider<GetGroupExpensesUseCase>((
+  ref,
+) {
   final repository = ref.watch(expenseRepositoryProvider);
   return GetGroupExpensesUseCase(repository: repository);
 });
@@ -61,7 +63,8 @@ final reverseExpenseUseCaseProvider = Provider<ReverseExpenseUseCase>((ref) {
 // ============================================================================
 
 /// Notifier that manages retrieving and listing paginated expenses for a group.
-class GroupExpensesNotifier extends FamilyAsyncNotifier<PaginatedExpenses, String> {
+class GroupExpensesNotifier
+    extends FamilyAsyncNotifier<PaginatedExpenses, String> {
   @override
   FutureOr<PaginatedExpenses> build(String groupId) {
     final useCase = ref.watch(getGroupExpensesUseCaseProvider);
@@ -85,13 +88,15 @@ class GroupExpensesNotifier extends FamilyAsyncNotifier<PaginatedExpenses, Strin
         limit: current.limit,
       );
 
-      state = AsyncData(PaginatedExpenses(
-        items: [...current.items, ...nextData.items],
-        page: newPage,
-        limit: nextData.limit,
-        totalPages: nextData.totalPages,
-        totalItems: nextData.totalItems,
-      ));
+      state = AsyncData(
+        PaginatedExpenses(
+          items: [...current.items, ...nextData.items],
+          page: newPage,
+          limit: nextData.limit,
+          totalPages: nextData.totalPages,
+          totalItems: nextData.totalItems,
+        ),
+      );
     } catch (e) {
       // Re-throw so UI can intercept and present the pagination fault,
       // keeping the current loaded state intact.
@@ -103,13 +108,15 @@ class GroupExpensesNotifier extends FamilyAsyncNotifier<PaginatedExpenses, Strin
   void prependExpense(Expense expense) {
     final current = state.valueOrNull;
     if (current != null) {
-      state = AsyncData(PaginatedExpenses(
-        items: [expense, ...current.items],
-        page: current.page,
-        limit: current.limit,
-        totalPages: current.totalPages,
-        totalItems: current.totalItems + 1,
-      ));
+      state = AsyncData(
+        PaginatedExpenses(
+          items: [expense, ...current.items],
+          page: current.page,
+          limit: current.limit,
+          totalPages: current.totalPages,
+          totalItems: current.totalItems + 1,
+        ),
+      );
     }
   }
 
@@ -121,9 +128,13 @@ class GroupExpensesNotifier extends FamilyAsyncNotifier<PaginatedExpenses, Strin
 
 /// Family provider exposing the paginated expenses state of a group.
 final groupExpensesProvider =
-    AsyncNotifierProvider.family<GroupExpensesNotifier, PaginatedExpenses, String>(() {
-  return GroupExpensesNotifier();
-});
+    AsyncNotifierProvider.family<
+      GroupExpensesNotifier,
+      PaginatedExpenses,
+      String
+    >(() {
+      return GroupExpensesNotifier();
+    });
 
 // ============================================================================
 // SECTION C — Single Expense Detail
@@ -146,8 +157,8 @@ class ExpenseDetailNotifier extends FamilyAsyncNotifier<Expense, String> {
 /// Family provider exposing detailed expense states.
 final expenseDetailProvider =
     AsyncNotifierProvider.family<ExpenseDetailNotifier, Expense, String>(() {
-  return ExpenseDetailNotifier();
-});
+      return ExpenseDetailNotifier();
+    });
 
 // ============================================================================
 // SECTION D — Create Expense
@@ -215,7 +226,9 @@ class CreateExpenseNotifier extends AsyncNotifier<Expense?> {
         participants: const [],
       );
 
-      ref.read(groupExpensesProvider(groupId).notifier).prependExpense(localExpense);
+      ref
+          .read(groupExpensesProvider(groupId).notifier)
+          .prependExpense(localExpense);
       ref.invalidate(pendingCountProvider);
 
       state = AsyncData<Expense?>(localExpense);
@@ -253,31 +266,43 @@ class CreateExpenseNotifier extends AsyncNotifier<Expense?> {
 
   List<Map<String, dynamic>> _participantsToJson(ExpenseSplitInput input) {
     return switch (input) {
-      final EqualSplitInput p => p.participants
-          .map((final item) => {'userId': item.userId, 'user_id': item.userId})
-          .toList(),
-      final ExactSplitInput p => p.participants
-          .map((final item) => {
+      final EqualSplitInput p =>
+        p.participants
+            .map(
+              (final item) => {'userId': item.userId, 'user_id': item.userId},
+            )
+            .toList(),
+      final ExactSplitInput p =>
+        p.participants
+            .map(
+              (final item) => {
                 'userId': item.userId,
                 'user_id': item.userId,
                 'owedAmount': item.owedAmount,
                 'owed_amount': item.owedAmount,
-              })
-          .toList(),
-      final PercentageSplitInput p => p.participants
-          .map((final item) => {
+              },
+            )
+            .toList(),
+      final PercentageSplitInput p =>
+        p.participants
+            .map(
+              (final item) => {
                 'userId': item.userId,
                 'user_id': item.userId,
                 'percentage': item.percentage,
-              })
-          .toList(),
-      final ShareSplitInput p => p.participants
-          .map((final item) => {
+              },
+            )
+            .toList(),
+      final ShareSplitInput p =>
+        p.participants
+            .map(
+              (final item) => {
                 'userId': item.userId,
                 'user_id': item.userId,
                 'shares': item.shares,
-              })
-          .toList(),
+              },
+            )
+            .toList(),
     };
   }
 }
@@ -285,8 +310,8 @@ class CreateExpenseNotifier extends AsyncNotifier<Expense?> {
 /// Provider exposing [CreateExpenseNotifier].
 final createExpenseProvider =
     AsyncNotifierProvider<CreateExpenseNotifier, Expense?>(() {
-  return CreateExpenseNotifier();
-});
+      return CreateExpenseNotifier();
+    });
 
 // ============================================================================
 // SECTION E — Update Expense
@@ -329,8 +354,8 @@ class UpdateExpenseNotifier extends AsyncNotifier<void> {
 /// Provider exposing [UpdateExpenseNotifier].
 final updateExpenseProvider =
     AsyncNotifierProvider<UpdateExpenseNotifier, void>(() {
-  return UpdateExpenseNotifier();
-});
+      return UpdateExpenseNotifier();
+    });
 
 // ============================================================================
 // SECTION F — Reverse Expense
@@ -373,5 +398,5 @@ class ReverseExpenseNotifier extends AsyncNotifier<void> {
 /// Provider exposing [ReverseExpenseNotifier].
 final reverseExpenseProvider =
     AsyncNotifierProvider<ReverseExpenseNotifier, void>(() {
-  return ReverseExpenseNotifier();
-});
+      return ReverseExpenseNotifier();
+    });

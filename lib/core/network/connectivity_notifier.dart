@@ -47,10 +47,11 @@ class ConnectivityNotifier extends AsyncNotifier<bool> {
 }
 
 /// Provider exposing [ConnectivityNotifier] state with ref.keepAlive().
-final connectivityProvider =
-    AsyncNotifierProvider<ConnectivityNotifier, bool>(() {
-  return ConnectivityNotifier();
-});
+final connectivityProvider = AsyncNotifierProvider<ConnectivityNotifier, bool>(
+  () {
+    return ConnectivityNotifier();
+  },
+);
 
 /// Convenience provider for checking boolean connectivity state.
 /// Defaults to true to assume online state on startup until proven otherwise,

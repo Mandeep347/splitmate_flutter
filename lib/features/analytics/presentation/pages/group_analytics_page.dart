@@ -62,7 +62,9 @@ class GroupAnalyticsPage extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.share_outlined),
             tooltip: 'Share summary',
-            onPressed: hasData ? () => _shareAnalytics(context, ref, analytics) : null,
+            onPressed: hasData
+                ? () => _shareAnalytics(context, ref, analytics)
+                : null,
           ),
           IconButton(
             icon: const Icon(Icons.refresh_outlined),
@@ -125,7 +127,8 @@ class GroupAnalyticsPage extends ConsumerWidget {
                   ? const EmptyStateWidget(
                       icon: Icons.bar_chart_outlined,
                       title: 'No analytics yet',
-                      subtitle: 'Add expenses to see spending insights for this group.',
+                      subtitle:
+                          'Add expenses to see spending insights for this group.',
                     )
                   : LayoutBuilder(
                       builder: (context, constraints) {
@@ -146,7 +149,9 @@ class GroupAnalyticsPage extends ConsumerWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: MonthlySpendingChart(
-                                    monthlyData: fillMissingMonths(analytics.monthlySpending),
+                                    monthlyData: fillMissingMonths(
+                                      analytics.monthlySpending,
+                                    ),
                                     currency: currency,
                                   ),
                                 ),
@@ -158,7 +163,8 @@ class GroupAnalyticsPage extends ConsumerWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: MemberContributionChart(
-                                    contributions: analytics.memberContributions,
+                                    contributions:
+                                        analytics.memberContributions,
                                     totalAmount: analytics.totalExpenses,
                                     currency: currency,
                                   ),
@@ -179,16 +185,20 @@ class GroupAnalyticsPage extends ConsumerWidget {
                                 ),
                                 const SizedBox(height: 16),
                               ],
-                              const _SectionHeader(title: 'Settlement Progress'),
+                              const _SectionHeader(
+                                title: 'Settlement Progress',
+                              ),
                               Card(
                                 margin: EdgeInsets.zero,
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             'Settled',
@@ -196,10 +206,12 @@ class GroupAnalyticsPage extends ConsumerWidget {
                                           ),
                                           Text(
                                             '${(analytics.settlementRate * 100).toStringAsFixed(0)}%',
-                                            style: theme.textTheme.titleMedium?.copyWith(
-                                              color: theme.colorScheme.primary,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                            style: theme.textTheme.titleMedium
+                                                ?.copyWith(
+                                                  color:
+                                                      theme.colorScheme.primary,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                           ),
                                         ],
                                       ),
@@ -209,44 +221,62 @@ class GroupAnalyticsPage extends ConsumerWidget {
                                       ),
                                       const SizedBox(height: 12),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 'Total Expenses',
-                                                style: theme.textTheme.bodySmall?.copyWith(
-                                                  color: theme.colorScheme.onSurfaceVariant,
-                                                ),
+                                                style: theme.textTheme.bodySmall
+                                                    ?.copyWith(
+                                                      color: theme
+                                                          .colorScheme
+                                                          .onSurfaceVariant,
+                                                    ),
                                               ),
                                               const SizedBox(height: 2),
                                               AmountDisplay(
                                                 amount: analytics.totalExpenses,
                                                 currency: currency,
-                                                style: theme.textTheme.titleSmall?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                                style: theme
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                               ),
                                             ],
                                           ),
                                           Column(
-                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
                                             children: [
                                               Text(
                                                 'Total Settled',
-                                                style: theme.textTheme.bodySmall?.copyWith(
-                                                  color: theme.colorScheme.onSurfaceVariant,
-                                                ),
+                                                style: theme.textTheme.bodySmall
+                                                    ?.copyWith(
+                                                      color: theme
+                                                          .colorScheme
+                                                          .onSurfaceVariant,
+                                                    ),
                                               ),
                                               const SizedBox(height: 2),
                                               AmountDisplay(
                                                 amount: analytics.totalSettled,
                                                 currency: currency,
-                                                style: theme.textTheme.titleSmall?.copyWith(
-                                                  color: Colors.green.shade600,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                                style: theme
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                      color:
+                                                          Colors.green.shade600,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -324,4 +354,3 @@ class _SectionHeader extends StatelessWidget {
     );
   }
 }
-

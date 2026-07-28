@@ -36,26 +36,35 @@ import 'package:splito_flutter/features/navigation/presentation/widgets/responsi
 
 /// Global navigator keys for context access.
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-final dashboardTabNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'dashboardTab');
-final groupsTabNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'groupsTab');
-final expensesTabNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'expensesTab');
-final activityTabNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'activityTab');
-final statisticsTabNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'statisticsTab');
-final profileTabNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profileTab');
+final dashboardTabNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'dashboardTab',
+);
+final groupsTabNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'groupsTab',
+);
+final expensesTabNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'expensesTab',
+);
+final activityTabNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'activityTab',
+);
+final statisticsTabNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'statisticsTab',
+);
+final profileTabNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'profileTab',
+);
 
 /// Notifier that triggers GoRouter refreshes on Riverpod provider updates.
 class RouterNotifier extends ChangeNotifier {
   final Ref _ref;
 
   RouterNotifier(this._ref) {
-    _ref.listen<AsyncValue<AuthState>>(
-      authNotifierProvider,
-      (previous, next) {
-        if (previous?.valueOrNull != next.valueOrNull) {
-          notifyListeners();
-        }
-      },
-    );
+    _ref.listen<AsyncValue<AuthState>>(authNotifierProvider, (previous, next) {
+      if (previous?.valueOrNull != next.valueOrNull) {
+        notifyListeners();
+      }
+    });
   }
 }
 
@@ -67,7 +76,7 @@ final routerNotifierProvider = Provider<RouterNotifier>((ref) {
 /// Riverpod provider for GoRouter instance.
 final goRouterProvider = Provider<GoRouter>((ref) {
   final notifier = ref.watch(routerNotifierProvider);
-  
+
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: AppRoutes.splashPath,
@@ -93,7 +102,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       final isAuthenticated = authAsync.valueOrNull is AuthStateAuthenticated;
 
-      final isAuthFormRoute = loc == AppRoutes.loginPath ||
+      final isAuthFormRoute =
+          loc == AppRoutes.loginPath ||
           loc == AppRoutes.registerPath ||
           loc == AppRoutes.verifyEmailPendingPath ||
           loc == AppRoutes.verifyEmailPath ||
@@ -266,10 +276,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         path: AppRoutes.createExpensePath,
                         builder: (context, state) {
                           final groupId = state.pathParameters['groupId']!;
-                          final extra = state.extra as Map<String, dynamic>? ?? {};
-                          final groupName = extra['groupName'] as String? ?? 'Group';
-                          final currency = extra['currency'] as String? ?? 'INR';
-                          final members = extra['members'] as List<GroupMember>? ?? [];
+                          final extra =
+                              state.extra as Map<String, dynamic>? ?? {};
+                          final groupName =
+                              extra['groupName'] as String? ?? 'Group';
+                          final currency =
+                              extra['currency'] as String? ?? 'INR';
+                          final members =
+                              extra['members'] as List<GroupMember>? ?? [];
 
                           return CreateExpensePage(
                             groupId: groupId,
@@ -284,9 +298,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         path: AppRoutes.expenseListPath,
                         builder: (context, state) {
                           final groupId = state.pathParameters['groupId']!;
-                          final extra = state.extra as Map<String, dynamic>? ?? {};
-                          final groupName = extra['groupName'] as String? ?? 'Group';
-                          return ExpenseListPage(groupId: groupId, groupName: groupName);
+                          final extra =
+                              state.extra as Map<String, dynamic>? ?? {};
+                          final groupName =
+                              extra['groupName'] as String? ?? 'Group';
+                          return ExpenseListPage(
+                            groupId: groupId,
+                            groupName: groupName,
+                          );
                         },
                       ),
                       GoRoute(
@@ -302,9 +321,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         path: AppRoutes.groupBalancesPath,
                         builder: (context, state) {
                           final groupId = state.pathParameters['groupId']!;
-                          final extra = state.extra as Map<String, dynamic>? ?? {};
-                          final groupName = extra['groupName'] as String? ?? 'Group';
-                          final currency = extra['currency'] as String? ?? 'INR';
+                          final extra =
+                              state.extra as Map<String, dynamic>? ?? {};
+                          final groupName =
+                              extra['groupName'] as String? ?? 'Group';
+                          final currency =
+                              extra['currency'] as String? ?? 'INR';
 
                           return GroupBalancesPage(
                             groupId: groupId,
@@ -318,9 +340,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         path: AppRoutes.settlementListPath,
                         builder: (context, state) {
                           final groupId = state.pathParameters['groupId']!;
-                          final extra = state.extra as Map<String, dynamic>? ?? {};
-                          final groupName = extra['groupName'] as String? ?? 'Group';
-                          return SettlementListPage(groupId: groupId, groupName: groupName);
+                          final extra =
+                              state.extra as Map<String, dynamic>? ?? {};
+                          final groupName =
+                              extra['groupName'] as String? ?? 'Group';
+                          return SettlementListPage(
+                            groupId: groupId,
+                            groupName: groupName,
+                          );
                         },
                       ),
                       GoRoute(
@@ -328,12 +355,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         path: AppRoutes.createSettlementPath,
                         builder: (context, state) {
                           final groupId = state.pathParameters['groupId']!;
-                          final extra = state.extra as Map<String, dynamic>? ?? {};
-                          final groupName = extra['groupName'] as String? ?? 'Group';
-                          final currency = extra['currency'] as String? ?? 'INR';
-                          final members = extra['members'] as List<GroupMember>? ?? [];
-                          final prefilledFromUserId = extra['prefilledFromUserId'] as String?;
-                          final prefilledToUserId = extra['prefilledToUserId'] as String?;
+                          final extra =
+                              state.extra as Map<String, dynamic>? ?? {};
+                          final groupName =
+                              extra['groupName'] as String? ?? 'Group';
+                          final currency =
+                              extra['currency'] as String? ?? 'INR';
+                          final members =
+                              extra['members'] as List<GroupMember>? ?? [];
+                          final prefilledFromUserId =
+                              extra['prefilledFromUserId'] as String?;
+                          final prefilledToUserId =
+                              extra['prefilledToUserId'] as String?;
 
                           return CreateSettlementPage(
                             groupId: groupId,
@@ -350,8 +383,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         path: AppRoutes.groupMembersPath,
                         builder: (context, state) {
                           final groupId = state.pathParameters['groupId']!;
-                          final extra = state.extra as Map<String, dynamic>? ?? {};
-                          final groupCreatedBy = extra['groupCreatedBy'] as String? ?? '';
+                          final extra =
+                              state.extra as Map<String, dynamic>? ?? {};
+                          final groupCreatedBy =
+                              extra['groupCreatedBy'] as String? ?? '';
                           return GroupMembersPage(
                             groupId: groupId,
                             groupCreatedBy: groupCreatedBy,
@@ -363,9 +398,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         path: AppRoutes.groupAnalyticsPath,
                         builder: (context, state) {
                           final groupId = state.pathParameters['groupId']!;
-                          final extra = state.extra as Map<String, dynamic>? ?? {};
-                          final groupName = extra['groupName'] as String? ?? 'Group';
-                          final currency = extra['currency'] as String? ?? 'INR';
+                          final extra =
+                              state.extra as Map<String, dynamic>? ?? {};
+                          final groupName =
+                              extra['groupName'] as String? ?? 'Group';
+                          final currency =
+                              extra['currency'] as String? ?? 'INR';
                           return GroupAnalyticsPage(
                             groupId: groupId,
                             groupName: groupName,
@@ -378,8 +416,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                         path: AppRoutes.activityFeedPath,
                         builder: (context, state) {
                           final groupId = state.pathParameters['groupId']!;
-                          final extra = state.extra as Map<String, dynamic>? ?? {};
-                          final groupName = extra['groupName'] as String? ?? 'Group';
+                          final extra =
+                              state.extra as Map<String, dynamic>? ?? {};
+                          final groupName =
+                              extra['groupName'] as String? ?? 'Group';
                           return ActivityFeedPage(
                             groupId: groupId,
                             groupName: groupName,

@@ -7,7 +7,8 @@ import 'package:splito_flutter/features/balances/data/models/pairwise_balance_mo
 import 'package:splito_flutter/features/balances/data/models/simplified_balances_model.dart';
 import 'package:splito_flutter/features/balances/data/repositories/balance_repository_impl.dart';
 
-class MockIBalanceRemoteDatasource extends Mock implements IBalanceRemoteDatasource {}
+class MockIBalanceRemoteDatasource extends Mock
+    implements IBalanceRemoteDatasource {}
 
 void main() {
   late MockIBalanceRemoteDatasource mockDatasource;
@@ -41,27 +42,32 @@ void main() {
 
   group('getGroupBalances', () {
     test('calls datasource and maps to entity', () async {
-      when(() => mockDatasource.getGroupBalances(groupId: 'group-1'))
-          .thenAnswer((_) async => tGroupBalancesModel);
+      when(
+        () => mockDatasource.getGroupBalances(groupId: 'group-1'),
+      ).thenAnswer((_) async => tGroupBalancesModel);
 
       final result = await repository.getGroupBalances(groupId: 'group-1');
 
       expect(result.balances.first.amount, closeTo(500.0, 0.001));
       expect(result.balances.first.fromUserName, 'Mandeep Singh');
-      verify(() => mockDatasource.getGroupBalances(groupId: 'group-1')).called(1);
+      verify(
+        () => mockDatasource.getGroupBalances(groupId: 'group-1'),
+      ).called(1);
     });
 
     test('amount string "500.00" parses to double 500.0', () async {
-      when(() => mockDatasource.getGroupBalances(groupId: 'group-1'))
-          .thenAnswer((_) async => tGroupBalancesModel);
+      when(
+        () => mockDatasource.getGroupBalances(groupId: 'group-1'),
+      ).thenAnswer((_) async => tGroupBalancesModel);
 
       final result = await repository.getGroupBalances(groupId: 'group-1');
       expect(result.balances.first.amount, 500.0);
     });
 
     test('propagates NetworkException without catching', () async {
-      when(() => mockDatasource.getGroupBalances(groupId: 'group-1'))
-          .thenThrow(const NetworkException('Remote error'));
+      when(
+        () => mockDatasource.getGroupBalances(groupId: 'group-1'),
+      ).thenThrow(const NetworkException('Remote error'));
 
       expect(
         () => repository.getGroupBalances(groupId: 'group-1'),
@@ -72,15 +78,18 @@ void main() {
 
   group('getSimplifiedBalances', () {
     test('calls datasource and maps transactions to entities', () async {
-      when(() => mockDatasource.getSimplifiedBalances(groupId: 'group-1'))
-          .thenAnswer((_) async => tSimplifiedModel);
+      when(
+        () => mockDatasource.getSimplifiedBalances(groupId: 'group-1'),
+      ).thenAnswer((_) async => tSimplifiedModel);
 
       final result = await repository.getSimplifiedBalances(groupId: 'group-1');
 
       expect(result.transactions.first.amount, closeTo(500.0, 0.001));
       expect(result.transactions.first.fromUserName, 'Mandeep Singh');
       expect(result.isAllSettled, isFalse);
-      verify(() => mockDatasource.getSimplifiedBalances(groupId: 'group-1')).called(1);
+      verify(
+        () => mockDatasource.getSimplifiedBalances(groupId: 'group-1'),
+      ).called(1);
     });
 
     test('empty transactions list maps to isAllSettled = true', () async {
@@ -90,8 +99,9 @@ void main() {
         transactions: [],
       );
 
-      when(() => mockDatasource.getSimplifiedBalances(groupId: 'group-1'))
-          .thenAnswer((_) async => tEmptyModel);
+      when(
+        () => mockDatasource.getSimplifiedBalances(groupId: 'group-1'),
+      ).thenAnswer((_) async => tEmptyModel);
 
       final result = await repository.getSimplifiedBalances(groupId: 'group-1');
       expect(result.isAllSettled, isTrue);

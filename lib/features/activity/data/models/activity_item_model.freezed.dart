@@ -12,7 +12,8 @@ part of 'activity_item_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ActivityItemModel _$ActivityItemModelFromJson(Map<String, dynamic> json) {
   return _ActivityItemModel.fromJson(json);
@@ -34,13 +35,15 @@ mixin _$ActivityItemModel {
 /// @nodoc
 abstract class $ActivityItemModelCopyWith<$Res> {
   factory $ActivityItemModelCopyWith(
-          ActivityItemModel value, $Res Function(ActivityItemModel) then) =
-      _$ActivityItemModelCopyWithImpl<$Res, ActivityItemModel>;
+    ActivityItemModel value,
+    $Res Function(ActivityItemModel) then,
+  ) = _$ActivityItemModelCopyWithImpl<$Res, ActivityItemModel>;
   @useResult
-  $Res call(
-      {String type,
-      String actor,
-      @JsonKey(name: 'created_at') String createdAt});
+  $Res call({
+    String type,
+    String actor,
+    @JsonKey(name: 'created_at') String createdAt,
+  });
 }
 
 /// @nodoc
@@ -60,44 +63,50 @@ class _$ActivityItemModelCopyWithImpl<$Res, $Val extends ActivityItemModel>
     Object? actor = null,
     Object? createdAt = null,
   }) {
-    return _then(_value.copyWith(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      actor: null == actor
-          ? _value.actor
-          : actor // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as String,
+            actor: null == actor
+                ? _value.actor
+                : actor // ignore: cast_nullable_to_non_nullable
+                      as String,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$ActivityItemModelImplCopyWith<$Res>
     implements $ActivityItemModelCopyWith<$Res> {
-  factory _$$ActivityItemModelImplCopyWith(_$ActivityItemModelImpl value,
-          $Res Function(_$ActivityItemModelImpl) then) =
-      __$$ActivityItemModelImplCopyWithImpl<$Res>;
+  factory _$$ActivityItemModelImplCopyWith(
+    _$ActivityItemModelImpl value,
+    $Res Function(_$ActivityItemModelImpl) then,
+  ) = __$$ActivityItemModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String type,
-      String actor,
-      @JsonKey(name: 'created_at') String createdAt});
+  $Res call({
+    String type,
+    String actor,
+    @JsonKey(name: 'created_at') String createdAt,
+  });
 }
 
 /// @nodoc
 class __$$ActivityItemModelImplCopyWithImpl<$Res>
     extends _$ActivityItemModelCopyWithImpl<$Res, _$ActivityItemModelImpl>
     implements _$$ActivityItemModelImplCopyWith<$Res> {
-  __$$ActivityItemModelImplCopyWithImpl(_$ActivityItemModelImpl _value,
-      $Res Function(_$ActivityItemModelImpl) _then)
-      : super(_value, _then);
+  __$$ActivityItemModelImplCopyWithImpl(
+    _$ActivityItemModelImpl _value,
+    $Res Function(_$ActivityItemModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -106,31 +115,33 @@ class __$$ActivityItemModelImplCopyWithImpl<$Res>
     Object? actor = null,
     Object? createdAt = null,
   }) {
-    return _then(_$ActivityItemModelImpl(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      actor: null == actor
-          ? _value.actor
-          : actor // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$ActivityItemModelImpl(
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as String,
+        actor: null == actor
+            ? _value.actor
+            : actor // ignore: cast_nullable_to_non_nullable
+                  as String,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ActivityItemModelImpl extends _ActivityItemModel {
-  const _$ActivityItemModelImpl(
-      {required this.type,
-      required this.actor,
-      @JsonKey(name: 'created_at') required this.createdAt})
-      : super._();
+  const _$ActivityItemModelImpl({
+    required this.type,
+    required this.actor,
+    @JsonKey(name: 'created_at') required this.createdAt,
+  }) : super._();
 
   factory _$ActivityItemModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ActivityItemModelImplFromJson(json);
@@ -168,22 +179,22 @@ class _$ActivityItemModelImpl extends _ActivityItemModel {
   @pragma('vm:prefer-inline')
   _$$ActivityItemModelImplCopyWith<_$ActivityItemModelImpl> get copyWith =>
       __$$ActivityItemModelImplCopyWithImpl<_$ActivityItemModelImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ActivityItemModelImplToJson(
-      this,
-    );
+    return _$$ActivityItemModelImplToJson(this);
   }
 }
 
 abstract class _ActivityItemModel extends ActivityItemModel {
-  const factory _ActivityItemModel(
-          {required final String type,
-          required final String actor,
-          @JsonKey(name: 'created_at') required final String createdAt}) =
-      _$ActivityItemModelImpl;
+  const factory _ActivityItemModel({
+    required final String type,
+    required final String actor,
+    @JsonKey(name: 'created_at') required final String createdAt,
+  }) = _$ActivityItemModelImpl;
   const _ActivityItemModel._() : super._();
 
   factory _ActivityItemModel.fromJson(Map<String, dynamic> json) =

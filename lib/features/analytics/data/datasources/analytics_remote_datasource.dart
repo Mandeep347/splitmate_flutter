@@ -21,19 +21,25 @@ class AnalyticsRemoteDatasource implements IAnalyticsRemoteDatasource {
 
   @override
   Future<GroupAnalyticsModel> getGroupAnalytics(String groupId) async {
-    final response = await _client.get<Map<String, dynamic>>('/groups/$groupId/analytics');
+    final response = await _client.get<Map<String, dynamic>>(
+      '/groups/$groupId/analytics',
+    );
     return GroupAnalyticsModel.fromJson(response.data!);
   }
 
   @override
   Future<UserAnalyticsModel> getUserAnalytics() async {
-    final response = await _client.get<Map<String, dynamic>>('/users/me/analytics');
+    final response = await _client.get<Map<String, dynamic>>(
+      '/users/me/analytics',
+    );
     return UserAnalyticsModel.fromJson(response.data!);
   }
 }
 
 /// Provider exposing [IAnalyticsRemoteDatasource].
-final analyticsRemoteDatasourceProvider = Provider<IAnalyticsRemoteDatasource>((ref) {
+final analyticsRemoteDatasourceProvider = Provider<IAnalyticsRemoteDatasource>((
+  ref,
+) {
   final dioClient = ref.watch(dioClientProvider);
   return AnalyticsRemoteDatasource(dioClient);
 });

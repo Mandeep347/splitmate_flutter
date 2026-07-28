@@ -31,11 +31,7 @@ class InfoRow extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(
-          icon,
-          size: 18,
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
+        Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
         SizedBox(width: ext.spaceSM),
         Text(
           label,

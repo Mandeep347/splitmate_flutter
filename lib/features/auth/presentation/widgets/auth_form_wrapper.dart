@@ -100,7 +100,10 @@ class AuthFormWrapper extends StatelessWidget {
                           const SizedBox(height: 48),
                           // Premium teaser metric badge
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 16,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.05),
                               borderRadius: BorderRadius.circular(16),
@@ -194,7 +197,9 @@ class AuthFormWrapper extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.25),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.25,
+                          ),
                           blurRadius: 16,
                           offset: const Offset(0, 4),
                         ),

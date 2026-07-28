@@ -11,9 +11,7 @@ class SettingsRepositoryImpl implements ISettingsRepository {
   final IHiveStorageService storage;
 
   /// Creates a new [SettingsRepositoryImpl] instance.
-  const SettingsRepositoryImpl({
-    required this.storage,
-  });
+  const SettingsRepositoryImpl({required this.storage});
 
   @override
   Future<AppSettings> getSettings() async {

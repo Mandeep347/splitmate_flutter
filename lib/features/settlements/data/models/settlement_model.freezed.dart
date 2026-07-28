@@ -12,7 +12,8 @@ part of 'settlement_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SettlementModel _$SettlementModelFromJson(Map<String, dynamic> json) {
   return _SettlementModel.fromJson(json);
@@ -47,21 +48,23 @@ mixin _$SettlementModel {
 /// @nodoc
 abstract class $SettlementModelCopyWith<$Res> {
   factory $SettlementModelCopyWith(
-          SettlementModel value, $Res Function(SettlementModel) then) =
-      _$SettlementModelCopyWithImpl<$Res, SettlementModel>;
+    SettlementModel value,
+    $Res Function(SettlementModel) then,
+  ) = _$SettlementModelCopyWithImpl<$Res, SettlementModel>;
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'group_id') String groupId,
-      @JsonKey(name: 'from_user_id') String fromUserId,
-      @JsonKey(name: 'from_user_name') String fromUserName,
-      @JsonKey(name: 'to_user_id') String toUserId,
-      @JsonKey(name: 'to_user_name') String toUserName,
-      String amount,
-      String currency,
-      String? note,
-      String status,
-      @JsonKey(name: 'created_at') String createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'group_id') String groupId,
+    @JsonKey(name: 'from_user_id') String fromUserId,
+    @JsonKey(name: 'from_user_name') String fromUserName,
+    @JsonKey(name: 'to_user_id') String toUserId,
+    @JsonKey(name: 'to_user_name') String toUserName,
+    String amount,
+    String currency,
+    String? note,
+    String status,
+    @JsonKey(name: 'created_at') String createdAt,
+  });
 }
 
 /// @nodoc
@@ -89,75 +92,80 @@ class _$SettlementModelCopyWithImpl<$Res, $Val extends SettlementModel>
     Object? status = null,
     Object? createdAt = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromUserId: null == fromUserId
-          ? _value.fromUserId
-          : fromUserId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromUserName: null == fromUserName
-          ? _value.fromUserName
-          : fromUserName // ignore: cast_nullable_to_non_nullable
-              as String,
-      toUserId: null == toUserId
-          ? _value.toUserId
-          : toUserId // ignore: cast_nullable_to_non_nullable
-              as String,
-      toUserName: null == toUserName
-          ? _value.toUserName
-          : toUserName // ignore: cast_nullable_to_non_nullable
-              as String,
-      amount: null == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-      note: freezed == note
-          ? _value.note
-          : note // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            groupId: null == groupId
+                ? _value.groupId
+                : groupId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fromUserId: null == fromUserId
+                ? _value.fromUserId
+                : fromUserId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fromUserName: null == fromUserName
+                ? _value.fromUserName
+                : fromUserName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            toUserId: null == toUserId
+                ? _value.toUserId
+                : toUserId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            toUserName: null == toUserName
+                ? _value.toUserName
+                : toUserName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            amount: null == amount
+                ? _value.amount
+                : amount // ignore: cast_nullable_to_non_nullable
+                      as String,
+            currency: null == currency
+                ? _value.currency
+                : currency // ignore: cast_nullable_to_non_nullable
+                      as String,
+            note: freezed == note
+                ? _value.note
+                : note // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as String,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$SettlementModelImplCopyWith<$Res>
     implements $SettlementModelCopyWith<$Res> {
-  factory _$$SettlementModelImplCopyWith(_$SettlementModelImpl value,
-          $Res Function(_$SettlementModelImpl) then) =
-      __$$SettlementModelImplCopyWithImpl<$Res>;
+  factory _$$SettlementModelImplCopyWith(
+    _$SettlementModelImpl value,
+    $Res Function(_$SettlementModelImpl) then,
+  ) = __$$SettlementModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'group_id') String groupId,
-      @JsonKey(name: 'from_user_id') String fromUserId,
-      @JsonKey(name: 'from_user_name') String fromUserName,
-      @JsonKey(name: 'to_user_id') String toUserId,
-      @JsonKey(name: 'to_user_name') String toUserName,
-      String amount,
-      String currency,
-      String? note,
-      String status,
-      @JsonKey(name: 'created_at') String createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'group_id') String groupId,
+    @JsonKey(name: 'from_user_id') String fromUserId,
+    @JsonKey(name: 'from_user_name') String fromUserName,
+    @JsonKey(name: 'to_user_id') String toUserId,
+    @JsonKey(name: 'to_user_name') String toUserName,
+    String amount,
+    String currency,
+    String? note,
+    String status,
+    @JsonKey(name: 'created_at') String createdAt,
+  });
 }
 
 /// @nodoc
@@ -165,8 +173,9 @@ class __$$SettlementModelImplCopyWithImpl<$Res>
     extends _$SettlementModelCopyWithImpl<$Res, _$SettlementModelImpl>
     implements _$$SettlementModelImplCopyWith<$Res> {
   __$$SettlementModelImplCopyWithImpl(
-      _$SettlementModelImpl _value, $Res Function(_$SettlementModelImpl) _then)
-      : super(_value, _then);
+    _$SettlementModelImpl _value,
+    $Res Function(_$SettlementModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -183,71 +192,73 @@ class __$$SettlementModelImplCopyWithImpl<$Res>
     Object? status = null,
     Object? createdAt = null,
   }) {
-    return _then(_$SettlementModelImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      groupId: null == groupId
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromUserId: null == fromUserId
-          ? _value.fromUserId
-          : fromUserId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fromUserName: null == fromUserName
-          ? _value.fromUserName
-          : fromUserName // ignore: cast_nullable_to_non_nullable
-              as String,
-      toUserId: null == toUserId
-          ? _value.toUserId
-          : toUserId // ignore: cast_nullable_to_non_nullable
-              as String,
-      toUserName: null == toUserName
-          ? _value.toUserName
-          : toUserName // ignore: cast_nullable_to_non_nullable
-              as String,
-      amount: null == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as String,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String,
-      note: freezed == note
-          ? _value.note
-          : note // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$SettlementModelImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        groupId: null == groupId
+            ? _value.groupId
+            : groupId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fromUserId: null == fromUserId
+            ? _value.fromUserId
+            : fromUserId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fromUserName: null == fromUserName
+            ? _value.fromUserName
+            : fromUserName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        toUserId: null == toUserId
+            ? _value.toUserId
+            : toUserId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        toUserName: null == toUserName
+            ? _value.toUserName
+            : toUserName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        amount: null == amount
+            ? _value.amount
+            : amount // ignore: cast_nullable_to_non_nullable
+                  as String,
+        currency: null == currency
+            ? _value.currency
+            : currency // ignore: cast_nullable_to_non_nullable
+                  as String,
+        note: freezed == note
+            ? _value.note
+            : note // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as String,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$SettlementModelImpl extends _SettlementModel {
-  const _$SettlementModelImpl(
-      {required this.id,
-      @JsonKey(name: 'group_id') required this.groupId,
-      @JsonKey(name: 'from_user_id') required this.fromUserId,
-      @JsonKey(name: 'from_user_name') required this.fromUserName,
-      @JsonKey(name: 'to_user_id') required this.toUserId,
-      @JsonKey(name: 'to_user_name') required this.toUserName,
-      required this.amount,
-      required this.currency,
-      this.note,
-      required this.status,
-      @JsonKey(name: 'created_at') required this.createdAt})
-      : super._();
+  const _$SettlementModelImpl({
+    required this.id,
+    @JsonKey(name: 'group_id') required this.groupId,
+    @JsonKey(name: 'from_user_id') required this.fromUserId,
+    @JsonKey(name: 'from_user_name') required this.fromUserName,
+    @JsonKey(name: 'to_user_id') required this.toUserId,
+    @JsonKey(name: 'to_user_name') required this.toUserName,
+    required this.amount,
+    required this.currency,
+    this.note,
+    required this.status,
+    @JsonKey(name: 'created_at') required this.createdAt,
+  }) : super._();
 
   factory _$SettlementModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SettlementModelImplFromJson(json);
@@ -313,48 +324,49 @@ class _$SettlementModelImpl extends _SettlementModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      groupId,
-      fromUserId,
-      fromUserName,
-      toUserId,
-      toUserName,
-      amount,
-      currency,
-      note,
-      status,
-      createdAt);
+    runtimeType,
+    id,
+    groupId,
+    fromUserId,
+    fromUserName,
+    toUserId,
+    toUserName,
+    amount,
+    currency,
+    note,
+    status,
+    createdAt,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$SettlementModelImplCopyWith<_$SettlementModelImpl> get copyWith =>
       __$$SettlementModelImplCopyWithImpl<_$SettlementModelImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SettlementModelImplToJson(
-      this,
-    );
+    return _$$SettlementModelImplToJson(this);
   }
 }
 
 abstract class _SettlementModel extends SettlementModel {
-  const factory _SettlementModel(
-          {required final String id,
-          @JsonKey(name: 'group_id') required final String groupId,
-          @JsonKey(name: 'from_user_id') required final String fromUserId,
-          @JsonKey(name: 'from_user_name') required final String fromUserName,
-          @JsonKey(name: 'to_user_id') required final String toUserId,
-          @JsonKey(name: 'to_user_name') required final String toUserName,
-          required final String amount,
-          required final String currency,
-          final String? note,
-          required final String status,
-          @JsonKey(name: 'created_at') required final String createdAt}) =
-      _$SettlementModelImpl;
+  const factory _SettlementModel({
+    required final String id,
+    @JsonKey(name: 'group_id') required final String groupId,
+    @JsonKey(name: 'from_user_id') required final String fromUserId,
+    @JsonKey(name: 'from_user_name') required final String fromUserName,
+    @JsonKey(name: 'to_user_id') required final String toUserId,
+    @JsonKey(name: 'to_user_name') required final String toUserName,
+    required final String amount,
+    required final String currency,
+    final String? note,
+    required final String status,
+    @JsonKey(name: 'created_at') required final String createdAt,
+  }) = _$SettlementModelImpl;
   const _SettlementModel._() : super._();
 
   factory _SettlementModel.fromJson(Map<String, dynamic> json) =

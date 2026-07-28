@@ -9,9 +9,7 @@ class GetNotificationsUseCase {
   final INotificationRepository repository;
 
   /// Creates a new [GetNotificationsUseCase] instance.
-  const GetNotificationsUseCase({
-    required this.repository,
-  });
+  const GetNotificationsUseCase({required this.repository});
 
   /// Executes the usecase.
   Future<List<AppNotification>> call() async {
@@ -35,7 +33,8 @@ extension on NetworkClientException {
   String? get errorCode {
     if (this is BusinessRuleException) {
       final br = this as BusinessRuleException;
-      return br.errors?['code'] as String? ?? br.errors?['errorCode'] as String?;
+      return br.errors?['code'] as String? ??
+          br.errors?['errorCode'] as String?;
     }
     return null;
   }

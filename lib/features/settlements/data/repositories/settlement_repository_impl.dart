@@ -9,9 +9,7 @@ class SettlementRepositoryImpl implements ISettlementRepository {
   final ISettlementRemoteDatasource datasource;
 
   /// Creates a new [SettlementRepositoryImpl] instance.
-  const SettlementRepositoryImpl({
-    required this.datasource,
-  });
+  const SettlementRepositoryImpl({required this.datasource});
 
   @override
   Future<List<Settlement>> getGroupSettlements({

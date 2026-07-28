@@ -28,7 +28,14 @@ class MemberTileSkeleton extends StatelessWidget {
               ],
             ),
           ),
-          Container(height: 24, width: 60, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12))),
+          Container(
+            height: 24,
+            width: 60,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
         ],
       ),
     );

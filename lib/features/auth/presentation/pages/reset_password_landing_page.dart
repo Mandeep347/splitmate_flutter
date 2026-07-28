@@ -18,16 +18,15 @@ class ResetPasswordLandingPage extends ConsumerStatefulWidget {
   final String token;
 
   /// Creates a new [ResetPasswordLandingPage] instance.
-  const ResetPasswordLandingPage({
-    super.key,
-    required this.token,
-  });
+  const ResetPasswordLandingPage({super.key, required this.token});
 
   @override
-  ConsumerState<ResetPasswordLandingPage> createState() => _ResetPasswordLandingPageState();
+  ConsumerState<ResetPasswordLandingPage> createState() =>
+      _ResetPasswordLandingPageState();
 }
 
-class _ResetPasswordLandingPageState extends ConsumerState<ResetPasswordLandingPage> {
+class _ResetPasswordLandingPageState
+    extends ConsumerState<ResetPasswordLandingPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -45,7 +44,9 @@ class _ResetPasswordLandingPageState extends ConsumerState<ResetPasswordLandingP
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     try {
-      await ref.read(authNotifierProvider.notifier).resetPassword(
+      await ref
+          .read(authNotifierProvider.notifier)
+          .resetPassword(
             token: widget.token,
             newPassword: _passwordController.text,
           );
@@ -54,7 +55,9 @@ class _ResetPasswordLandingPageState extends ConsumerState<ResetPasswordLandingP
       }
     } catch (e) {
       if (mounted) {
-        final msg = e is Failure ? AppErrorHandler.toUserMessage(e) : 'Failed to reset password. Please try again.';
+        final msg = e is Failure
+            ? AppErrorHandler.toUserMessage(e)
+            : 'Failed to reset password. Please try again.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(msg),
@@ -113,9 +116,13 @@ class _ResetPasswordLandingPageState extends ConsumerState<ResetPasswordLandingP
                       textInputAction: TextInputAction.next,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                         ),
-                        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                        onPressed: () => setState(
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -137,9 +144,14 @@ class _ResetPasswordLandingPageState extends ConsumerState<ResetPasswordLandingP
                       onFieldSubmitted: (_) => _submit(),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                          _obscureConfirmPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                         ),
-                        onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                        onPressed: () => setState(
+                          () => _obscureConfirmPassword =
+                              !_obscureConfirmPassword,
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {

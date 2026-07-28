@@ -51,10 +51,16 @@ class ExpenseListTile extends ConsumerWidget {
     final theme = Theme.of(context);
     final isReversed = !expense.isActive && expense.status == 'REVERSED';
     final isPending = expense.status == 'PENDING';
-    final relativeDate = isPending ? 'Pending sync' : _getRelativeDate(expense.createdAt);
+    final relativeDate = isPending
+        ? 'Pending sync'
+        : _getRelativeDate(expense.createdAt);
     final currentUser = ref.watch(currentUserProvider);
 
-    final paidByLabel = _displayName(expense.paidByUserId, expense.paidByName, currentUser);
+    final paidByLabel = _displayName(
+      expense.paidByUserId,
+      expense.paidByName,
+      currentUser,
+    );
 
     Widget content = Card(
       margin: compact
@@ -90,12 +96,18 @@ class ExpenseListTile extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: isPending
                       ? const Color(0xFFF59E0B).withValues(alpha: 0.15)
-                      : theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
+                      : theme.colorScheme.primaryContainer.withValues(
+                          alpha: 0.5,
+                        ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
-                  isPending ? Icons.access_time_rounded : Icons.receipt_long_outlined,
-                  color: isPending ? const Color(0xFFF59E0B) : theme.colorScheme.onPrimaryContainer,
+                  isPending
+                      ? Icons.access_time_rounded
+                      : Icons.receipt_long_outlined,
+                  color: isPending
+                      ? const Color(0xFFF59E0B)
+                      : theme.colorScheme.onPrimaryContainer,
                   size: compact ? 16 : 20,
                 ),
               ),
@@ -108,11 +120,19 @@ class ExpenseListTile extends ConsumerWidget {
                   children: [
                     Text(
                       expense.title,
-                      style: (compact ? theme.textTheme.bodySmall : theme.textTheme.titleMedium)?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        decoration: isReversed ? TextDecoration.lineThrough : null,
-                        color: isReversed ? theme.colorScheme.onSurfaceVariant : null,
-                      ),
+                      style:
+                          (compact
+                                  ? theme.textTheme.bodySmall
+                                  : theme.textTheme.titleMedium)
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                decoration: isReversed
+                                    ? TextDecoration.lineThrough
+                                    : null,
+                                color: isReversed
+                                    ? theme.colorScheme.onSurfaceVariant
+                                    : null,
+                              ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -120,7 +140,9 @@ class ExpenseListTile extends ConsumerWidget {
                     Text(
                       '$paidByLabel · $relativeDate',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: isPending ? const Color(0xFFD97706) : theme.colorScheme.onSurfaceVariant,
+                        color: isPending
+                            ? const Color(0xFFD97706)
+                            : theme.colorScheme.onSurfaceVariant,
                         fontSize: compact ? 11 : null,
                         fontWeight: isPending ? FontWeight.w600 : null,
                       ),
@@ -139,10 +161,16 @@ class ExpenseListTile extends ConsumerWidget {
                   AmountDisplay(
                     amount: expense.totalAmount,
                     currency: expense.currency,
-                    style: (compact ? theme.textTheme.bodyMedium : theme.textTheme.titleMedium)?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      decoration: isReversed ? TextDecoration.lineThrough : null,
-                    ),
+                    style:
+                        (compact
+                                ? theme.textTheme.bodyMedium
+                                : theme.textTheme.titleMedium)
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              decoration: isReversed
+                                  ? TextDecoration.lineThrough
+                                  : null,
+                            ),
                     color: isReversed
                         ? theme.colorScheme.onSurfaceVariant
                         : theme.colorScheme.primary,
@@ -150,7 +178,10 @@ class ExpenseListTile extends ConsumerWidget {
                   if (!compact) ...[
                     const SizedBox(height: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(4),
@@ -178,14 +209,12 @@ class ExpenseListTile extends ConsumerWidget {
         child: content,
       );
     } else if (isReversed) {
-      content = Opacity(
-        opacity: 0.6,
-        child: content,
-      );
+      content = Opacity(opacity: 0.6, child: content);
     }
 
     return Semantics(
-      label: '${expense.title}, ${expense.currency} ${expense.totalAmount}, paid by $paidByLabel',
+      label:
+          '${expense.title}, ${expense.currency} ${expense.totalAmount}, paid by $paidByLabel',
       button: true,
       enabled: !isPending,
       child: content,

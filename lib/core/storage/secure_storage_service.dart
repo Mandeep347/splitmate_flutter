@@ -54,9 +54,7 @@ class SecureStorageService implements ISecureStorageService {
 /// Provider for raw [FlutterSecureStorage] with encrypted preferences enabled on Android.
 final flutterSecureStorageProvider = Provider<FlutterSecureStorage>((ref) {
   return const FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    ),
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
   );
 });
 

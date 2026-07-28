@@ -9,9 +9,7 @@ class GetMembersUseCase {
   final IGroupRepository repository;
 
   /// Creates a new [GetMembersUseCase] instance.
-  const GetMembersUseCase({
-    required this.repository,
-  });
+  const GetMembersUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws a [Failure] on error.

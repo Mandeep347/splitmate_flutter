@@ -19,15 +19,12 @@ class UpdateProfileNotifier extends AsyncNotifier<void> {
 
   /// Triggers update operation via [UpdateProfileUseCase].
   /// On success, invalidates [authNotifierProvider] to refresh credentials.
-  Future<void> updateProfile({
-    String? name,
-    String? preferredCurrency,
-  }) async {
+  Future<void> updateProfile({String? name, String? preferredCurrency}) async {
     state = const AsyncLoading<void>();
     state = await AsyncValue.guard<void>(() async {
       final useCase = ref.read(updateProfileUseCaseProvider);
       await useCase(name: name, preferredCurrency: preferredCurrency);
-      
+
       // Invalidate the auth notifier provider to re-fetch the user details
       ref.invalidate(authNotifierProvider);
     });
@@ -37,5 +34,5 @@ class UpdateProfileNotifier extends AsyncNotifier<void> {
 /// Global provider for [UpdateProfileNotifier].
 final updateProfileNotifierProvider =
     AsyncNotifierProvider<UpdateProfileNotifier, void>(() {
-  return UpdateProfileNotifier();
-});
+      return UpdateProfileNotifier();
+    });

@@ -7,9 +7,7 @@ class ResetSettingsUseCase {
   final ISettingsRepository repository;
 
   /// Creates a new [ResetSettingsUseCase] instance.
-  const ResetSettingsUseCase({
-    required this.repository,
-  });
+  const ResetSettingsUseCase({required this.repository});
 
   /// Executes the usecase.
   Future<void> call() async {

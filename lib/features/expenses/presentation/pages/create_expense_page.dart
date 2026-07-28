@@ -125,14 +125,18 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
 
     if (_selectedPaidByUserId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select who paid for this expense.')),
+        const SnackBar(
+          content: Text('Please select who paid for this expense.'),
+        ),
       );
       return;
     }
 
     if (_currentSplitInput == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all participant amounts.')),
+        const SnackBar(
+          content: Text('Please fill in all participant amounts.'),
+        ),
       );
       return;
     }
@@ -140,7 +144,9 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
     final amount = double.tryParse(_amountController.text) ?? 0.0;
 
     try {
-      await ref.read(createExpenseProvider.notifier).create(
+      await ref
+          .read(createExpenseProvider.notifier)
+          .create(
             groupId: widget.groupId,
             title: _titleController.text.trim(),
             description: _descriptionController.text.trim().isNotEmpty
@@ -169,21 +175,26 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
     final eachPays = amount / count;
 
     return Card(
-      color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.15),
+      color: Theme.of(
+        context,
+      ).colorScheme.primaryContainer.withValues(alpha: 0.15),
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 12),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            Icon(Icons.info_outline, color: Theme.of(context).colorScheme.primary),
+            Icon(
+              Icons.info_outline,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             const SizedBox(width: 8),
             Text(
               'Each pays: $symbol${eachPays.toStringAsFixed(2)}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
             ),
           ],
         ),
@@ -202,17 +213,25 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
     final expenseState = ref.watch(createExpenseProvider);
 
     // Fallback to fetching group members via provider if widget.members was empty
-    final fetchedMembers = ref.watch(groupMembersProvider(widget.groupId)).valueOrNull ??
+    final fetchedMembers =
+        ref.watch(groupMembersProvider(widget.groupId)).valueOrNull ??
         ref.watch(groupDetailProvider(widget.groupId)).valueOrNull?.members ??
         const [];
-    final effectiveMembers = widget.members.isNotEmpty ? widget.members : fetchedMembers;
+    final effectiveMembers = widget.members.isNotEmpty
+        ? widget.members
+        : fetchedMembers;
 
-    final mappedMembers = effectiveMembers.map((m) => _mapMember(m, currentUser)).toList();
+    final mappedMembers = effectiveMembers
+        .map((m) => _mapMember(m, currentUser))
+        .toList();
 
     // Auto-select default paidBy userId if not yet selected or invalid
     if (mappedMembers.isNotEmpty &&
-        (_selectedPaidByUserId == null || !mappedMembers.any((m) => m.userId == _selectedPaidByUserId))) {
-      _selectedPaidByUserId = (currentUser != null && mappedMembers.any((m) => m.userId == currentUser.id))
+        (_selectedPaidByUserId == null ||
+            !mappedMembers.any((m) => m.userId == _selectedPaidByUserId))) {
+      _selectedPaidByUserId =
+          (currentUser != null &&
+              mappedMembers.any((m) => m.userId == currentUser.id))
           ? currentUser.id
           : mappedMembers.first.userId;
     }
@@ -226,9 +245,13 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
           );
           context.pop();
         }
-      } else if (next is AsyncError<Expense?> && previous is AsyncLoading<Expense?>) {
+      } else if (next is AsyncError<Expense?> &&
+          previous is AsyncLoading<Expense?>) {
         final isOnline = ref.read(isOnlineProvider);
-        final message = AppErrorHandler.toOfflineAwareMessage(next.error, isOnline);
+        final message = AppErrorHandler.toOfflineAwareMessage(
+          next.error,
+          isOnline,
+        );
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
@@ -241,9 +264,7 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
     return LoadingOverlay(
       isLoading: expenseState.isLoading,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Add Expense'),
-        ),
+        appBar: AppBar(title: const Text('Add Expense')),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -273,7 +294,9 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
                   labelText: 'Amount',
                   hintText: '0.00',
                   controller: _amountController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   prefixIcon: Padding(
                     padding: const EdgeInsets.all(14.0),
                     child: Text(
@@ -323,7 +346,9 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
                 // Paid By Section
                 Text(
                   'Paid by',
-                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 PaidBySelector(
@@ -340,7 +365,9 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
                 // Split Type Section
                 Text(
                   'Split type',
-                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 SplitTypeSelector(
@@ -356,7 +383,9 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
                 // Participants Section
                 Text(
                   'Participants',
-                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 ParticipantInputSection(
@@ -375,10 +404,7 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
                 const SizedBox(height: 24),
 
                 // Submit Button
-                PrimaryButton(
-                  label: 'Add Expense',
-                  onPressed: _submit,
-                ),
+                PrimaryButton(label: 'Add Expense', onPressed: _submit),
               ],
             ),
           ),

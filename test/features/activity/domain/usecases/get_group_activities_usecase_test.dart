@@ -32,28 +32,34 @@ void main() {
 
   group('GetGroupActivitiesUseCase', () {
     test('returns ActivityFeed on success', () async {
-      when(() => mockRepository.getGroupActivities(
-            groupId: 'group-1',
-            page: 1,
-            limit: 20,
-          )).thenAnswer((_) async => tFeed);
+      when(
+        () => mockRepository.getGroupActivities(
+          groupId: 'group-1',
+          page: 1,
+          limit: 20,
+        ),
+      ).thenAnswer((_) async => tFeed);
 
       final result = await usecase(groupId: 'group-1', page: 1, limit: 20);
 
       expect(result, equals(tFeed));
-      verify(() => mockRepository.getGroupActivities(
-            groupId: 'group-1',
-            page: 1,
-            limit: 20,
-          )).called(1);
+      verify(
+        () => mockRepository.getGroupActivities(
+          groupId: 'group-1',
+          page: 1,
+          limit: 20,
+        ),
+      ).called(1);
     });
 
     test('maps NetworkException to NetworkFailure', () async {
-      when(() => mockRepository.getGroupActivities(
-            groupId: 'group-1',
-            page: 1,
-            limit: 20,
-          )).thenThrow(const NetworkException('No connection'));
+      when(
+        () => mockRepository.getGroupActivities(
+          groupId: 'group-1',
+          page: 1,
+          limit: 20,
+        ),
+      ).thenThrow(const NetworkException('No connection'));
 
       expect(
         () => usecase(groupId: 'group-1', page: 1, limit: 20),
@@ -62,11 +68,13 @@ void main() {
     });
 
     test('maps NotFoundException to ServerFailure NOT_FOUND', () async {
-      when(() => mockRepository.getGroupActivities(
-            groupId: 'group-1',
-            page: 1,
-            limit: 20,
-          )).thenThrow(const NotFoundException('Not found'));
+      when(
+        () => mockRepository.getGroupActivities(
+          groupId: 'group-1',
+          page: 1,
+          limit: 20,
+        ),
+      ).thenThrow(const NotFoundException('Not found'));
 
       expect(
         () => usecase(groupId: 'group-1', page: 1, limit: 20),
@@ -77,11 +85,13 @@ void main() {
     });
 
     test('does not re-wrap Failure subtypes', () async {
-      when(() => mockRepository.getGroupActivities(
-            groupId: 'group-1',
-            page: 1,
-            limit: 20,
-          )).thenThrow(const CustomFailure('Cache error'));
+      when(
+        () => mockRepository.getGroupActivities(
+          groupId: 'group-1',
+          page: 1,
+          limit: 20,
+        ),
+      ).thenThrow(const CustomFailure('Cache error'));
 
       expect(
         () => usecase(groupId: 'group-1', page: 1, limit: 20),

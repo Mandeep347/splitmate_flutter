@@ -56,12 +56,8 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   @override
-  Future<AuthTokens> refreshTokens({
-    required String refreshToken,
-  }) async {
-    final tokenResponse = await datasource.refresh(
-      refreshToken: refreshToken,
-    );
+  Future<AuthTokens> refreshTokens({required String refreshToken}) async {
+    final tokenResponse = await datasource.refresh(refreshToken: refreshToken);
     await tokenStorage.saveTokens(
       accessToken: tokenResponse.accessToken,
       refreshToken: tokenResponse.refreshToken,
@@ -122,7 +118,10 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   @override
-  Future<void> resetPassword({required String token, required String newPassword}) async {
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
     await datasource.resetPassword(token: token, newPassword: newPassword);
   }
 }

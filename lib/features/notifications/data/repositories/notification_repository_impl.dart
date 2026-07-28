@@ -9,9 +9,7 @@ class NotificationRepositoryImpl implements INotificationRepository {
   final INotificationRemoteDatasource remoteDatasource;
 
   /// Creates a new [NotificationRepositoryImpl] instance.
-  const NotificationRepositoryImpl({
-    required this.remoteDatasource,
-  });
+  const NotificationRepositoryImpl({required this.remoteDatasource});
 
   @override
   Future<List<AppNotification>> getNotifications() async {
@@ -21,7 +19,9 @@ class NotificationRepositoryImpl implements INotificationRepository {
 
   @override
   Future<AppNotification> markAsRead({required String notificationId}) async {
-    final model = await remoteDatasource.markAsRead(notificationId: notificationId);
+    final model = await remoteDatasource.markAsRead(
+      notificationId: notificationId,
+    );
     return model.toEntity();
   }
 

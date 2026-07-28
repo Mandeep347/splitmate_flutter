@@ -56,7 +56,7 @@ abstract class ErrorMapper {
           } else if (detailVal != null) {
             message = detailVal.toString();
           }
-              
+
           final rawErrors = responseData['errors'] as Map<String, dynamic>?;
 
           // Handle validation errors (e.g. FastAPI 422 HTTP validation format)
@@ -74,7 +74,7 @@ abstract class ErrorMapper {
 
           return ServerFailure(message, statusCode: statusCode);
         }
-        
+
         return ServerFailure(
           'Received invalid server response: ${response?.statusMessage}',
           statusCode: statusCode,

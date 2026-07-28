@@ -9,9 +9,7 @@ class CreateSettlementUseCase {
   final ISettlementRepository repository;
 
   /// Creates a new [CreateSettlementUseCase] instance.
-  const CreateSettlementUseCase({
-    required this.repository,
-  });
+  const CreateSettlementUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws a [Failure] on error.
@@ -65,7 +63,8 @@ extension on NetworkClientException {
   String? get errorCode {
     if (this is BusinessRuleException) {
       final br = this as BusinessRuleException;
-      return br.errors?['code'] as String? ?? br.errors?['errorCode'] as String?;
+      return br.errors?['code'] as String? ??
+          br.errors?['errorCode'] as String?;
     }
     return null;
   }

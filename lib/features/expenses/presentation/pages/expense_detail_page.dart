@@ -20,10 +20,7 @@ class ExpenseDetailPage extends ConsumerWidget {
   final String expenseId;
 
   /// Creates a const [ExpenseDetailPage] instance.
-  const ExpenseDetailPage({
-    super.key,
-    required this.expenseId,
-  });
+  const ExpenseDetailPage({super.key, required this.expenseId});
 
   String _displayName(String? userId, String name, LoggedInUser? me) {
     if (me == null) return name;
@@ -32,21 +29,25 @@ class ExpenseDetailPage extends ConsumerWidget {
     return name;
   }
 
-  Future<void> _onReverse(BuildContext context, WidgetRef ref, Expense expense) async {
+  Future<void> _onReverse(
+    BuildContext context,
+    WidgetRef ref,
+    Expense expense,
+  ) async {
     final confirm = await ConfirmationDialog.show(
       context,
       title: 'Reverse Expense',
-      message: 'This will undo all balance changes from this expense. This cannot be undone.',
+      message:
+          'This will undo all balance changes from this expense. This cannot be undone.',
       confirmLabel: 'Reverse',
       isDestructive: true,
     );
 
     if (confirm == true) {
       try {
-        await ref.read(reverseExpenseProvider.notifier).reverse(
-              expenseId: expenseId,
-              groupId: expense.groupId,
-            );
+        await ref
+            .read(reverseExpenseProvider.notifier)
+            .reverse(expenseId: expenseId, groupId: expense.groupId);
       } catch (_) {
         // Silent catch; handled via provider listener
       }
@@ -63,13 +64,15 @@ class ExpenseDetailPage extends ConsumerWidget {
     // Listen to changes in the reverseExpenseProvider
     ref.listen<AsyncValue<void>>(reverseExpenseProvider, (previous, next) {
       if (next is AsyncData<void> && previous is AsyncLoading<void>) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Expense reversed')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Expense reversed')));
         context.pop();
       } else if (next is AsyncError<void> && previous is AsyncLoading<void>) {
         final failure = next.error;
-        final message = failure is Failure ? failure.message : 'Failed to reverse expense.';
+        final message = failure is Failure
+            ? failure.message
+            : 'Failed to reverse expense.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
@@ -78,16 +81,18 @@ class ExpenseDetailPage extends ConsumerWidget {
         );
       }
     });
- 
+
     // Listen to changes in the updateExpenseProvider
     ref.listen<AsyncValue<void>>(updateExpenseProvider, (previous, next) {
       if (next is AsyncData<void> && previous is AsyncLoading<void>) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Expense updated')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Expense updated')));
       } else if (next is AsyncError<void> && previous is AsyncLoading<void>) {
         final failure = next.error;
-        final message = failure is Failure ? failure.message : 'Failed to update expense.';
+        final message = failure is Failure
+            ? failure.message
+            : 'Failed to update expense.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
@@ -131,7 +136,11 @@ class ExpenseDetailPage extends ConsumerWidget {
           onRetry: () => ref.refresh(expenseDetailProvider(expenseId)),
           data: (expense) {
             final isReversed = !expense.isActive;
-            final paidByLabel = _displayName(expense.paidByUserId, expense.paidByName, currentUser);
+            final paidByLabel = _displayName(
+              expense.paidByUserId,
+              expense.paidByName,
+              currentUser,
+            );
 
             return ListView(
               padding: const EdgeInsets.all(16.0),
@@ -142,7 +151,9 @@ class ExpenseDetailPage extends ConsumerWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                      color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                      color: theme.colorScheme.outlineVariant.withValues(
+                        alpha: 0.5,
+                      ),
                     ),
                   ),
                   child: Padding(
@@ -152,7 +163,10 @@ class ExpenseDetailPage extends ConsumerWidget {
                       children: [
                         if (isReversed) ...[
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: theme.colorScheme.error,
                               borderRadius: BorderRadius.circular(4),
@@ -179,7 +193,9 @@ class ExpenseDetailPage extends ConsumerWidget {
                           currency: expense.currency,
                           style: theme.textTheme.displaySmall?.copyWith(
                             fontWeight: FontWeight.bold,
-                            decoration: isReversed ? TextDecoration.lineThrough : null,
+                            decoration: isReversed
+                                ? TextDecoration.lineThrough
+                                : null,
                           ),
                           color: isReversed
                               ? theme.colorScheme.onSurfaceVariant
@@ -188,7 +204,11 @@ class ExpenseDetailPage extends ConsumerWidget {
                         const Divider(height: 24),
                         Row(
                           children: [
-                            Icon(Icons.person_outline, size: 20, color: theme.colorScheme.primary),
+                            Icon(
+                              Icons.person_outline,
+                              size: 20,
+                              color: theme.colorScheme.primary,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               'Paid by ',
@@ -207,10 +227,16 @@ class ExpenseDetailPage extends ConsumerWidget {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            Icon(Icons.calendar_today_outlined, size: 20, color: theme.colorScheme.primary),
+                            Icon(
+                              Icons.calendar_today_outlined,
+                              size: 20,
+                              color: theme.colorScheme.primary,
+                            ),
                             const SizedBox(width: 8),
                             Text(
-                              DateFormat('d MMM yyyy, h:mm a').format(expense.createdAt),
+                              DateFormat(
+                                'd MMM yyyy, h:mm a',
+                              ).format(expense.createdAt),
                               style: theme.textTheme.bodyMedium,
                             ),
                           ],
@@ -218,7 +244,11 @@ class ExpenseDetailPage extends ConsumerWidget {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            Icon(Icons.pie_chart_outline, size: 20, color: theme.colorScheme.primary),
+                            Icon(
+                              Icons.pie_chart_outline,
+                              size: 20,
+                              color: theme.colorScheme.primary,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               expense.splitType.displayLabel,
@@ -226,7 +256,8 @@ class ExpenseDetailPage extends ConsumerWidget {
                             ),
                           ],
                         ),
-                        if (expense.description != null && expense.description!.trim().isNotEmpty) ...[
+                        if (expense.description != null &&
+                            expense.description!.trim().isNotEmpty) ...[
                           const Divider(height: 24),
                           Text(
                             'Description',
@@ -252,7 +283,9 @@ class ExpenseDetailPage extends ConsumerWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                      color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                      color: theme.colorScheme.outlineVariant.withValues(
+                        alpha: 0.5,
+                      ),
                     ),
                   ),
                   child: Padding(
@@ -270,7 +303,11 @@ class ExpenseDetailPage extends ConsumerWidget {
                         ...expense.participants.map((p) {
                           final hasPercentage = p.percentage != null;
                           final hasShares = p.shares != null;
-                          final participantLabel = _displayName(p.userId, p.name, currentUser);
+                          final participantLabel = _displayName(
+                            p.userId,
+                            p.name,
+                            currentUser,
+                          );
 
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -292,28 +329,35 @@ class ExpenseDetailPage extends ConsumerWidget {
                                     AmountDisplay(
                                       amount: p.owedAmount,
                                       currency: expense.currency,
-                                      style: theme.textTheme.titleSmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: theme.textTheme.titleSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                       color: theme.colorScheme.error,
                                     ),
                                     if (hasPercentage) ...[
                                       const SizedBox(height: 2),
                                       Text(
                                         '${p.percentage!.toStringAsFixed(1)}%',
-                                        style: theme.textTheme.bodySmall?.copyWith(
-                                          color: theme.colorScheme.onSurfaceVariant,
-                                          fontSize: 10,
-                                        ),
+                                        style: theme.textTheme.bodySmall
+                                            ?.copyWith(
+                                              color: theme
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                              fontSize: 10,
+                                            ),
                                       ),
                                     ] else if (hasShares) ...[
                                       const SizedBox(height: 2),
                                       Text(
                                         '${p.shares} shares',
-                                        style: theme.textTheme.bodySmall?.copyWith(
-                                          color: theme.colorScheme.onSurfaceVariant,
-                                          fontSize: 10,
-                                        ),
+                                        style: theme.textTheme.bodySmall
+                                            ?.copyWith(
+                                              color: theme
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                              fontSize: 10,
+                                            ),
                                       ),
                                     ],
                                   ],

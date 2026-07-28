@@ -7,11 +7,7 @@ class Shimmer extends StatefulWidget {
   final Widget child;
   final bool enabled;
 
-  const Shimmer({
-    super.key,
-    required this.child,
-    this.enabled = true,
-  });
+  const Shimmer({super.key, required this.child, this.enabled = true});
 
   @override
   State<Shimmer> createState() => _ShimmerState();
@@ -43,8 +39,12 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
     final isDark = theme.brightness == Brightness.dark;
 
     // Premium Slate HSL-tailored shades for Light & Dark mode shimmers
-    final baseColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
-    final highlightColor = isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9);
+    final baseColor = isDark
+        ? const Color(0xFF1E293B)
+        : const Color(0xFFE2E8F0);
+    final highlightColor = isDark
+        ? const Color(0xFF334155)
+        : const Color(0xFFF1F5F9);
 
     return AnimatedBuilder(
       animation: _controller,
@@ -57,7 +57,9 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
               stops: const [0.1, 0.3, 0.4],
               begin: const Alignment(-1.0, -0.3),
               end: const Alignment(1.0, 0.3),
-              transform: _SlidingGradientTransform(slidePercent: _controller.value),
+              transform: _SlidingGradientTransform(
+                slidePercent: _controller.value,
+              ),
             ).createShader(bounds);
           },
           child: widget.child,
@@ -121,7 +123,11 @@ class SkeletonCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SkeletonBlock(width: 48, height: 48, borderRadius: AppDesignTokens.radiusRound),
+            SkeletonBlock(
+              width: 48,
+              height: 48,
+              borderRadius: AppDesignTokens.radiusRound,
+            ),
             SizedBox(width: AppDesignTokens.spaceMD),
             Expanded(
               child: Column(
@@ -176,10 +182,7 @@ class CircularLoader extends StatelessWidget {
 class PageLoader extends StatelessWidget {
   final String message;
 
-  const PageLoader({
-    super.key,
-    this.message = 'Please wait...',
-  });
+  const PageLoader({super.key, this.message = 'Please wait...'});
 
   @override
   Widget build(BuildContext context) {
@@ -189,10 +192,7 @@ class PageLoader extends StatelessWidget {
         children: [
           const CircularLoader(),
           const SizedBox(height: AppDesignTokens.spaceMD),
-          Text(
-            message,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          Text(message, style: Theme.of(context).textTheme.bodyMedium),
         ],
       ),
     );
@@ -205,8 +205,6 @@ class EmptyLoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: PageLoader(),
-    );
+    return const Scaffold(body: PageLoader());
   }
 }

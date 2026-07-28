@@ -54,7 +54,9 @@ void main() {
     });
 
     test('returns defaults on malformed JSON (never throws)', () async {
-      when(() => mockStorage.read<String>(any(), any())).thenReturn('not-valid-json');
+      when(
+        () => mockStorage.read<String>(any(), any()),
+      ).thenReturn('not-valid-json');
 
       final result = await repo.getSettings();
 
@@ -65,18 +67,21 @@ void main() {
 
   group('saveSettings', () {
     test('writes jsonEncoded settings to correct box and key', () async {
-      when(() => mockStorage.write<String>(any(), any(), any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockStorage.write<String>(any(), any(), any()),
+      ).thenAnswer((_) async {});
 
       await repo.saveSettings(settings: tSettings);
 
-      final captured = verify(
-        () => mockStorage.write<String>(
-          StorageKeys.settingsBox,
-          StorageKeys.settingsKey,
-          captureAny(),
-        ),
-      ).captured.first as String;
+      final captured =
+          verify(
+                () => mockStorage.write<String>(
+                  StorageKeys.settingsBox,
+                  StorageKeys.settingsKey,
+                  captureAny(),
+                ),
+              ).captured.first
+              as String;
 
       final decoded = jsonDecode(captured) as Map<String, dynamic>;
       expect(decoded['themeMode'], 'dark');

@@ -9,9 +9,7 @@ class RegisterUseCase {
   final IAuthRepository repository;
 
   /// Creates a new [RegisterUseCase] instance.
-  const RegisterUseCase({
-    required this.repository,
-  });
+  const RegisterUseCase({required this.repository});
 
   /// Executes registration of a new user.
   /// Throws a [Failure] on error.

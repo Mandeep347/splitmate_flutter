@@ -53,10 +53,7 @@ class PendingIndicatorWrapper extends StatelessWidget {
 
     return Stack(
       children: [
-        Opacity(
-          opacity: isPending ? 0.88 : 0.75,
-          child: child,
-        ),
+        Opacity(opacity: isPending ? 0.88 : 0.75, child: child),
         Positioned(
           top: 6,
           right: 6,

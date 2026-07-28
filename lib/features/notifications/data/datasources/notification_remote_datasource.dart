@@ -21,9 +21,7 @@ class NotificationRemoteDatasource implements INotificationRemoteDatasource {
   final DioClient client;
 
   /// Creates a new [NotificationRemoteDatasource] instance.
-  const NotificationRemoteDatasource({
-    required this.client,
-  });
+  const NotificationRemoteDatasource({required this.client});
 
   @override
   Future<List<NotificationModel>> getNotifications() async {
@@ -54,7 +52,8 @@ class NotificationRemoteDatasource implements INotificationRemoteDatasource {
 }
 
 /// Provider exposing [INotificationRemoteDatasource] implementation.
-final notificationRemoteDatasourceProvider = Provider<INotificationRemoteDatasource>((ref) {
-  final dioClient = ref.watch(dioClientProvider);
-  return NotificationRemoteDatasource(client: dioClient);
-});
+final notificationRemoteDatasourceProvider =
+    Provider<INotificationRemoteDatasource>((ref) {
+      final dioClient = ref.watch(dioClientProvider);
+      return NotificationRemoteDatasource(client: dioClient);
+    });

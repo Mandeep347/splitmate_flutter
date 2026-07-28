@@ -15,9 +15,7 @@ abstract interface class IExpenseRemoteDatasource {
   });
 
   /// Fetches a single expense details by ID.
-  Future<ExpenseModel> getExpenseById({
-    required String expenseId,
-  });
+  Future<ExpenseModel> getExpenseById({required String expenseId});
 
   /// Creates a new expense record in a group.
   Future<ExpenseModel> createExpense({
@@ -34,9 +32,7 @@ abstract interface class IExpenseRemoteDatasource {
   });
 
   /// Reverses an active expense record.
-  Future<ExpenseModel> reverseExpense({
-    required String expenseId,
-  });
+  Future<ExpenseModel> reverseExpense({required String expenseId});
 }
 
 /// Remote datasource implementation using [DioClient].
@@ -54,18 +50,13 @@ class ExpenseRemoteDatasource implements IExpenseRemoteDatasource {
   }) async {
     final response = await _client.get<Map<String, dynamic>>(
       ApiEndpoints.groupExpenses(groupId),
-      queryParameters: {
-        'page': page,
-        'limit': limit,
-      },
+      queryParameters: {'page': page, 'limit': limit},
     );
     return PaginatedExpensesModel.fromJson(response.data!);
   }
 
   @override
-  Future<ExpenseModel> getExpenseById({
-    required String expenseId,
-  }) async {
+  Future<ExpenseModel> getExpenseById({required String expenseId}) async {
     final response = await _client.get<Map<String, dynamic>>(
       ApiEndpoints.expenseById(expenseId),
     );
@@ -107,9 +98,7 @@ class ExpenseRemoteDatasource implements IExpenseRemoteDatasource {
   }
 
   @override
-  Future<ExpenseModel> reverseExpense({
-    required String expenseId,
-  }) async {
+  Future<ExpenseModel> reverseExpense({required String expenseId}) async {
     final response = await _client.patch<Map<String, dynamic>>(
       ApiEndpoints.reverseExpense(expenseId),
     );
@@ -118,8 +107,9 @@ class ExpenseRemoteDatasource implements IExpenseRemoteDatasource {
 }
 
 /// Provider exposing [IExpenseRemoteDatasource].
-final expenseRemoteDatasourceProvider =
-    Provider<IExpenseRemoteDatasource>((ref) {
+final expenseRemoteDatasourceProvider = Provider<IExpenseRemoteDatasource>((
+  ref,
+) {
   final client = ref.watch(dioClientProvider);
   return ExpenseRemoteDatasource(client);
 });

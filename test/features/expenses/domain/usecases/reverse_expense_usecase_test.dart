@@ -44,31 +44,39 @@ void main() {
         participants: const [tParticipant],
       );
 
-      when(() => mockRepository.reverseExpense(expenseId: 'expense-1'))
-          .thenAnswer((_) async => tReversedExpense);
+      when(
+        () => mockRepository.reverseExpense(expenseId: 'expense-1'),
+      ).thenAnswer((_) async => tReversedExpense);
 
       final result = await useCase(expenseId: 'expense-1');
 
       expect(result.isReversed, true);
       expect(result.isActive, false);
-      verify(() => mockRepository.reverseExpense(expenseId: 'expense-1')).called(1);
+      verify(
+        () => mockRepository.reverseExpense(expenseId: 'expense-1'),
+      ).called(1);
     });
 
-    test('maps NotFoundException to ServerFailure with NOT_FOUND code', () async {
-      when(() => mockRepository.reverseExpense(expenseId: 'expense-1'))
-          .thenThrow(const NotFoundException('Not found'));
+    test(
+      'maps NotFoundException to ServerFailure with NOT_FOUND code',
+      () async {
+        when(
+          () => mockRepository.reverseExpense(expenseId: 'expense-1'),
+        ).thenThrow(const NotFoundException('Not found'));
 
-      expect(
-        () => useCase(expenseId: 'expense-1'),
-        throwsA(
-          isA<ServerFailure>().having((f) => f.code, 'code', 'NOT_FOUND'),
-        ),
-      );
-    });
+        expect(
+          () => useCase(expenseId: 'expense-1'),
+          throwsA(
+            isA<ServerFailure>().having((f) => f.code, 'code', 'NOT_FOUND'),
+          ),
+        );
+      },
+    );
 
     test('maps BusinessRuleException to BusinessRuleFailure', () async {
-      when(() => mockRepository.reverseExpense(expenseId: 'expense-1'))
-          .thenThrow(const BusinessRuleException(message: 'Cannot reverse'));
+      when(
+        () => mockRepository.reverseExpense(expenseId: 'expense-1'),
+      ).thenThrow(const BusinessRuleException(message: 'Cannot reverse'));
 
       expect(
         () => useCase(expenseId: 'expense-1'),
@@ -77,8 +85,9 @@ void main() {
     });
 
     test('maps NetworkException to NetworkFailure', () async {
-      when(() => mockRepository.reverseExpense(expenseId: 'expense-1'))
-          .thenThrow(const NetworkException('No connection'));
+      when(
+        () => mockRepository.reverseExpense(expenseId: 'expense-1'),
+      ).thenThrow(const NetworkException('No connection'));
 
       expect(
         () => useCase(expenseId: 'expense-1'),

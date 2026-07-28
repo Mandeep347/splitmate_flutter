@@ -8,9 +8,7 @@ class GetSettingsUseCase {
   final ISettingsRepository repository;
 
   /// Creates a new [GetSettingsUseCase] instance.
-  const GetSettingsUseCase({
-    required this.repository,
-  });
+  const GetSettingsUseCase({required this.repository});
 
   /// Executes the usecase.
   Future<AppSettings> call() async {

@@ -46,7 +46,9 @@ class MemberAvatar extends StatelessWidget {
         style: theme.textTheme.titleSmall?.copyWith(
           color: textColor ?? theme.colorScheme.onPrimaryContainer,
           fontWeight: FontWeight.bold,
-          fontSize: radius * 0.8, // Dynamically size initials text based on avatar radius
+          fontSize:
+              radius *
+              0.8, // Dynamically size initials text based on avatar radius
         ),
       ),
     );

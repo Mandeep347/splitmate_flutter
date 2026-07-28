@@ -31,9 +31,9 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     try {
-      await ref.read(authNotifierProvider.notifier).forgotPassword(
-            email: _emailController.text.trim(),
-          );
+      await ref
+          .read(authNotifierProvider.notifier)
+          .forgotPassword(email: _emailController.text.trim());
       if (mounted) {
         setState(() => _submitted = true);
       }
@@ -72,9 +72,9 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               Text(
                 'If an account exists with that email, a recovery link has been sent. Please check your inbox and click the link to reset your password.',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  height: 1.5,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(height: 1.5),
               ),
               const SizedBox(height: 32),
               PrimaryButton(

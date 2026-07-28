@@ -28,7 +28,8 @@ class ParticipantInputSection extends StatefulWidget {
   });
 
   @override
-  State<ParticipantInputSection> createState() => _ParticipantInputSectionState();
+  State<ParticipantInputSection> createState() =>
+      _ParticipantInputSectionState();
 }
 
 class _ParticipantInputSectionState extends State<ParticipantInputSection> {
@@ -74,13 +75,11 @@ class _ParticipantInputSectionState extends State<ParticipantInputSection> {
       _selectedEqualIds = widget.members.map((m) => m.userId).toSet();
     } else if (widget.splitType == SplitType.exact) {
       _exactControllers = {
-        for (final m in widget.members)
-          m.userId: TextEditingController(),
+        for (final m in widget.members) m.userId: TextEditingController(),
       };
     } else if (widget.splitType == SplitType.percentage) {
       _percentControllers = {
-        for (final m in widget.members)
-          m.userId: TextEditingController(),
+        for (final m in widget.members) m.userId: TextEditingController(),
       };
     } else if (widget.splitType == SplitType.share) {
       _shareControllers = {
@@ -126,7 +125,9 @@ class _ParticipantInputSectionState extends State<ParticipantInputSection> {
           if (text.isNotEmpty) {
             final val = double.tryParse(text);
             if (val != null && val > 0) {
-              list.add(ExactParticipantInput(userId: m.userId, owedAmount: val));
+              list.add(
+                ExactParticipantInput(userId: m.userId, owedAmount: val),
+              );
             }
           }
         }
@@ -140,7 +141,9 @@ class _ParticipantInputSectionState extends State<ParticipantInputSection> {
           if (text.isNotEmpty) {
             final val = double.tryParse(text);
             if (val != null && val > 0) {
-              list.add(PercentageParticipantInput(userId: m.userId, percentage: val));
+              list.add(
+                PercentageParticipantInput(userId: m.userId, percentage: val),
+              );
             }
           }
         }
@@ -210,7 +213,10 @@ class _ParticipantInputSectionState extends State<ParticipantInputSection> {
             decoration: InputDecoration(
               hintText: '0.00',
               suffixText: ' ${_getCurrencySymbol(widget.currency)}',
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 4,
+              ),
               isDense: true,
             ),
             onChanged: (_) => _notifyParentOfCurrentInput(),

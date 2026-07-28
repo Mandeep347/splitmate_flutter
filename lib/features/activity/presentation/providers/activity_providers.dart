@@ -13,7 +13,9 @@ import 'package:splito_flutter/core/events/app_events.dart';
 // ============================================================================
 
 /// Provider exposing [GetGroupActivitiesUseCase].
-final getGroupActivitiesUseCaseProvider = Provider<GetGroupActivitiesUseCase>((ref) {
+final getGroupActivitiesUseCaseProvider = Provider<GetGroupActivitiesUseCase>((
+  ref,
+) {
   final repository = ref.watch(activityRepositoryProvider);
   return GetGroupActivitiesUseCase(repository: repository);
 });
@@ -58,14 +60,16 @@ class GroupActivityNotifier extends FamilyAsyncNotifier<ActivityFeed, String> {
         limit: current.limit,
       );
 
-      state = AsyncData(ActivityFeed(
-        groupId: arg,
-        items: [...current.items, ...newResult.items],
-        page: nextPage,
-        limit: newResult.limit,
-        totalPages: newResult.totalPages,
-        totalItems: newResult.totalItems,
-      ));
+      state = AsyncData(
+        ActivityFeed(
+          groupId: arg,
+          items: [...current.items, ...newResult.items],
+          page: nextPage,
+          limit: newResult.limit,
+          totalPages: newResult.totalPages,
+          totalItems: newResult.totalItems,
+        ),
+      );
     } catch (e) {
       rethrow;
     }
@@ -79,9 +83,11 @@ class GroupActivityNotifier extends FamilyAsyncNotifier<ActivityFeed, String> {
 
 /// Family provider exposing the paginated activity feed.
 final groupActivityProvider =
-    AsyncNotifierProvider.family<GroupActivityNotifier, ActivityFeed, String>(() {
-  return GroupActivityNotifier();
-});
+    AsyncNotifierProvider.family<GroupActivityNotifier, ActivityFeed, String>(
+      () {
+        return GroupActivityNotifier();
+      },
+    );
 
 /// Aggregates recent activity items across all active groups.
 final globalActivityProvider = Provider<AsyncValue<List<ActivityItem>>>((ref) {

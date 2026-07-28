@@ -67,9 +67,7 @@ class AmountDisplay extends StatelessWidget {
       formatted,
       maxLines: maxLines,
       overflow: overflow,
-      style: baseStyle?.copyWith(
-        color: color ?? baseStyle.color,
-      ),
+      style: baseStyle?.copyWith(color: color ?? baseStyle.color),
     );
   }
 }

@@ -37,7 +37,11 @@ class DioClient {
     Options? options,
   }) async {
     try {
-      return await dio.get<T>(path, queryParameters: queryParameters, options: options);
+      return await dio.get<T>(
+        path,
+        queryParameters: queryParameters,
+        options: options,
+      );
     } on DioException catch (e) {
       _rethrowTyped(e);
     }
@@ -98,14 +102,19 @@ class _AuthInterceptor extends QueuedInterceptor {
   final Dio _refreshDio;
 
   _AuthInterceptor(this._ref)
-      : _refreshDio = Dio(BaseOptions(
+    : _refreshDio = Dio(
+        BaseOptions(
           baseUrl: AppConstants.baseUrl,
           connectTimeout: Duration(milliseconds: AppConstants.connectTimeoutMs),
           receiveTimeout: Duration(milliseconds: AppConstants.receiveTimeoutMs),
-        ));
+        ),
+      );
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     // Changed: Added refresh endpoints to auth route skip list to prevent recursive auth interceptor loops
     if (options.path == ApiEndpoints.login ||
         options.path == ApiEndpoints.register ||
@@ -204,7 +213,7 @@ class _ErrorInterceptor extends Interceptor {
       final response = err.response;
       final statusCode = response?.statusCode;
       final data = response?.data;
-      
+
       final messageVal = data is Map<String, dynamic> ? data['message'] : null;
       final detailVal = data is Map<String, dynamic> ? data['detail'] : null;
       final codeVal = data is Map<String, dynamic> ? data['code'] : null;
@@ -233,28 +242,56 @@ class _ErrorInterceptor extends Interceptor {
 
       switch (statusCode) {
         case 401:
-          return handler.next(err.copyWith(error: UnauthorizedException(message, code)));
+          return handler.next(
+            err.copyWith(error: UnauthorizedException(message, code)),
+          );
         case 403:
-          return handler.next(err.copyWith(error: ForbiddenException(message, code)));
+          return handler.next(
+            err.copyWith(error: ForbiddenException(message, code)),
+          );
         case 404:
-          return handler.next(err.copyWith(error: NotFoundException(message, code)));
+          return handler.next(
+            err.copyWith(error: NotFoundException(message, code)),
+          );
         case 409:
-          return handler.next(err.copyWith(error: ConflictException(message, code)));
+          return handler.next(
+            err.copyWith(error: ConflictException(message, code)),
+          );
         case 422:
-          final errors = data is Map<String, dynamic> ? data['errors'] as Map<String, dynamic>? : null;
-          return handler.next(err.copyWith(error: BusinessRuleException(message: message, code: code, errors: errors)));
+          final errors = data is Map<String, dynamic>
+              ? data['errors'] as Map<String, dynamic>?
+              : null;
+          return handler.next(
+            err.copyWith(
+              error: BusinessRuleException(
+                message: message,
+                code: code,
+                errors: errors,
+              ),
+            ),
+          );
         default:
-          return handler.next(err.copyWith(
-            error: ServerException(message: message, code: code, statusCode: statusCode),
-          ));
+          return handler.next(
+            err.copyWith(
+              error: ServerException(
+                message: message,
+                code: code,
+                statusCode: statusCode,
+              ),
+            ),
+          );
       }
     } else if (err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.sendTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
         err.type == DioExceptionType.connectionError) {
-      return handler.next(err.copyWith(
-        error: const NetworkException('Connection timed out or network error occurred.'),
-      ));
+      return handler.next(
+        err.copyWith(
+          error: const NetworkException(
+            'Connection timed out or network error occurred.',
+          ),
+        ),
+      );
     }
 
     return handler.next(err);
@@ -266,15 +303,17 @@ final _rawDioProvider = Provider<Dio>((ref) {
   // Dio must persist for the app lifetime — requests in-flight
   // must not be orphaned by provider disposal during navigation.
   ref.keepAlive();
-  final dio = Dio(BaseOptions(
-    baseUrl: AppConstants.baseUrl,
-    connectTimeout: Duration(milliseconds: AppConstants.connectTimeoutMs),
-    receiveTimeout: Duration(milliseconds: AppConstants.receiveTimeoutMs),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  ));
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: AppConstants.baseUrl,
+      connectTimeout: Duration(milliseconds: AppConstants.connectTimeoutMs),
+      receiveTimeout: Duration(milliseconds: AppConstants.receiveTimeoutMs),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    ),
+  );
 
   dio.interceptors.addAll([
     _AuthInterceptor(ref),

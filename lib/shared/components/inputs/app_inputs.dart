@@ -106,7 +106,9 @@ class _PasswordFieldState extends State<PasswordField> {
       prefixIcon: const Icon(Icons.lock_outline, size: AppDesignTokens.iconMD),
       suffixIcon: IconButton(
         icon: Icon(
-          _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+          _obscureText
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
           size: AppDesignTokens.iconMD,
         ),
         onPressed: () => setState(() => _obscureText = !_obscureText),
@@ -138,7 +140,10 @@ class EmailField extends StatelessWidget {
       keyboardType: TextInputType.emailAddress,
       validator: validator,
       textInputAction: textInputAction,
-      prefixIcon: const Icon(Icons.email_outlined, size: AppDesignTokens.iconMD),
+      prefixIcon: const Icon(
+        Icons.email_outlined,
+        size: AppDesignTokens.iconMD,
+      ),
     );
   }
 }

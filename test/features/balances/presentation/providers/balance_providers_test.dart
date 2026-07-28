@@ -17,10 +17,7 @@ class FakeMyOverallBalancesNotifier extends MyOverallBalancesNotifier {
   final List<UserOverallBalance>? data;
   final bool isLoading;
 
-  FakeMyOverallBalancesNotifier({
-    this.data,
-    this.isLoading = false,
-  });
+  FakeMyOverallBalancesNotifier({this.data, this.isLoading = false});
 
   @override
   FutureOr<List<UserOverallBalance>> build() {
@@ -60,8 +57,9 @@ void main() {
 
   group('GroupBalancesNotifier', () {
     test('returns GroupBalances on successful build', () async {
-      when(() => mockRepository.getGroupBalances(groupId: 'group-1'))
-          .thenAnswer((_) async => tGroupBalances);
+      when(
+        () => mockRepository.getGroupBalances(groupId: 'group-1'),
+      ).thenAnswer((_) async => tGroupBalances);
 
       container = ProviderContainer(
         overrides: [
@@ -70,11 +68,15 @@ void main() {
         ],
       );
 
-      final result = await container.read(groupBalancesProvider('group-1').future);
+      final result = await container.read(
+        groupBalancesProvider('group-1').future,
+      );
 
       expect(result.balances.length, 1);
       expect(result.balances.first.amount, closeTo(500.0, 0.001));
-      verify(() => mockRepository.getGroupBalances(groupId: 'group-1')).called(1);
+      verify(
+        () => mockRepository.getGroupBalances(groupId: 'group-1'),
+      ).called(1);
     });
 
     test('returns empty GroupBalances when not authenticated', () async {
@@ -85,16 +87,21 @@ void main() {
         ],
       );
 
-      final result = await container.read(groupBalancesProvider('group-1').future);
+      final result = await container.read(
+        groupBalancesProvider('group-1').future,
+      );
 
       expect(result.balances.isEmpty, isTrue);
       expect(result.groupId, 'group-1');
-      verifyNever(() => mockRepository.getGroupBalances(groupId: any(named: 'groupId')));
+      verifyNever(
+        () => mockRepository.getGroupBalances(groupId: any(named: 'groupId')),
+      );
     });
 
     test('emits AsyncError when usecase throws', () async {
-      when(() => mockRepository.getGroupBalances(groupId: 'group-1'))
-          .thenThrow(const NetworkFailure('Network issue'));
+      when(
+        () => mockRepository.getGroupBalances(groupId: 'group-1'),
+      ).thenThrow(const NetworkFailure('Network issue'));
 
       container = ProviderContainer(
         overrides: [
@@ -128,7 +135,9 @@ void main() {
       container = ProviderContainer(
         overrides: [
           myOverallBalancesProvider.overrideWith(
-            () => FakeMyOverallBalancesNotifier(data: const [positiveBalance, negativeBalance]),
+            () => FakeMyOverallBalancesNotifier(
+              data: const [positiveBalance, negativeBalance],
+            ),
           ),
         ],
       );
@@ -169,7 +178,9 @@ void main() {
       container = ProviderContainer(
         overrides: [
           myOverallBalancesProvider.overrideWith(
-            () => FakeMyOverallBalancesNotifier(data: const [positiveBalance, negativeBalance]),
+            () => FakeMyOverallBalancesNotifier(
+              data: const [positiveBalance, negativeBalance],
+            ),
           ),
         ],
       );

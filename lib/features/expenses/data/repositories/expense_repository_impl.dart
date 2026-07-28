@@ -52,9 +52,7 @@ class ExpenseRepositoryImpl implements IExpenseRepository {
   }
 
   @override
-  Future<Expense> getExpenseById({
-    required String expenseId,
-  }) async {
+  Future<Expense> getExpenseById({required String expenseId}) async {
     try {
       final model = await _datasource.getExpenseById(expenseId: expenseId);
       await _localDatasource.cacheExpense(model);
@@ -111,9 +109,7 @@ class ExpenseRepositoryImpl implements IExpenseRepository {
   }
 
   @override
-  Future<Expense> reverseExpense({
-    required String expenseId,
-  }) async {
+  Future<Expense> reverseExpense({required String expenseId}) async {
     final model = await _datasource.reverseExpense(expenseId: expenseId);
     return model.toEntity();
   }
@@ -141,30 +137,29 @@ class ExpenseRepositoryImpl implements IExpenseRepository {
     final input = splitInput;
     if (input is EqualSplitInput) {
       body['participants_equal'] = input.participants
-          .map((p) => {
-                'user_id': p.userId,
-              })
+          .map((p) => {'user_id': p.userId})
           .toList();
     } else if (input is ExactSplitInput) {
       body['participants_exact'] = input.participants
-          .map((p) => {
-                'user_id': p.userId,
-                'owed_amount': p.owedAmount.toStringAsFixed(2),
-              })
+          .map(
+            (p) => {
+              'user_id': p.userId,
+              'owed_amount': p.owedAmount.toStringAsFixed(2),
+            },
+          )
           .toList();
     } else if (input is PercentageSplitInput) {
       body['participants_percentage'] = input.participants
-          .map((p) => {
-                'user_id': p.userId,
-                'percentage': p.percentage.toStringAsFixed(2),
-              })
+          .map(
+            (p) => {
+              'user_id': p.userId,
+              'percentage': p.percentage.toStringAsFixed(2),
+            },
+          )
           .toList();
     } else if (input is ShareSplitInput) {
       body['participants_share'] = input.participants
-          .map((p) => {
-                'user_id': p.userId,
-                'shares': p.shares,
-              })
+          .map((p) => {'user_id': p.userId, 'shares': p.shares})
           .toList();
     }
 

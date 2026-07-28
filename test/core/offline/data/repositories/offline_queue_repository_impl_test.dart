@@ -67,51 +67,66 @@ void main() {
 
   group('enqueue', () {
     test('writes jsonEncoded action with action_ key prefix', () async {
-      when(() => mockStorage.write<String>(any(), any(), any())).thenAnswer((_) async {});
+      when(
+        () => mockStorage.write<String>(any(), any(), any()),
+      ).thenAnswer((_) async {});
 
       await repository.enqueue(tAction1);
 
-      verify(() => mockStorage.write<String>(
-            boxName,
-            'action_action-1',
-            jsonEncode(tAction1.toJson()),
-          )).called(1);
+      verify(
+        () => mockStorage.write<String>(
+          boxName,
+          'action_action-1',
+          jsonEncode(tAction1.toJson()),
+        ),
+      ).called(1);
     });
 
     test('key contains action id', () async {
-      when(() => mockStorage.write<String>(any(), any(), any())).thenAnswer((_) async {});
+      when(
+        () => mockStorage.write<String>(any(), any(), any()),
+      ).thenAnswer((_) async {});
 
       await repository.enqueue(tAction2);
 
-      verify(() => mockStorage.write<String>(
-            boxName,
-            'action_action-2',
-            any(),
-          )).called(1);
+      verify(
+        () => mockStorage.write<String>(boxName, 'action_action-2', any()),
+      ).called(1);
     });
   });
 
   group('getPending', () {
     test('returns decoded actions sorted by createdAt asc', () async {
-      when(() => mockStorage.getKeys(boxName)).thenReturn(['action_action-2', 'action_action-1']);
-      when(() => mockStorage.read<String>(boxName, 'action_action-1'))
-          .thenReturn(jsonEncode(tAction1.toJson()));
-      when(() => mockStorage.read<String>(boxName, 'action_action-2'))
-          .thenReturn(jsonEncode(tAction2.toJson()));
+      when(
+        () => mockStorage.getKeys(boxName),
+      ).thenReturn(['action_action-2', 'action_action-1']);
+      when(
+        () => mockStorage.read<String>(boxName, 'action_action-1'),
+      ).thenReturn(jsonEncode(tAction1.toJson()));
+      when(
+        () => mockStorage.read<String>(boxName, 'action_action-2'),
+      ).thenReturn(jsonEncode(tAction2.toJson()));
 
       final pending = await repository.getPending();
 
       expect(pending.length, equals(2));
-      expect(pending.first.id, equals('action-1')); // 10:00 AM comes before 12:00 PM
+      expect(
+        pending.first.id,
+        equals('action-1'),
+      ); // 10:00 AM comes before 12:00 PM
       expect(pending.last.id, equals('action-2'));
     });
 
     test('excludes exhausted actions', () async {
-      when(() => mockStorage.getKeys(boxName)).thenReturn(['action_action-1', 'action_action-3']);
-      when(() => mockStorage.read<String>(boxName, 'action_action-1'))
-          .thenReturn(jsonEncode(tAction1.toJson()));
-      when(() => mockStorage.read<String>(boxName, 'action_action-3'))
-          .thenReturn(jsonEncode(tExhaustedAction.toJson()));
+      when(
+        () => mockStorage.getKeys(boxName),
+      ).thenReturn(['action_action-1', 'action_action-3']);
+      when(
+        () => mockStorage.read<String>(boxName, 'action_action-1'),
+      ).thenReturn(jsonEncode(tAction1.toJson()));
+      when(
+        () => mockStorage.read<String>(boxName, 'action_action-3'),
+      ).thenReturn(jsonEncode(tExhaustedAction.toJson()));
 
       final pending = await repository.getPending();
 
@@ -120,7 +135,9 @@ void main() {
     });
 
     test('returns empty list on storage error', () async {
-      when(() => mockStorage.getKeys(boxName)).thenThrow(Exception('Hive read error'));
+      when(
+        () => mockStorage.getKeys(boxName),
+      ).thenThrow(Exception('Hive read error'));
 
       final pending = await repository.getPending();
 
@@ -130,11 +147,15 @@ void main() {
 
   group('markCompleted', () {
     test('deletes action_ key', () async {
-      when(() => mockStorage.read<String>(boxName, 'action_action-1'))
-          .thenReturn(jsonEncode(tAction1.toJson()));
-      when(() => mockStorage.delete(boxName, 'action_action-1')).thenAnswer((_) async {});
-      when(() => mockStorage.write<String>(boxName, 'done_action-1', any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockStorage.read<String>(boxName, 'action_action-1'),
+      ).thenReturn(jsonEncode(tAction1.toJson()));
+      when(
+        () => mockStorage.delete(boxName, 'action_action-1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockStorage.write<String>(boxName, 'done_action-1', any()),
+      ).thenAnswer((_) async {});
 
       await repository.markCompleted('action-1');
 
@@ -142,49 +163,67 @@ void main() {
     });
 
     test('writes done_ key with timestamp', () async {
-      when(() => mockStorage.read<String>(boxName, 'action_action-1'))
-          .thenReturn(jsonEncode(tAction1.toJson()));
-      when(() => mockStorage.delete(boxName, 'action_action-1')).thenAnswer((_) async {});
-      when(() => mockStorage.write<String>(boxName, 'done_action-1', any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockStorage.read<String>(boxName, 'action_action-1'),
+      ).thenReturn(jsonEncode(tAction1.toJson()));
+      when(
+        () => mockStorage.delete(boxName, 'action_action-1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockStorage.write<String>(boxName, 'done_action-1', any()),
+      ).thenAnswer((_) async {});
 
       await repository.markCompleted('action-1');
 
-      verify(() => mockStorage.write<String>(boxName, 'done_action-1', any())).called(1);
+      verify(
+        () => mockStorage.write<String>(boxName, 'done_action-1', any()),
+      ).called(1);
     });
   });
 
   group('incrementRetry', () {
     test('increments retryCount by 1', () async {
-      when(() => mockStorage.read<String>(boxName, 'action_action-1'))
-          .thenReturn(jsonEncode(tAction1.toJson()));
-      when(() => mockStorage.write<String>(boxName, 'action_action-1', any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockStorage.read<String>(boxName, 'action_action-1'),
+      ).thenReturn(jsonEncode(tAction1.toJson()));
+      when(
+        () => mockStorage.write<String>(boxName, 'action_action-1', any()),
+      ).thenAnswer((_) async {});
 
       await repository.incrementRetry('action-1');
 
-      verify(() => mockStorage.write<String>(
-            boxName,
-            'action_action-1',
-            any(that: predicate<String>((str) {
+      verify(
+        () => mockStorage.write<String>(
+          boxName,
+          'action_action-1',
+          any(
+            that: predicate<String>((str) {
               final map = jsonDecode(str) as Map<String, dynamic>;
               return map['retryCount'] == 1;
-            })),
-          )).called(1);
+            }),
+          ),
+        ),
+      ).called(1);
     });
 
     test('calls markExhausted when new count >= maxRetries', () async {
       final nearExhausted = tAction1.copyWith(retryCount: 2);
-      when(() => mockStorage.read<String>(boxName, 'action_action-1'))
-          .thenReturn(jsonEncode(nearExhausted.toJson()));
-      when(() => mockStorage.delete(boxName, 'action_action-1')).thenAnswer((_) async {});
-      when(() => mockStorage.write<String>(boxName, 'exhausted_action-1', any()))
-          .thenAnswer((_) async {});
+      when(
+        () => mockStorage.read<String>(boxName, 'action_action-1'),
+      ).thenReturn(jsonEncode(nearExhausted.toJson()));
+      when(
+        () => mockStorage.delete(boxName, 'action_action-1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockStorage.write<String>(boxName, 'exhausted_action-1', any()),
+      ).thenAnswer((_) async {});
 
       await repository.incrementRetry('action-1');
 
       verify(() => mockStorage.delete(boxName, 'action_action-1')).called(1);
-      verify(() => mockStorage.write<String>(boxName, 'exhausted_action-1', any())).called(1);
+      verify(
+        () => mockStorage.write<String>(boxName, 'exhausted_action-1', any()),
+      ).called(1);
     });
   });
 }

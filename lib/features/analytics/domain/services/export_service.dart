@@ -16,9 +16,13 @@ class ExportService {
     buffer.write('📊 $groupName — Expense Summary\n');
     buffer.write('═══════════════════════\n');
     buffer.write('\n');
-    buffer.write('💰 Total Spent: ${_fmt(analytics.totalExpenses, currency)}\n');
+    buffer.write(
+      '💰 Total Spent: ${_fmt(analytics.totalExpenses, currency)}\n',
+    );
     buffer.write('📋 Expenses: ${analytics.totalExpenseCount}\n');
-    buffer.write('💸 Average: ${_fmt(analytics.averageExpenseAmount, currency)}\n');
+    buffer.write(
+      '💸 Average: ${_fmt(analytics.averageExpenseAmount, currency)}\n',
+    );
     buffer.write('\n');
     buffer.write('👥 Who Paid:\n');
 

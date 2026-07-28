@@ -13,10 +13,7 @@ class SettlementListTile extends ConsumerWidget {
   final Settlement settlement;
 
   /// Creates a const [SettlementListTile] instance.
-  const SettlementListTile({
-    super.key,
-    required this.settlement,
-  });
+  const SettlementListTile({super.key, required this.settlement});
 
   String _displayName(String? userId, String name, LoggedInUser? me) {
     if (me == null) return name;
@@ -51,8 +48,16 @@ class SettlementListTile extends ConsumerWidget {
     final relativeDate = _getRelativeDate(settlement.createdAt);
     final currentUser = ref.watch(currentUserProvider);
 
-    final fromLabel = _displayName(settlement.fromUserId, settlement.fromUserName, currentUser);
-    final toLabel = _paidToLabel(settlement.toUserId, settlement.toUserName, currentUser);
+    final fromLabel = _displayName(
+      settlement.fromUserId,
+      settlement.fromUserName,
+      currentUser,
+    );
+    final toLabel = _paidToLabel(
+      settlement.toUserId,
+      settlement.toUserName,
+      currentUser,
+    );
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
@@ -73,7 +78,9 @@ class SettlementListTile extends ConsumerWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
+                color: theme.colorScheme.primaryContainer.withValues(
+                  alpha: 0.5,
+                ),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -110,7 +117,8 @@ class SettlementListTile extends ConsumerWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (settlement.note != null && settlement.note!.trim().isNotEmpty) ...[
+                      if (settlement.note != null &&
+                          settlement.note!.trim().isNotEmpty) ...[
                         Text(
                           settlement.note!,
                           style: theme.textTheme.bodySmall?.copyWith(

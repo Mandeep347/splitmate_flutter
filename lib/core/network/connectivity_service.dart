@@ -18,10 +18,8 @@ class ConnectivityService implements IConnectivityService {
   final Future<List<InternetAddress>> Function(String host)? _addressLookup;
 
   /// Creates a new [ConnectivityService] instance.
-  ConnectivityService({
-    Connectivity? connectivity,
-    this._addressLookup,
-  }) : _connectivity = connectivity ?? Connectivity();
+  ConnectivityService({Connectivity? connectivity, this._addressLookup})
+    : _connectivity = connectivity ?? Connectivity();
 
   Stream<bool>? _debouncedStream;
 
@@ -41,8 +39,9 @@ class ConnectivityService implements IConnectivityService {
   Future<bool> _checkReachability() async {
     try {
       final lookupFn = _addressLookup ?? InternetAddress.lookup;
-      final result = await lookupFn('8.8.8.8')
-          .timeout(const Duration(seconds: 3));
+      final result = await lookupFn(
+        '8.8.8.8',
+      ).timeout(const Duration(seconds: 3));
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } catch (_) {
       return false;
@@ -58,7 +57,9 @@ class ConnectivityService implements IConnectivityService {
           return await _checkReachability();
         })
         .distinct()
-        .transform(const _DebounceTransformer<bool>(Duration(milliseconds: 500)));
+        .transform(
+          const _DebounceTransformer<bool>(Duration(milliseconds: 500)),
+        );
 
     return _debouncedStream!;
   }

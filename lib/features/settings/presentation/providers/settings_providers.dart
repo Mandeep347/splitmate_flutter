@@ -87,10 +87,11 @@ class SettingsNotifier extends AsyncNotifier<AppSettings> {
 }
 
 /// Provider exposing the local [AppSettings] configuration notifier.
-final settingsProvider =
-    AsyncNotifierProvider<SettingsNotifier, AppSettings>(() {
-  return SettingsNotifier();
-});
+final settingsProvider = AsyncNotifierProvider<SettingsNotifier, AppSettings>(
+  () {
+    return SettingsNotifier();
+  },
+);
 
 /// Synchronizes theme configurations from local settings with [themeModeProvider].
 final themeSyncProvider = Provider<void>((ref) {

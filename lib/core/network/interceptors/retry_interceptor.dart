@@ -18,12 +18,13 @@ class RetryInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final requestOptions = err.requestOptions;
     final extra = requestOptions.extra;
-    
+
     // Track retry count in the request metadata
     var retryCount = extra['retry_count'] as int? ?? 0;
 
     // Check if error is transient and we haven't reached limits
-    final isTransient = err.type == DioExceptionType.connectionTimeout ||
+    final isTransient =
+        err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.sendTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
         (err.error is SocketException);

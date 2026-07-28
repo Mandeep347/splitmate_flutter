@@ -9,9 +9,7 @@ class ArchiveGroupUseCase {
   final IGroupRepository repository;
 
   /// Creates a new [ArchiveGroupUseCase] instance.
-  const ArchiveGroupUseCase({
-    required this.repository,
-  });
+  const ArchiveGroupUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws a [Failure] on error.

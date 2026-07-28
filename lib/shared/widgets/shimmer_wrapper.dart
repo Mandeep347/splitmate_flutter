@@ -11,11 +11,7 @@ class ShimmerWrapper extends StatelessWidget {
   final bool isLoading;
 
   /// Creates a [ShimmerWrapper].
-  const ShimmerWrapper({
-    super.key,
-    required this.child,
-    this.isLoading = true,
-  });
+  const ShimmerWrapper({super.key, required this.child, this.isLoading = true});
 
   @override
   Widget build(BuildContext context) {

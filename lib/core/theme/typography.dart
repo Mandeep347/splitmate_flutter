@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 /// Design system typography rules for Splito.
 /// Implements standard Material 3 typography scales with fine-tuned line heights.
 abstract class AppTypography {
-  static const String fontFamily = 'Outfit'; // Premium modern sans-serif font family
+  static const String fontFamily =
+      'Outfit'; // Premium modern sans-serif font family
 
   static TextTheme get textTheme {
     return const TextTheme(

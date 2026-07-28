@@ -43,13 +43,17 @@ class SplitTypeSelector extends StatelessWidget {
                     border: Border.all(
                       color: isSelected
                           ? theme.colorScheme.primary
-                          : theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
+                          : theme.colorScheme.outlineVariant.withValues(
+                              alpha: 0.6,
+                            ),
                       width: isSelected ? 2.0 : 1.0,
                     ),
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: theme.colorScheme.primary.withValues(alpha: 0.18),
+                              color: theme.colorScheme.primary.withValues(
+                                alpha: 0.18,
+                              ),
                               blurRadius: 6,
                               offset: const Offset(0, 2),
                             ),
@@ -73,7 +77,9 @@ class SplitTypeSelector extends StatelessWidget {
                           child: Text(
                             type.displayLabel,
                             style: theme.textTheme.labelMedium?.copyWith(
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                               color: isSelected
                                   ? theme.colorScheme.onPrimaryContainer
                                   : theme.colorScheme.onSurfaceVariant,

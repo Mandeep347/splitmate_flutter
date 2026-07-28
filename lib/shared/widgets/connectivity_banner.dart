@@ -54,13 +54,9 @@ class _ConnectivityBannerState extends ConsumerState<ConnectivityBanner> {
         ? const Color(0xFFDC2626) // Sleek Crimson Red
         : const Color(0xFF10B981); // Emerald Green
 
-    final icon = isOffline
-        ? Icons.wifi_off_rounded
-        : Icons.wifi_rounded;
+    final icon = isOffline ? Icons.wifi_off_rounded : Icons.wifi_rounded;
 
-    final text = isOffline
-        ? 'No internet connection'
-        : 'Back online';
+    final text = isOffline ? 'No internet connection' : 'Back online';
 
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 350),

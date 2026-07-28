@@ -38,11 +38,15 @@ class QueuedRequest {
     return QueuedRequest(
       path: map['path'] as String,
       method: map['method'] as String,
-      data: map['data'] != null ? Map<String, dynamic>.from(map['data'] as Map) : null,
+      data: map['data'] != null
+          ? Map<String, dynamic>.from(map['data'] as Map)
+          : null,
       queryParameters: map['queryParameters'] != null
           ? Map<String, dynamic>.from(map['queryParameters'] as Map)
           : null,
-      headers: map['headers'] != null ? Map<String, String>.from(map['headers'] as Map) : null,
+      headers: map['headers'] != null
+          ? Map<String, String>.from(map['headers'] as Map)
+          : null,
       timestamp: map['timestamp'] as String,
     );
   }
@@ -80,7 +84,7 @@ class OfflineRequestQueue implements IOfflineRequestQueue {
   Future<void> enqueue(QueuedRequest request) async {
     final currentQueue = getQueue();
     currentQueue.add(request);
-    
+
     final jsonList = currentQueue.map((r) => r.toJson()).toList();
     await _hiveService.write<List<dynamic>>(
       StorageKeys.offlineQueueBox,

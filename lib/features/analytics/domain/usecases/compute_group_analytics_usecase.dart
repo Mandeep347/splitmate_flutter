@@ -9,9 +9,7 @@ class ComputeGroupAnalyticsUseCase {
   final IAnalyticsRepository repository;
 
   /// Creates a const [ComputeGroupAnalyticsUseCase] instance.
-  const ComputeGroupAnalyticsUseCase({
-    required this.repository,
-  });
+  const ComputeGroupAnalyticsUseCase({required this.repository});
 
   /// Executes the usecase.
   /// Throws [Failure] subclass on error.

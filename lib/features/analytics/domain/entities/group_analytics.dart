@@ -66,6 +66,8 @@ class GroupAnalytics {
   /// Returns null if there are no member contributions recorded.
   MemberContribution? get topPayer {
     if (memberContributions.isEmpty) return null;
-    return memberContributions.reduce((a, b) => a.totalPaid > b.totalPaid ? a : b);
+    return memberContributions.reduce(
+      (a, b) => a.totalPaid > b.totalPaid ? a : b,
+    );
   }
 }

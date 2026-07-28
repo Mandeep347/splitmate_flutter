@@ -9,9 +9,7 @@ class GetGroupActivitiesUseCase {
   final IActivityRepository repository;
 
   /// Creates a new [GetGroupActivitiesUseCase] instance.
-  const GetGroupActivitiesUseCase({
-    required this.repository,
-  });
+  const GetGroupActivitiesUseCase({required this.repository});
 
   /// Executes the usecase.
   Future<ActivityFeed> call({
@@ -43,7 +41,8 @@ extension on NetworkClientException {
   String? get errorCode {
     if (this is BusinessRuleException) {
       final br = this as BusinessRuleException;
-      return br.errors?['code'] as String? ?? br.errors?['errorCode'] as String?;
+      return br.errors?['code'] as String? ??
+          br.errors?['errorCode'] as String?;
     }
     return null;
   }

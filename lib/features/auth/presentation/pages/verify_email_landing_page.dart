@@ -18,16 +18,15 @@ class VerifyEmailLandingPage extends ConsumerStatefulWidget {
   final String token;
 
   /// Creates a new [VerifyEmailLandingPage] instance.
-  const VerifyEmailLandingPage({
-    super.key,
-    required this.token,
-  });
+  const VerifyEmailLandingPage({super.key, required this.token});
 
   @override
-  ConsumerState<VerifyEmailLandingPage> createState() => _VerifyEmailLandingPageState();
+  ConsumerState<VerifyEmailLandingPage> createState() =>
+      _VerifyEmailLandingPageState();
 }
 
-class _VerifyEmailLandingPageState extends ConsumerState<VerifyEmailLandingPage> {
+class _VerifyEmailLandingPageState
+    extends ConsumerState<VerifyEmailLandingPage> {
   bool _verifying = true;
   String? _successMessage;
   String? _errorMessage;
@@ -67,11 +66,14 @@ class _VerifyEmailLandingPageState extends ConsumerState<VerifyEmailLandingPage>
 
   Future<void> _verifyToken() async {
     try {
-      await ref.read(authNotifierProvider.notifier).verifyEmail(token: widget.token);
+      await ref
+          .read(authNotifierProvider.notifier)
+          .verifyEmail(token: widget.token);
       if (mounted) {
         setState(() {
           _verifying = false;
-          _successMessage = 'Your email has been verified successfully! You can now sign in.';
+          _successMessage =
+              'Your email has been verified successfully! You can now sign in.';
         });
       }
     } on Failure catch (e) {
@@ -85,7 +87,8 @@ class _VerifyEmailLandingPageState extends ConsumerState<VerifyEmailLandingPage>
       if (mounted) {
         setState(() {
           _verifying = false;
-          _errorMessage = 'An error occurred during verification. Please try again.';
+          _errorMessage =
+              'An error occurred during verification. Please try again.';
         });
       }
     }
@@ -95,7 +98,9 @@ class _VerifyEmailLandingPageState extends ConsumerState<VerifyEmailLandingPage>
     if (!_formKey.currentState!.validate() || _cooldownSeconds > 0) return;
     try {
       final email = _emailController.text.trim();
-      await ref.read(authNotifierProvider.notifier).resendVerification(email: email);
+      await ref
+          .read(authNotifierProvider.notifier)
+          .resendVerification(email: email);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -107,7 +112,9 @@ class _VerifyEmailLandingPageState extends ConsumerState<VerifyEmailLandingPage>
       }
     } catch (e) {
       if (mounted) {
-        final msg = e is Failure ? AppErrorHandler.toUserMessage(e) : 'Failed to resend link.';
+        final msg = e is Failure
+            ? AppErrorHandler.toUserMessage(e)
+            : 'Failed to resend link.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(msg),
@@ -131,13 +138,13 @@ class _VerifyEmailLandingPageState extends ConsumerState<VerifyEmailLandingPage>
         title: _verifying
             ? 'Verifying Email'
             : _successMessage != null
-                ? 'Email Verified'
-                : 'Verification Failed',
+            ? 'Email Verified'
+            : 'Verification Failed',
         subtitle: _verifying
             ? 'Please wait while we confirm your verification link...'
             : _successMessage != null
-                ? 'Your account is now active'
-                : 'The verification token was rejected',
+            ? 'Your account is now active'
+            : 'The verification token was rejected',
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -174,7 +181,8 @@ class _VerifyEmailLandingPageState extends ConsumerState<VerifyEmailLandingPage>
               ),
               const SizedBox(height: 24),
               Text(
-                _errorMessage ?? 'This verification link is invalid or has expired.',
+                _errorMessage ??
+                    'This verification link is invalid or has expired.',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.error,

@@ -37,7 +37,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
       try {
-        await ref.read(authNotifierProvider.notifier).login(
+        await ref
+            .read(authNotifierProvider.notifier)
+            .login(
               email: _emailController.text.trim(),
               password: _passwordController.text,
             );
@@ -52,38 +54,35 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // Listens to authentication state updates reactive-style
-    ref.listen<AsyncValue<AuthState>>(
-      authNotifierProvider,
-      (previous, next) {
-        if (next.valueOrNull is AuthStateAuthenticated) {
-          context.goNamed(AppRoutes.groupsName);
+    ref.listen<AsyncValue<AuthState>>(authNotifierProvider, (previous, next) {
+      if (next.valueOrNull is AuthStateAuthenticated) {
+        context.goNamed(AppRoutes.groupsName);
+        return;
+      }
+      // Show error and clear loading state on failure
+      if (next is AsyncError) {
+        final error = next.error;
+        if (error is Failure &&
+            (error.code?.toUpperCase() == 'EMAIL_NOT_VERIFIED' ||
+                error.message.toLowerCase().contains('verify your email'))) {
+          context.goNamed(
+            AppRoutes.verifyEmailPendingName,
+            extra: _emailController.text.trim(),
+          );
           return;
         }
-        // Show error and clear loading state on failure
-        if (next is AsyncError) {
-          final error = next.error;
-          if (error is Failure &&
-              (error.code?.toUpperCase() == 'EMAIL_NOT_VERIFIED' ||
-               error.message.toLowerCase().contains('verify your email'))) {
-            context.goNamed(
-              AppRoutes.verifyEmailPendingName,
-              extra: _emailController.text.trim(),
-            );
-            return;
-          }
-          final message = error is Failure
-              ? AppErrorHandler.toUserMessage(error)
-              : 'Login failed. Please try again.';
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(message),
-              backgroundColor: Theme.of(context).colorScheme.error,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        }
-      },
-    );
+        final message = error is Failure
+            ? AppErrorHandler.toUserMessage(error)
+            : 'Login failed. Please try again.';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    });
 
     final authAsync = ref.watch(authNotifierProvider);
     final isLoading = authAsync is AsyncLoading;
@@ -128,7 +127,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   icon: Icon(
                     _obscurePassword ? Icons.visibility_off : Icons.visibility,
                   ),
-                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                  onPressed: () =>
+                      setState(() => _obscurePassword = !_obscurePassword),
                 ),
                 onFieldSubmitted: (_) => _submit(),
                 validator: (value) {

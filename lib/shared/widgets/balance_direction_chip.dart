@@ -20,8 +20,12 @@ class BalanceDirectionChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final backgroundColor = isPositive ? Colors.green.shade50 : Colors.red.shade50;
-    final borderColor = isPositive ? Colors.green.shade200 : Colors.red.shade200;
+    final backgroundColor = isPositive
+        ? Colors.green.shade50
+        : Colors.red.shade50;
+    final borderColor = isPositive
+        ? Colors.green.shade200
+        : Colors.red.shade200;
     final textColor = isPositive ? Colors.green.shade700 : Colors.red.shade700;
 
     return Container(

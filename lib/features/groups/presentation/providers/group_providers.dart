@@ -42,7 +42,9 @@ final settledGroupIdsProvider = Provider<Set<String>>((ref) {
 
     if (balances != null && balances.isAllSettled) {
       final expensesState = ref.watch(groupExpensesProvider(group.id));
-      final expenses = expensesState.hasValue ? expensesState.requireValue : null;
+      final expenses = expensesState.hasValue
+          ? expensesState.requireValue
+          : null;
 
       if (expenses != null && expenses.totalItems > 0) {
         settledIds.add(group.id);
@@ -116,17 +118,18 @@ class MyGroupsNotifier extends AsyncNotifier<List<Group>> {
 }
 
 /// Provider exposing [MyGroupsNotifier].
-final myGroupsProvider =
-    AsyncNotifierProvider<MyGroupsNotifier, List<Group>>(() {
-  return MyGroupsNotifier();
-});
+final myGroupsProvider = AsyncNotifierProvider<MyGroupsNotifier, List<Group>>(
+  () {
+    return MyGroupsNotifier();
+  },
+);
 
 /// Notifier that manages fetching detailed records for a single group by ID.
 class GroupDetailNotifier extends FamilyAsyncNotifier<Group, String> {
   @override
   FutureOr<Group> build(String groupId) {
     ref.cacheWithTTL(ProviderTTL.longTTL);
-    
+
     final useCase = ref.watch(getGroupByIdUseCaseProvider);
     return useCase(groupId: groupId);
   }
@@ -140,8 +143,8 @@ class GroupDetailNotifier extends FamilyAsyncNotifier<Group, String> {
 /// Family provider exposing detailed group states.
 final groupDetailProvider =
     AsyncNotifierProvider.family<GroupDetailNotifier, Group, String>(() {
-  return GroupDetailNotifier();
-});
+      return GroupDetailNotifier();
+    });
 
 /// Notifier executing the creation of a new group.
 class CreateGroupNotifier extends AsyncNotifier<void> {
@@ -151,10 +154,7 @@ class CreateGroupNotifier extends AsyncNotifier<void> {
   }
 
   /// Triggers group creation.
-  Future<void> create({
-    required String name,
-    required String currency,
-  }) async {
+  Future<void> create({required String name, required String currency}) async {
     state = const AsyncLoading<void>();
     try {
       final useCase = ref.read(createGroupUseCaseProvider);
@@ -169,10 +169,11 @@ class CreateGroupNotifier extends AsyncNotifier<void> {
 }
 
 /// Provider exposing [CreateGroupNotifier].
-final createGroupProvider =
-    AsyncNotifierProvider<CreateGroupNotifier, void>(() {
-  return CreateGroupNotifier();
-});
+final createGroupProvider = AsyncNotifierProvider<CreateGroupNotifier, void>(
+  () {
+    return CreateGroupNotifier();
+  },
+);
 
 /// Notifier executing group profile details update.
 class UpdateGroupNotifier extends AsyncNotifier<void> {
@@ -201,10 +202,11 @@ class UpdateGroupNotifier extends AsyncNotifier<void> {
 }
 
 /// Provider exposing [UpdateGroupNotifier].
-final updateGroupProvider =
-    AsyncNotifierProvider<UpdateGroupNotifier, void>(() {
-  return UpdateGroupNotifier();
-});
+final updateGroupProvider = AsyncNotifierProvider<UpdateGroupNotifier, void>(
+  () {
+    return UpdateGroupNotifier();
+  },
+);
 
 /// Notifier executing group archiving operations.
 class ArchiveGroupNotifier extends AsyncNotifier<void> {
@@ -230,13 +232,15 @@ class ArchiveGroupNotifier extends AsyncNotifier<void> {
 }
 
 /// Provider exposing [ArchiveGroupNotifier].
-final archiveGroupProvider =
-    AsyncNotifierProvider<ArchiveGroupNotifier, void>(() {
-  return ArchiveGroupNotifier();
-});
+final archiveGroupProvider = AsyncNotifierProvider<ArchiveGroupNotifier, void>(
+  () {
+    return ArchiveGroupNotifier();
+  },
+);
 
 /// Notifier that manages fetching and listing the group members.
-class GroupMembersNotifier extends FamilyAsyncNotifier<List<GroupMember>, String> {
+class GroupMembersNotifier
+    extends FamilyAsyncNotifier<List<GroupMember>, String> {
   @override
   FutureOr<List<GroupMember>> build(String groupId) {
     final useCase = ref.watch(getMembersUseCaseProvider);
@@ -253,10 +257,14 @@ class GroupMembersNotifier extends FamilyAsyncNotifier<List<GroupMember>, String
 }
 
 /// Family provider exposing the member list of a group.
-final groupMembersProvider = AsyncNotifierProvider.family<
-    GroupMembersNotifier, List<GroupMember>, String>(() {
-  return GroupMembersNotifier();
-});
+final groupMembersProvider =
+    AsyncNotifierProvider.family<
+      GroupMembersNotifier,
+      List<GroupMember>,
+      String
+    >(() {
+      return GroupMembersNotifier();
+    });
 
 /// Notifier executing member invitation / additions.
 class AddMemberNotifier extends AsyncNotifier<void> {
@@ -266,10 +274,7 @@ class AddMemberNotifier extends AsyncNotifier<void> {
   }
 
   /// Adds a new member to a group by email.
-  Future<void> add({
-    required String groupId,
-    required String email,
-  }) async {
+  Future<void> add({required String groupId, required String email}) async {
     state = const AsyncLoading<void>();
 
     final isOnline = ref.read(isOnlineProvider);
@@ -299,7 +304,9 @@ class AddMemberNotifier extends AsyncNotifier<void> {
         joinedAt: DateTime.now(),
       );
 
-      ref.read(groupMembersProvider(groupId).notifier).prependMember(localMember);
+      ref
+          .read(groupMembersProvider(groupId).notifier)
+          .prependMember(localMember);
       ref.invalidate(pendingCountProvider);
 
       state = const AsyncData<void>(null);
@@ -322,8 +329,7 @@ class AddMemberNotifier extends AsyncNotifier<void> {
 }
 
 /// Provider exposing [AddMemberNotifier].
-final addMemberProvider =
-    AsyncNotifierProvider<AddMemberNotifier, void>(() {
+final addMemberProvider = AsyncNotifierProvider<AddMemberNotifier, void>(() {
   return AddMemberNotifier();
 });
 
@@ -335,10 +341,7 @@ class RemoveMemberNotifier extends AsyncNotifier<void> {
   }
 
   /// Removes an existing member from a group.
-  Future<void> remove({
-    required String groupId,
-    required String userId,
-  }) async {
+  Future<void> remove({required String groupId, required String userId}) async {
     state = const AsyncLoading<void>();
     try {
       final useCase = ref.read(removeMemberUseCaseProvider);
@@ -354,7 +357,8 @@ class RemoveMemberNotifier extends AsyncNotifier<void> {
 }
 
 /// Provider exposing [RemoveMemberNotifier].
-final removeMemberProvider =
-    AsyncNotifierProvider<RemoveMemberNotifier, void>(() {
-  return RemoveMemberNotifier();
-});
+final removeMemberProvider = AsyncNotifierProvider<RemoveMemberNotifier, void>(
+  () {
+    return RemoveMemberNotifier();
+  },
+);

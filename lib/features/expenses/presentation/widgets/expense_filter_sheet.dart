@@ -32,10 +32,8 @@ class ExpenseFilterSheet extends ConsumerStatefulWidget {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (context) => ExpenseFilterSheet(
-        groupId: groupId,
-        members: members,
-      ),
+      builder: (context) =>
+          ExpenseFilterSheet(groupId: groupId, members: members),
     );
   }
 
@@ -108,10 +106,7 @@ class _ExpenseFilterSheetState extends ConsumerState<ExpenseFilterSheet> {
           child: const Text('Clear'),
         ),
         actions: [
-          TextButton(
-            onPressed: _applyFilters,
-            child: const Text('Apply'),
-          ),
+          TextButton(onPressed: _applyFilters, child: const Text('Apply')),
         ],
       ),
       body: ListView(
@@ -192,10 +187,7 @@ class _ExpenseFilterSheetState extends ConsumerState<ExpenseFilterSheet> {
             }).toList(),
           ),
           SizedBox(height: ext.spaceXL),
-          PrimaryButton(
-            label: 'Apply Filters',
-            onPressed: _applyFilters,
-          ),
+          PrimaryButton(label: 'Apply Filters', onPressed: _applyFilters),
         ],
       ),
     );

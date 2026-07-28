@@ -41,7 +41,9 @@ class _CreateGroupSheetState extends ConsumerState<CreateGroupSheet> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      ref.read(createGroupProvider.notifier).create(
+      ref
+          .read(createGroupProvider.notifier)
+          .create(
             name: _nameController.text.trim(),
             currency: _selectedCurrency,
           );
@@ -60,8 +62,9 @@ class _CreateGroupSheetState extends ConsumerState<CreateGroupSheet> {
       if (next is AsyncData<void> && previous is AsyncLoading<void>) {
         Navigator.of(context).pop();
       } else if (next is AsyncError<void> && previous is AsyncLoading<void>) {
-        final errorMessage =
-            next.error is Failure ? (next.error as Failure).message : 'Failed to create group.';
+        final errorMessage = next.error is Failure
+            ? (next.error as Failure).message
+            : 'Failed to create group.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),

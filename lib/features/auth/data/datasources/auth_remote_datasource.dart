@@ -20,18 +20,13 @@ abstract interface class IAuthRemoteDatasource {
   });
 
   /// Calls POST /auth/refresh with the refresh token.
-  Future<TokenResponseModel> refresh({
-    required String refreshToken,
-  });
+  Future<TokenResponseModel> refresh({required String refreshToken});
 
   /// Calls GET /users/me to fetch active user profile details.
   Future<UserModel> getMe();
 
   /// Calls PATCH /users/me to update user profile parameters.
-  Future<UserModel> updateMe({
-    String? name,
-    String? preferredCurrency,
-  });
+  Future<UserModel> updateMe({String? name, String? preferredCurrency});
 
   /// Calls POST /auth/verify-email with verification token.
   Future<void> verifyEmail({required String token});
@@ -43,7 +38,10 @@ abstract interface class IAuthRemoteDatasource {
   Future<void> forgotPassword({required String email});
 
   /// Calls POST /auth/reset-password with reset token and new password.
-  Future<void> resetPassword({required String token, required String newPassword});
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  });
 }
 
 /// Remote datasource implementation using [DioClient].
@@ -59,10 +57,7 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   }) async {
     final response = await _client.post<Map<String, dynamic>>(
       ApiEndpoints.login,
-      data: {
-        'email': email,
-        'password': password,
-      },
+      data: {'email': email, 'password': password},
     );
     return TokenResponseModel.fromJson(response.data!);
   }
@@ -75,24 +70,16 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   }) async {
     final response = await _client.post<Map<String, dynamic>>(
       ApiEndpoints.register,
-      data: {
-        'name': name,
-        'email': email,
-        'password': password,
-      },
+      data: {'name': name, 'email': email, 'password': password},
     );
     return UserModel.fromJson(response.data!);
   }
 
   @override
-  Future<TokenResponseModel> refresh({
-    required String refreshToken,
-  }) async {
+  Future<TokenResponseModel> refresh({required String refreshToken}) async {
     final response = await _client.post<Map<String, dynamic>>(
       ApiEndpoints.refresh,
-      data: {
-        'refresh_token': refreshToken,
-      },
+      data: {'refresh_token': refreshToken},
     );
     return TokenResponseModel.fromJson(response.data!);
   }
@@ -106,13 +93,11 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   }
 
   @override
-  Future<UserModel> updateMe({
-    String? name,
-    String? preferredCurrency,
-  }) async {
+  Future<UserModel> updateMe({String? name, String? preferredCurrency}) async {
     final data = <String, dynamic>{};
     if (name != null) data['name'] = name;
-    if (preferredCurrency != null) data['preferred_currency'] = preferredCurrency;
+    if (preferredCurrency != null)
+      data['preferred_currency'] = preferredCurrency;
 
     final response = await _client.patch<Map<String, dynamic>>(
       ApiEndpoints.usersMe,
@@ -146,13 +131,13 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource {
   }
 
   @override
-  Future<void> resetPassword({required String token, required String newPassword}) async {
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
     await _client.post<dynamic>(
       ApiEndpoints.resetPassword,
-      data: {
-        'token': token,
-        'new_password': newPassword,
-      },
+      data: {'token': token, 'new_password': newPassword},
     );
   }
 }

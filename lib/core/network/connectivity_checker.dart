@@ -14,8 +14,9 @@ class ConnectivityChecker implements IConnectivityChecker {
   @override
   Future<bool> isOnline() async {
     try {
-      final result = await InternetAddress.lookup('8.8.8.8')
-          .timeout(const Duration(seconds: 3));
+      final result = await InternetAddress.lookup(
+        '8.8.8.8',
+      ).timeout(const Duration(seconds: 3));
       return result.isNotEmpty && result.first.rawAddress.isNotEmpty;
     } on SocketException catch (_) {
       return false;

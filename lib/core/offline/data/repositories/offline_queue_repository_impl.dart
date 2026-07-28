@@ -82,7 +82,11 @@ class OfflineQueueRepositoryImpl implements IOfflineQueueRepository {
       if (updatedAction.isExhausted) {
         await markExhausted(actionId);
       } else {
-        await storage.write<String>(_boxName, actionKey, jsonEncode(updatedAction.toJson()));
+        await storage.write<String>(
+          _boxName,
+          actionKey,
+          jsonEncode(updatedAction.toJson()),
+        );
       }
     } catch (e) {
       debugPrint('Error incrementing retry for action $actionId: $e');
@@ -100,7 +104,9 @@ class OfflineQueueRepositoryImpl implements IOfflineQueueRepository {
     if (raw != null) {
       await storage.write<String>(_boxName, exhaustedKey, raw);
     }
-    debugPrint('WARNING: OfflineAction $actionId reached max retries and was marked as exhausted.');
+    debugPrint(
+      'WARNING: OfflineAction $actionId reached max retries and was marked as exhausted.',
+    );
   }
 
   @override

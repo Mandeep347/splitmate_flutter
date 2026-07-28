@@ -6,7 +6,8 @@ import 'package:splito_flutter/features/notifications/domain/entities/app_notifi
 import 'package:splito_flutter/features/notifications/domain/repositories/i_notification_repository.dart';
 import 'package:splito_flutter/features/notifications/domain/usecases/mark_notification_read_usecase.dart';
 
-class MockINotificationRepository extends Mock implements INotificationRepository {}
+class MockINotificationRepository extends Mock
+    implements INotificationRepository {}
 
 void main() {
   late MockINotificationRepository mockRepository;
@@ -29,18 +30,22 @@ void main() {
 
   group('MarkNotificationReadUseCase', () {
     test('calls repository with correct notificationId', () async {
-      when(() => mockRepository.markAsRead(notificationId: 'notif-1'))
-          .thenAnswer((_) async => tNotification);
+      when(
+        () => mockRepository.markAsRead(notificationId: 'notif-1'),
+      ).thenAnswer((_) async => tNotification);
 
       final result = await usecase(notificationId: 'notif-1');
 
       expect(result, equals(tNotification));
-      verify(() => mockRepository.markAsRead(notificationId: 'notif-1')).called(1);
+      verify(
+        () => mockRepository.markAsRead(notificationId: 'notif-1'),
+      ).called(1);
     });
 
     test('maps NetworkException to NetworkFailure', () async {
-      when(() => mockRepository.markAsRead(notificationId: 'notif-1'))
-          .thenThrow(const NetworkException('No connection'));
+      when(
+        () => mockRepository.markAsRead(notificationId: 'notif-1'),
+      ).thenThrow(const NetworkException('No connection'));
 
       expect(
         () => usecase(notificationId: 'notif-1'),
@@ -49,8 +54,9 @@ void main() {
     });
 
     test('completes without error on success', () async {
-      when(() => mockRepository.markAsRead(notificationId: 'notif-1'))
-          .thenAnswer((_) async => tNotification);
+      when(
+        () => mockRepository.markAsRead(notificationId: 'notif-1'),
+      ).thenAnswer((_) async => tNotification);
 
       final result = await usecase(notificationId: 'notif-1');
       expect(result.isRead, isTrue);

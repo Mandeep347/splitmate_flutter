@@ -43,16 +43,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     if (_formKey.currentState?.validate() ?? false) {
       try {
         final email = _emailController.text.trim();
-        await ref.read(authNotifierProvider.notifier).register(
+        await ref
+            .read(authNotifierProvider.notifier)
+            .register(
               name: _nameController.text.trim(),
               email: email,
               password: _passwordController.text,
             );
         if (mounted) {
-          context.goNamed(
-            AppRoutes.verifyEmailPendingName,
-            extra: email,
-          );
+          context.goNamed(AppRoutes.verifyEmailPendingName, extra: email);
         }
       } catch (_) {
         // Error is already handled via ref.listen on authNotifierProvider.
@@ -63,25 +62,22 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     // Listens to authentication state updates reactive-style
-    ref.listen<AsyncValue<AuthState>>(
-      authNotifierProvider,
-      (previous, next) {
-        // Show error and clear loading state on failure
-        if (next is AsyncError) {
-          final error = next.error;
-          final message = error is Failure
-              ? error.message
-              : 'Registration failed. Please try again.';
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(message),
-              backgroundColor: Theme.of(context).colorScheme.error,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        }
-      },
-    );
+    ref.listen<AsyncValue<AuthState>>(authNotifierProvider, (previous, next) {
+      // Show error and clear loading state on failure
+      if (next is AsyncError) {
+        final error = next.error;
+        final message = error is Failure
+            ? error.message
+            : 'Registration failed. Please try again.';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    });
 
     final authAsync = ref.watch(authNotifierProvider);
     final isLoading = authAsync is AsyncLoading;
@@ -91,7 +87,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       isLoading: isLoading,
       child: AuthFormWrapper(
         title: 'Create Account',
-        subtitle: 'Sign up to start splitting expenses with ${AppBranding.name}',
+        subtitle:
+            'Sign up to start splitting expenses with ${AppBranding.name}',
         child: Form(
           key: _formKey,
           child: Column(
@@ -143,7 +140,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   icon: Icon(
                     _obscurePassword ? Icons.visibility_off : Icons.visibility,
                   ),
-                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                  onPressed: () =>
+                      setState(() => _obscurePassword = !_obscurePassword),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -164,9 +162,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 prefixIcon: const Icon(Icons.lock_outline),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                    _obscureConfirmPassword
+                        ? Icons.visibility_off
+                        : Icons.visibility,
                   ),
-                  onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                  onPressed: () => setState(
+                    () => _obscureConfirmPassword = !_obscureConfirmPassword,
+                  ),
                 ),
                 onFieldSubmitted: (_) => _submit(),
                 validator: (value) {
@@ -188,7 +190,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     style: theme.textTheme.bodySmall,
                   ),
                   GestureDetector(
-                    onTap: () => context.pushNamed(AppRoutes.termsOfServiceName),
+                    onTap: () =>
+                        context.pushNamed(AppRoutes.termsOfServiceName),
                     child: Text(
                       'Terms of Service',
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -197,10 +200,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ),
                     ),
                   ),
-                  Text(
-                    ' and ',
-                    style: theme.textTheme.bodySmall,
-                  ),
+                  Text(' and ', style: theme.textTheme.bodySmall),
                   GestureDetector(
                     onTap: () => context.pushNamed(AppRoutes.privacyPolicyName),
                     child: Text(
@@ -211,10 +211,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ),
                     ),
                   ),
-                  Text(
-                    '.',
-                    style: theme.textTheme.bodySmall,
-                  ),
+                  Text('.', style: theme.textTheme.bodySmall),
                 ],
               ),
               const SizedBox(height: 24),

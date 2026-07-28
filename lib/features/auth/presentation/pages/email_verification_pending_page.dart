@@ -18,16 +18,15 @@ class EmailVerificationPendingPage extends ConsumerStatefulWidget {
   final String email;
 
   /// Creates a new [EmailVerificationPendingPage] instance.
-  const EmailVerificationPendingPage({
-    super.key,
-    required this.email,
-  });
+  const EmailVerificationPendingPage({super.key, required this.email});
 
   @override
-  ConsumerState<EmailVerificationPendingPage> createState() => _EmailVerificationPendingPageState();
+  ConsumerState<EmailVerificationPendingPage> createState() =>
+      _EmailVerificationPendingPageState();
 }
 
-class _EmailVerificationPendingPageState extends ConsumerState<EmailVerificationPendingPage> {
+class _EmailVerificationPendingPageState
+    extends ConsumerState<EmailVerificationPendingPage> {
   static const int _twentyFourHoursMs = 24 * 60 * 60 * 1000;
   Timer? _timer;
 
@@ -47,7 +46,10 @@ class _EmailVerificationPendingPageState extends ConsumerState<EmailVerification
 
   int? _getRemainingCooldownMs() {
     final hive = ref.read(hiveStorageServiceProvider);
-    final int? lastTs = hive.read<int>(StorageKeys.settingsBox, 'last_resend_ts');
+    final int? lastTs = hive.read<int>(
+      StorageKeys.settingsBox,
+      'last_resend_ts',
+    );
     if (lastTs == null) return null;
 
     final now = DateTime.now().millisecondsSinceEpoch;
@@ -71,7 +73,9 @@ class _EmailVerificationPendingPageState extends ConsumerState<EmailVerification
   Future<void> _resend() async {
     if (_getRemainingCooldownMs() != null) return;
     try {
-      await ref.read(authNotifierProvider.notifier).resendVerification(email: widget.email);
+      await ref
+          .read(authNotifierProvider.notifier)
+          .resendVerification(email: widget.email);
       final hive = ref.read(hiveStorageServiceProvider);
       await hive.write<int>(
         StorageKeys.settingsBox,
@@ -89,7 +93,9 @@ class _EmailVerificationPendingPageState extends ConsumerState<EmailVerification
       }
     } catch (e) {
       if (mounted) {
-        final message = e is Failure ? e.message : 'Failed to resend verification email.';
+        final message = e is Failure
+            ? e.message
+            : 'Failed to resend verification email.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),

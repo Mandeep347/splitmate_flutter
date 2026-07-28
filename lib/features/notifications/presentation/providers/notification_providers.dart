@@ -15,16 +15,19 @@ import 'package:splito_flutter/core/utils/provider_ttl.dart';
 // ============================================================================
 
 /// Provider exposing [GetNotificationsUseCase].
-final getNotificationsUseCaseProvider = Provider<GetNotificationsUseCase>((ref) {
+final getNotificationsUseCaseProvider = Provider<GetNotificationsUseCase>((
+  ref,
+) {
   final repository = ref.watch(notificationRepositoryProvider);
   return GetNotificationsUseCase(repository: repository);
 });
 
 /// Provider exposing [MarkNotificationReadUseCase].
-final markNotificationReadUseCaseProvider = Provider<MarkNotificationReadUseCase>((ref) {
-  final repository = ref.watch(notificationRepositoryProvider);
-  return MarkNotificationReadUseCase(repository: repository);
-});
+final markNotificationReadUseCaseProvider =
+    Provider<MarkNotificationReadUseCase>((ref) {
+      final repository = ref.watch(notificationRepositoryProvider);
+      return MarkNotificationReadUseCase(repository: repository);
+    });
 
 /// Provider exposing [MarkAllReadUseCase].
 final markAllReadUseCaseProvider = Provider<MarkAllReadUseCase>((ref) {
@@ -50,9 +53,9 @@ class NotificationsNotifier extends AsyncNotifier<List<AppNotification>> {
     if (!isAuthenticated) {
       return const [];
     }
-    
+
     ref.cacheWithTTL(ProviderTTL.shortTTL);
-    
+
     final useCase = ref.watch(getNotificationsUseCaseProvider);
     return useCase();
   }
@@ -66,8 +69,8 @@ class NotificationsNotifier extends AsyncNotifier<List<AppNotification>> {
 /// Provider exposing the user notifications list.
 final notificationsProvider =
     AsyncNotifierProvider<NotificationsNotifier, List<AppNotification>>(() {
-  return NotificationsNotifier();
-});
+      return NotificationsNotifier();
+    });
 
 /// Notifier managing total unread notifications count.
 class UnreadCountNotifier extends AsyncNotifier<int> {
@@ -123,9 +126,10 @@ class MarkReadNotifier extends AsyncNotifier<AppNotification?> {
 }
 
 /// Provider exposing the [MarkReadNotifier].
-final markReadProvider = AsyncNotifierProvider<MarkReadNotifier, AppNotification?>(() {
-  return MarkReadNotifier();
-});
+final markReadProvider =
+    AsyncNotifierProvider<MarkReadNotifier, AppNotification?>(() {
+      return MarkReadNotifier();
+    });
 
 /// Notifier marking all notifications as read.
 class MarkAllReadNotifier extends AsyncNotifier<int?> {
@@ -153,6 +157,8 @@ class MarkAllReadNotifier extends AsyncNotifier<int?> {
 }
 
 /// Provider exposing the [MarkAllReadNotifier].
-final markAllReadProvider = AsyncNotifierProvider<MarkAllReadNotifier, int?>(() {
-  return MarkAllReadNotifier();
-});
+final markAllReadProvider = AsyncNotifierProvider<MarkAllReadNotifier, int?>(
+  () {
+    return MarkAllReadNotifier();
+  },
+);

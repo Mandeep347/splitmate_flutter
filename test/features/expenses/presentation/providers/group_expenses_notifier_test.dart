@@ -73,9 +73,7 @@ void main() {
   setUp(() {
     mockRepository = MockIExpenseRepository();
     container = ProviderContainer(
-      overrides: [
-        expenseRepositoryProvider.overrideWithValue(mockRepository),
-      ],
+      overrides: [expenseRepositoryProvider.overrideWithValue(mockRepository)],
     );
   });
 
@@ -85,13 +83,17 @@ void main() {
 
   group('GroupExpensesNotifier', () {
     test('emits PaginatedExpenses on successful build', () async {
-      when(() => mockRepository.getGroupExpenses(
-            groupId: 'group-1',
-            page: 1,
-            limit: 20,
-          )).thenAnswer((_) async => tPaginatedPage1);
+      when(
+        () => mockRepository.getGroupExpenses(
+          groupId: 'group-1',
+          page: 1,
+          limit: 20,
+        ),
+      ).thenAnswer((_) async => tPaginatedPage1);
 
-      final result = await container.read(groupExpensesProvider('group-1').future);
+      final result = await container.read(
+        groupExpensesProvider('group-1').future,
+      );
 
       expect(result.items.length, 1);
       expect(result.items.first, tExpense1);
@@ -99,23 +101,29 @@ void main() {
     });
 
     test('loadNextPage merges new items with existing', () async {
-      when(() => mockRepository.getGroupExpenses(
-            groupId: 'group-1',
-            page: 1,
-            limit: 20,
-          )).thenAnswer((_) async => tPaginatedPage1);
+      when(
+        () => mockRepository.getGroupExpenses(
+          groupId: 'group-1',
+          page: 1,
+          limit: 20,
+        ),
+      ).thenAnswer((_) async => tPaginatedPage1);
 
-      when(() => mockRepository.getGroupExpenses(
-            groupId: 'group-1',
-            page: 2,
-            limit: 20,
-          )).thenAnswer((_) async => tPaginatedPage2);
+      when(
+        () => mockRepository.getGroupExpenses(
+          groupId: 'group-1',
+          page: 2,
+          limit: 20,
+        ),
+      ).thenAnswer((_) async => tPaginatedPage2);
 
       // Wait for initial build to complete
       await container.read(groupExpensesProvider('group-1').future);
 
       // Trigger loadNextPage
-      await container.read(groupExpensesProvider('group-1').notifier).loadNextPage();
+      await container
+          .read(groupExpensesProvider('group-1').notifier)
+          .loadNextPage();
 
       final state = container.read(groupExpensesProvider('group-1'));
 
@@ -125,24 +133,30 @@ void main() {
     });
 
     test('loadNextPage does not wipe existing list on failure', () async {
-      when(() => mockRepository.getGroupExpenses(
-            groupId: 'group-1',
-            page: 1,
-            limit: 20,
-          )).thenAnswer((_) async => tPaginatedPage1);
+      when(
+        () => mockRepository.getGroupExpenses(
+          groupId: 'group-1',
+          page: 1,
+          limit: 20,
+        ),
+      ).thenAnswer((_) async => tPaginatedPage1);
 
-      when(() => mockRepository.getGroupExpenses(
-            groupId: 'group-1',
-            page: 2,
-            limit: 20,
-          )).thenThrow(const NetworkFailure('Offline'));
+      when(
+        () => mockRepository.getGroupExpenses(
+          groupId: 'group-1',
+          page: 2,
+          limit: 20,
+        ),
+      ).thenThrow(const NetworkFailure('Offline'));
 
       // Wait for initial build
       await container.read(groupExpensesProvider('group-1').future);
 
       // Trigger loadNextPage and catch expected exception
       try {
-        await container.read(groupExpensesProvider('group-1').notifier).loadNextPage();
+        await container
+            .read(groupExpensesProvider('group-1').notifier)
+            .loadNextPage();
       } catch (_) {
         // Expected exception
       }
@@ -156,11 +170,13 @@ void main() {
     });
 
     test('emits AsyncError when initial load throws', () async {
-      when(() => mockRepository.getGroupExpenses(
-            groupId: 'group-1',
-            page: 1,
-            limit: 20,
-          )).thenThrow(const NetworkFailure('Offline'));
+      when(
+        () => mockRepository.getGroupExpenses(
+          groupId: 'group-1',
+          page: 1,
+          limit: 20,
+        ),
+      ).thenThrow(const NetworkFailure('Offline'));
 
       expect(
         () => container.read(groupExpensesProvider('group-1').future),

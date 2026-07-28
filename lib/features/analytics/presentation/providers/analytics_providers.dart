@@ -19,21 +19,25 @@ import 'package:splito_flutter/core/events/app_events.dart';
 // ============================================================================
 
 /// Provider exposing [ComputeGroupAnalyticsUseCase].
-final computeGroupAnalyticsUseCaseProvider = Provider<ComputeGroupAnalyticsUseCase>((ref) {
-  return ComputeGroupAnalyticsUseCase(
-    repository: ref.watch(analyticsRepositoryProvider),
-  );
-});
+final computeGroupAnalyticsUseCaseProvider =
+    Provider<ComputeGroupAnalyticsUseCase>((ref) {
+      return ComputeGroupAnalyticsUseCase(
+        repository: ref.watch(analyticsRepositoryProvider),
+      );
+    });
 
 /// Provider exposing [GetExpenseSearchResultsUseCase].
-final getExpenseSearchResultsUseCaseProvider = Provider<GetExpenseSearchResultsUseCase>((ref) {
-  return GetExpenseSearchResultsUseCase(
-    expenseRepository: ref.watch(expenseRepositoryProvider),
-  );
-});
+final getExpenseSearchResultsUseCaseProvider =
+    Provider<GetExpenseSearchResultsUseCase>((ref) {
+      return GetExpenseSearchResultsUseCase(
+        expenseRepository: ref.watch(expenseRepositoryProvider),
+      );
+    });
 
 /// Provider exposing [GetUserAnalyticsUseCase].
-final getUserAnalyticsUseCaseProvider = Provider<GetUserAnalyticsUseCase>((ref) {
+final getUserAnalyticsUseCaseProvider = Provider<GetUserAnalyticsUseCase>((
+  ref,
+) {
   return GetUserAnalyticsUseCase(
     repository: ref.watch(analyticsRepositoryProvider),
   );
@@ -44,7 +48,8 @@ final getUserAnalyticsUseCaseProvider = Provider<GetUserAnalyticsUseCase>((ref) 
 // ============================================================================
 
 /// Notifier managing group analytics state.
-class GroupAnalyticsNotifier extends FamilyAsyncNotifier<GroupAnalytics, String> {
+class GroupAnalyticsNotifier
+    extends FamilyAsyncNotifier<GroupAnalytics, String> {
   @override
   FutureOr<GroupAnalytics> build(String groupId) {
     final isAuthenticated = ref.watch(authStateProvider);
@@ -80,9 +85,13 @@ class GroupAnalyticsNotifier extends FamilyAsyncNotifier<GroupAnalytics, String>
 
 /// Provider family exposing remote analytics for a specific group.
 final groupAnalyticsProvider =
-    AsyncNotifierProvider.family<GroupAnalyticsNotifier, GroupAnalytics, String>(() {
-  return GroupAnalyticsNotifier();
-});
+    AsyncNotifierProvider.family<
+      GroupAnalyticsNotifier,
+      GroupAnalytics,
+      String
+    >(() {
+      return GroupAnalyticsNotifier();
+    });
 
 /// Notifier managing personal analytics state.
 class UserAnalyticsNotifier extends AsyncNotifier<UserAnalytics> {
@@ -115,9 +124,10 @@ class UserAnalyticsNotifier extends AsyncNotifier<UserAnalytics> {
 }
 
 /// Provider exposing personal cross-group analytics.
-final userAnalyticsProvider = AsyncNotifierProvider<UserAnalyticsNotifier, UserAnalytics>(() {
-  return UserAnalyticsNotifier();
-});
+final userAnalyticsProvider =
+    AsyncNotifierProvider<UserAnalyticsNotifier, UserAnalytics>(() {
+      return UserAnalyticsNotifier();
+    });
 
 // ============================================================================
 // SECTION C — Expense Search + Filter Notifier
@@ -167,10 +177,16 @@ class ExpenseSearchState {
   }) {
     return ExpenseSearchState(
       searchQuery: searchQuery ?? this.searchQuery,
-      fromDate: fromDate == const Object() ? this.fromDate : fromDate as DateTime?,
+      fromDate: fromDate == const Object()
+          ? this.fromDate
+          : fromDate as DateTime?,
       toDate: toDate == const Object() ? this.toDate : toDate as DateTime?,
-      paidByUserId: paidByUserId == const Object() ? this.paidByUserId : paidByUserId as String?,
-      splitType: splitType == const Object() ? this.splitType : splitType as SplitType?,
+      paidByUserId: paidByUserId == const Object()
+          ? this.paidByUserId
+          : paidByUserId as String?,
+      splitType: splitType == const Object()
+          ? this.splitType
+          : splitType as SplitType?,
     );
   }
 }
@@ -178,8 +194,8 @@ class ExpenseSearchState {
 /// Provider family exposing the reactive filter configuration state.
 final expenseSearchFiltersProvider =
     StateProvider.family<ExpenseSearchState, String>((ref, groupId) {
-  return ExpenseSearchState();
-});
+      return ExpenseSearchState();
+    });
 
 /// Notifier executing client-side expense searches and filters.
 class ExpenseSearchNotifier extends FamilyAsyncNotifier<List<Expense>, String> {
@@ -188,7 +204,7 @@ class ExpenseSearchNotifier extends FamilyAsyncNotifier<List<Expense>, String> {
   @override
   FutureOr<List<Expense>> build(String groupId) async {
     _filters = ExpenseSearchState();
-    
+
     // Sync the filter configuration provider state initially
     ref.read(expenseSearchFiltersProvider(groupId).notifier).state = _filters;
 
@@ -252,9 +268,11 @@ class ExpenseSearchNotifier extends FamilyAsyncNotifier<List<Expense>, String> {
 
 /// Provider family exposing search results for a group.
 final expenseSearchProvider =
-    AsyncNotifierProvider.family<ExpenseSearchNotifier, List<Expense>, String>(() {
-  return ExpenseSearchNotifier();
-});
+    AsyncNotifierProvider.family<ExpenseSearchNotifier, List<Expense>, String>(
+      () {
+        return ExpenseSearchNotifier();
+      },
+    );
 
 // ============================================================================
 // SECTION D — Derived Summary Providers
@@ -262,10 +280,17 @@ final expenseSearchProvider =
 
 /// Derived provider family for the total spent in a group (returns 0.0 on loading/error).
 final groupTotalSpentProvider = Provider.family<double, String>((ref, groupId) {
-  return ref.watch(groupAnalyticsProvider(groupId)).valueOrNull?.totalExpenses ?? 0.0;
+  return ref
+          .watch(groupAnalyticsProvider(groupId))
+          .valueOrNull
+          ?.totalExpenses ??
+      0.0;
 });
 
 /// Derived provider family for the top payer in a group (returns null on loading/error).
-final groupTopPayerProvider = Provider.family<MemberContribution?, String>((ref, groupId) {
+final groupTopPayerProvider = Provider.family<MemberContribution?, String>((
+  ref,
+  groupId,
+) {
   return ref.watch(groupAnalyticsProvider(groupId)).valueOrNull?.topPayer;
 });

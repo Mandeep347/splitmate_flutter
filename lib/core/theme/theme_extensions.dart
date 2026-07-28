@@ -171,7 +171,11 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
       radiusLG: lerpDouble(radiusLG, other.radiusLG, t)!,
       radiusXL: lerpDouble(radiusXL, other.radiusXL, t)!,
       radiusRound: lerpDouble(radiusRound, other.radiusRound, t)!,
-      primaryGradient: Gradient.lerp(primaryGradient, other.primaryGradient, t)!,
+      primaryGradient: Gradient.lerp(
+        primaryGradient,
+        other.primaryGradient,
+        t,
+      )!,
       glassOverlay: Color.lerp(glassOverlay, other.glassOverlay, t)!,
       cardShadow: BoxShadow.lerpList(cardShadow, other.cardShadow, t)!,
     );

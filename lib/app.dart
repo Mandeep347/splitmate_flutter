@@ -88,24 +88,30 @@ class _SplitoAppState extends ConsumerState<SplitoApp> {
       ref.read(myOverallBalancesProvider.notifier).refresh();
 
       // Trigger system tray notifications outside app for unread items
-      ref.read(notificationsProvider.future).then((notifications) {
-        final localNotifService = ref.read(localNotificationServiceProvider);
-        for (final notif in notifications) {
-          if (!notif.isRead) {
-            localNotifService.notifyIfNew(
-              notificationId: notif.id,
-              title: notif.title ?? 'New Update',
-              body: notif.message ?? '',
+      ref
+          .read(notificationsProvider.future)
+          .then((notifications) {
+            final localNotifService = ref.read(
+              localNotificationServiceProvider,
             );
-          }
-        }
-      }).catchError((_) {});
+            for (final notif in notifications) {
+              if (!notif.isRead) {
+                localNotifService.notifyIfNew(
+                  notificationId: notif.id,
+                  title: notif.title ?? 'New Update',
+                  body: notif.message ?? '',
+                );
+              }
+            }
+          })
+          .catchError((_) {});
 
       // Dynamically detect if we are on a group details or nested group page,
       // and refresh providers for that group.
       try {
         final router = ref.read(goRouterProvider);
-        final pathParams = router.routerDelegate.currentConfiguration.pathParameters;
+        final pathParams =
+            router.routerDelegate.currentConfiguration.pathParameters;
         final groupId = pathParams['groupId'];
         if (groupId != null && groupId.isNotEmpty) {
           ref.invalidate(groupDetailProvider(groupId));
@@ -139,10 +145,7 @@ class _SplitoAppState extends ConsumerState<SplitoApp> {
       themeMode: selectedThemeMode,
       builder: (context, child) {
         return Stack(
-          children: [
-            if (child != null) child,
-            const ConnectivityBanner(),
-          ],
+          children: [if (child != null) child, const ConnectivityBanner()],
         );
       },
     );

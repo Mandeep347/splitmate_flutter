@@ -13,10 +13,7 @@ class EditGroupNameSheet extends ConsumerStatefulWidget {
   final Group group;
 
   /// Creates a const [EditGroupNameSheet] instance.
-  const EditGroupNameSheet({
-    super.key,
-    required this.group,
-  });
+  const EditGroupNameSheet({super.key, required this.group});
 
   /// Displays the sheet.
   static Future<void> show(BuildContext context, Group group) {
@@ -52,7 +49,9 @@ class _EditGroupNameSheetState extends ConsumerState<EditGroupNameSheet> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      ref.read(updateGroupProvider.notifier).updateGroup(
+      ref
+          .read(updateGroupProvider.notifier)
+          .updateGroup(
             groupId: widget.group.id,
             name: _nameController.text.trim(),
           );
@@ -70,12 +69,13 @@ class _EditGroupNameSheetState extends ConsumerState<EditGroupNameSheet> {
     ref.listen<AsyncValue<void>>(updateGroupProvider, (previous, next) {
       if (next is AsyncData<void> && previous is AsyncLoading<void>) {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Group updated!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Group updated!')));
       } else if (next is AsyncError<void> && previous is AsyncLoading<void>) {
-        final errorMessage =
-            next.error is Failure ? (next.error as Failure).message : 'Failed to update group name.';
+        final errorMessage = next.error is Failure
+            ? (next.error as Failure).message
+            : 'Failed to update group name.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),

@@ -5,13 +5,18 @@ class AppConstants {
   const AppConstants._();
 
   /// The base URL of the FastAPI backend.
-  static String get baseUrl => dotenv.get('API_BASE_URL', fallback: 'https://splitmate-hosting.onrender.com/api/v1');
+  static String get baseUrl => dotenv.get(
+    'API_BASE_URL',
+    fallback: 'https://splitmate-hosting.onrender.com/api/v1',
+  );
 
   /// Connection timeout in milliseconds.
-  static int get connectTimeoutMs => int.parse(dotenv.get('CONNECT_TIMEOUT_MS', fallback: '15000'));
+  static int get connectTimeoutMs =>
+      int.parse(dotenv.get('CONNECT_TIMEOUT_MS', fallback: '15000'));
 
   /// Receive timeout in milliseconds.
-  static int get receiveTimeoutMs => int.parse(dotenv.get('RECEIVE_TIMEOUT_MS', fallback: '15000'));
+  static int get receiveTimeoutMs =>
+      int.parse(dotenv.get('RECEIVE_TIMEOUT_MS', fallback: '15000'));
 }
 
 /// Constants defining backend REST API endpoint paths.
@@ -52,20 +57,17 @@ class ApiEndpoints {
   static String archiveGroup(String id) => '/groups/$id/archive';
 
   // Group Members
-  static String groupMembers(String groupId) =>
-      '/groups/$groupId/members';
+  static String groupMembers(String groupId) => '/groups/$groupId/members';
   static String groupMemberById(String groupId, String userId) =>
       '/groups/$groupId/members/$userId';
 
   // Expenses
-  static String groupExpenses(String groupId) =>
-      '/groups/$groupId/expenses';
+  static String groupExpenses(String groupId) => '/groups/$groupId/expenses';
   static String expenseById(String id) => '/expenses/$id';
   static String reverseExpense(String id) => '/expenses/$id/reverse';
 
   // Balances
-  static String groupBalances(String groupId) =>
-      '/groups/$groupId/balances';
+  static String groupBalances(String groupId) => '/groups/$groupId/balances';
   static String simplifiedBalances(String groupId) =>
       '/groups/$groupId/balances/simplified';
 
@@ -78,9 +80,7 @@ class ApiEndpoints {
 
   static const String notifications = '/notifications';
 
-  static String markNotificationRead(String id) =>
-      '/notifications/$id/read';
+  static String markNotificationRead(String id) => '/notifications/$id/read';
 
-  static const String markAllNotificationsRead =
-      '/notifications/read-all';
+  static const String markAllNotificationsRead = '/notifications/read-all';
 }
