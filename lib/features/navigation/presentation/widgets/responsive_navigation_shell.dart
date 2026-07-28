@@ -339,20 +339,7 @@ class _DesktopShell extends ConsumerWidget {
                   ),
                   child: Row(
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(ext.spaceSM),
-                        decoration: BoxDecoration(
-                          gradient: ext.primaryGradient,
-                          borderRadius: BorderRadius.circular(ext.radiusSM),
-                        ),
-                        child: Image.asset(
-                          AppBranding.logoIcon,
-                          width: 24,
-                          height: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(width: ext.spaceMD),
+
                       Text(
                         AppBranding.name,
                         style: theme.textTheme.titleLarge?.copyWith(

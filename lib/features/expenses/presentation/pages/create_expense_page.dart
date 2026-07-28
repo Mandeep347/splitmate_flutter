@@ -267,9 +267,12 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
         appBar: AppBar(title: const Text('Add Expense')),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 600),
+              child: Form(
+                key: _formKey,
+                child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Title Field
@@ -406,6 +409,8 @@ class _CreateExpensePageState extends ConsumerState<CreateExpensePage> {
                 // Submit Button
                 PrimaryButton(label: 'Add Expense', onPressed: _submit),
               ],
+            ),
+          ),
             ),
           ),
         ),
